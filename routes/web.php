@@ -157,9 +157,9 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
         Route::get('/value/assessment/{page}', [CandidateController::class, 'show'])
         ->where('page', '[0-9]+')->middleware('candidate');
-        Route::post('/value/assessment/{page}', [CandidateController::class, 'submit'])->middleware('candidate');
+        Route::post('/value/assessment/submit', [CandidateController::class, 'submit'])->middleware('candidate');
         Route::get('/value/assessment/result', [CandidateController::class, 'result'])->name('value.result')->middleware('candidate');
-        
+
         // Submit Quiz Answers (AJAX Post)
         // Route::post('/submit-quiz', [CandidateController::class, 'store']);
 
