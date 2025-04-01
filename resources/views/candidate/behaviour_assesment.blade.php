@@ -51,7 +51,7 @@
           <div class="card-body text-center">
             <h5 class="card-title">Resillience VS Sensitivity</h5>
             <p class="card-text">Test your core skills and technical skills and knowledge in your field.</p>
-            <a href="{{ route('technical.assesment') }}" class="btn btn-primary"> Assessment Library</a>
+            <a href="{{route('ResilienceVsSensitivity')}}" class="btn btn-primary"> Assessment Library</a>
           </div>
         </div>
       </div>

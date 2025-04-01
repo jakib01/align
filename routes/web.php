@@ -147,6 +147,9 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::get('/technical/assesment', [CandidateController::class, 'TechnicalAssesment'])->name('technical.assesment')->middleware('candidate');
         Route::get('/behaviour/assesment', [CandidateController::class, 'BehaviourAssesment'])->name('behaviour.assesment')->middleware('candidate');
 
+        Route::get('/ResilienceVsSensitivity', [CandidateController::class, 'showtResilienceVsSensitivity'])->name('ResilienceVsSensitivity');
+        Route::post('/ResilienceVsSensitivity/submit', [CandidateController::class, 'savet4'])->name('store.ResilienceVsSensitivity');
+
         Route::get('/SocioblityVsReflectiveness', [CandidateController::class, 'showtSociobilityVsReflectiveness'])->name('SociobilityVsReflectiveness');
         Route::post('/SocioblityVsReflectiveness/submit', [CandidateController::class, 'savet5'])->name('store.SociobilityVsReflectiveness');
 

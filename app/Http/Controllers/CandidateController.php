@@ -54,11 +54,56 @@ class CandidateController extends Controller
         return view('candidate.behaviour_assesment');
     }
 
+    public function showtResilienceVsSensitivity()
+    {
+        $questions = DB::table('resilience_vs_sensitivity_questions')->get();
+        return view('candidate.ResilienceVsSensitivity', compact('questions'));
+    }
+
+    public function savet4(Request $request)
+    {
+        $candidate_id = auth()->guard('candidate')->id();
+        $total_resilience = 0;
+        $total_sensitivity = 0;
+
+        foreach ($request->input('responses') as $question_id => $response) {
+            $question = DB::table('resilience_vs_sensitivity_questions')->where('id', $question_id)->first();
+
+            $resilience_score = $question->{$response . '_resilience'};
+            $sensitivity_score = $question->{$response . '_sensitivity'};
+
+            DB::table('resilience_vs_sensitivity_responses')->insert([
+                'candidate_id' => $candidate_id,
+                'question_id' => $question_id,
+                'response' => $response,
+                'resilience_score' => $resilience_score,
+                'sensitivity_score' => $sensitivity_score,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            $total_resilience += $resilience_score;
+            $total_sensitivity += $sensitivity_score;
+        }
+
+        $resilience_percentage = ($total_resilience / 2000) * 100;
+        $sensitivity_percentage = ($total_sensitivity / 2000) * 100;
+
+        return view('candidate.ResilienceVsSensitivityResult', compact(
+            'total_resilience',
+            'total_sensitivity',
+            'resilience_percentage',
+            'sensitivity_percentage'
+        ));
+    }
+
     public function showtSociobilityVsReflectiveness()
     {
         $questions = DB::table('sociability_vs_reflectiveness_questions')->get();
         return view('candidate.sociobilityVsReflectiveness', compact('questions'));
     }
+
+    
 
     public function savet5(Request $request)
     {
