@@ -147,6 +147,15 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::get('/technical/assesment', [CandidateController::class, 'TechnicalAssesment'])->name('technical.assesment')->middleware('candidate');
         Route::get('/behaviour/assesment', [CandidateController::class, 'BehaviourAssesment'])->name('behaviour.assesment')->middleware('candidate');
 
+        Route::get('/CompassionVsConfidence', [CandidateController::class, 'showCompassionVsConfidence'])->name('CompassionVsConfidence');
+        Route::post('/CompassionVsConfidence/submit', [CandidateController::class, 'savet1'])->name('store.CompassionVsConfidence');
+
+        Route::get('/CuriosityVsPracticality', [CandidateController::class, 'showCuriosityVsPracticality'])->name('CuriosityVsPracticality');
+        Route::post('/CuriosityVsPracticality/submit', [CandidateController::class, 'savet2'])->name('store.CuriosityVsPracticality');
+
+        Route::get('/DisciplineVsAdaptability', [CandidateController::class, 'showDisciplineVsAdaptability'])->name('DisciplineVsAdaptability');
+        Route::post('/DisciplineVsAdaptability/submit', [CandidateController::class, 'savet3'])->name('store.DisciplineVsAdaptability');
+
         Route::get('/ResilienceVsSensitivity', [CandidateController::class, 'showtResilienceVsSensitivity'])->name('ResilienceVsSensitivity');
         Route::post('/ResilienceVsSensitivity/submit', [CandidateController::class, 'savet4'])->name('store.ResilienceVsSensitivity');
 

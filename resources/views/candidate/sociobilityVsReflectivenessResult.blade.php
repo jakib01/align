@@ -18,5 +18,7 @@
     @endif
 
     {{-- <a href="{{ url('/sociability-test/' . request()->input('candidate_id')) }}">Retake Test</a> --}}
+
+    <a href="{{ route('behaviour.assesment') }}">Back to Behaviour Assesment</a>
 </body>
 </html>
