@@ -5,14 +5,14 @@
 </head>
 <body>
     <h2>Your Test Results</h2>
-    <p>Sociability Score: {{ $sociability_percentage }}%</p>
-    <p>Reflectiveness Score: {{ $reflectiveness_percentage }}%</p>
+    <p>Resilient: {{ $resilience_percentage }}%</p>
+    <p>Sensitive Score: {{ $sensitivity_percentage }}%</p>
 
     <h3>Interpretation:</h3>
-    @if ($total_sociability > $total_reflectiveness)
-        <p><strong>You are more sociable.</strong></p>
+    @if ($total_resilience > $total_sensitivity)
+        <p><strong>You are more Resilient.</strong></p>
     @elseif ($total_sociability < $total_reflectiveness)
-        <p><strong>You are more reflective.</strong></p>
+        <p><strong>You are more Sensitive.</strong></p>
     @else
         <p><strong>You have a balanced approach.</strong></p>
     @endif

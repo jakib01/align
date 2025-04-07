@@ -60,11 +60,187 @@ class CandidateController extends Controller
         return view('candidate.behaviour_assesment');
     }
 
+    public function showCompassionVsConfidence()
+    {
+        $questions = DB::table('compassion_vs_confidence_questions')->get();
+        return view('candidate.CompassionVsConfidence', compact('questions'));
+    }
+
+    public function savet1(Request $request)
+    {
+        $candidate_id = auth()->guard('candidate')->id();
+        $total_compassion = 0;
+        $total_confidence = 0;
+
+        foreach ($request->input('responses') as $question_id => $response) {
+            $question = DB::table('compassion_vs_confidence_questions')->where('id', $question_id)->first();
+
+            $compassion_score = $question->{$response . '_compassion'};
+            $confidence_score = $question->{$response . '_confidence'};
+
+            DB::table('compassion_vs_confidence_responses')->insert([
+                'candidate_id' => $candidate_id,
+                'question_id' => $question_id,
+                'response' => $response,
+                'compassion_score' => $compassion_score,
+                'confidence_score' => $confidence_score,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            $total_compassion += $compassion_score;
+            $total_confidence += $confidence_score;
+        }
+
+        $compassion_percentage = ($total_compassion / 2000) * 100;
+        $confidence_percentage = ($total_confidence / 2000) * 100;
+
+        return view('candidate.CompassionVsConfidenceResult', compact(
+            'total_compassion',
+            'total_confidence',
+            'compassion_percentage',
+            'confidence_percentage'
+        ));
+    }
+
+    
+
+    public function showCuriosityVsPracticality()
+    {
+        $questions = DB::table('curiosity_vs_practicality_questions')->get();
+        return view('candidate.CuriosityVsPracticality', compact('questions'));
+    }
+
+    public function savet2(Request $request)
+    {
+        $candidate_id = auth()->guard('candidate')->id();
+        $total_curiosity = 0;
+        $total_practicality = 0;
+
+        foreach ($request->input('responses') as $question_id => $response) {
+            $question = DB::table('curiosity_vs_practicality_questions')->where('id', $question_id)->first();
+
+            $curiosity_score = $question->{$response . '_curiosity'};
+            $practicality_score = $question->{$response . '_practicality'};
+
+            DB::table('curiosity_vs_practicality_responses')->insert([
+                'candidate_id' => $candidate_id,
+                'question_id' => $question_id,
+                'response' => $response,
+                'curiosity_score' => $curiosity_score,
+                'practicality_score' => $practicality_score,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            $total_curiosity += $curiosity_score;
+            $total_practicality += $practicality_score;
+        }
+
+        $curiosity_percentage = ($total_curiosity / 2000) * 100;
+        $practicality_percentage = ($total_practicality / 2000) * 100;
+
+        return view('candidate.CuriosityVsPracticalityResult', compact(
+            'total_curiosity',
+            'total_practicality',
+            'curiosity_percentage',
+            'practicality_percentage'
+        ));
+    }
+
+    public function showDisciplineVsAdaptability()
+    {
+        $questions = DB::table('discipline_vs_adaptability_questions')->get();
+        return view('candidate.DisciplineVsAdaptability', compact('questions'));
+    }
+
+    public function savet3(Request $request)
+    {
+        $candidate_id = auth()->guard('candidate')->id();
+        $total_discipline = 0;
+        $total_adaptability = 0;
+
+        foreach ($request->input('responses') as $question_id => $response) {
+            $question = DB::table('discipline_vs_adaptability_questions')->where('id', $question_id)->first();
+
+            $discipline_score = $question->{$response . '_discipline'};
+            $adaptability_score = $question->{$response . '_adaptability'};
+
+            DB::table('discipline_vs_adaptability_responses')->insert([
+                'candidate_id' => $candidate_id,
+                'question_id' => $question_id,
+                'response' => $response,
+                'discipline_score' => $discipline_score,
+                'adaptability_score' => $adaptability_score,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            $total_discipline += $discipline_score;
+            $total_adaptability += $adaptability_score;
+        }
+
+        $discipline_percentage = ($total_discipline / 2000) * 100;
+        $adaptability_percentage = ($total_adaptability / 2000) * 100;
+
+        return view('candidate.DisciplineVsAdaptabilityResult', compact(
+            'total_discipline',
+            'total_adaptability',
+            'discipline_percentage',
+            'adaptability_percentage'
+        ));
+    }
+
+    public function showtResilienceVsSensitivity()
+    {
+        $questions = DB::table('resilience_vs_sensitivity_questions')->get();
+        return view('candidate.ResilienceVsSensitivity', compact('questions'));
+    }
+
+    public function savet4(Request $request)
+    {
+        $candidate_id = auth()->guard('candidate')->id();
+        $total_resilience = 0;
+        $total_sensitivity = 0;
+
+        foreach ($request->input('responses') as $question_id => $response) {
+            $question = DB::table('resilience_vs_sensitivity_questions')->where('id', $question_id)->first();
+
+            $resilience_score = $question->{$response . '_resilience'};
+            $sensitivity_score = $question->{$response . '_sensitivity'};
+
+            DB::table('resilience_vs_sensitivity_responses')->insert([
+                'candidate_id' => $candidate_id,
+                'question_id' => $question_id,
+                'response' => $response,
+                'resilience_score' => $resilience_score,
+                'sensitivity_score' => $sensitivity_score,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            $total_resilience += $resilience_score;
+            $total_sensitivity += $sensitivity_score;
+        }
+
+        $resilience_percentage = ($total_resilience / 2000) * 100;
+        $sensitivity_percentage = ($total_sensitivity / 2000) * 100;
+
+        return view('candidate.ResilienceVsSensitivityResult', compact(
+            'total_resilience',
+            'total_sensitivity',
+            'resilience_percentage',
+            'sensitivity_percentage'
+        ));
+    }
+
     public function showtSociobilityVsReflectiveness()
     {
         $questions = DB::table('sociability_vs_reflectiveness_questions')->get();
         return view('candidate.sociobilityVsReflectiveness', compact('questions'));
     }
+
+    
 
     public function savet5(Request $request)
     {

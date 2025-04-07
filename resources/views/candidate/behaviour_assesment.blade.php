@@ -19,7 +19,7 @@
           <div class="card-body text-center">
             <h5 class="card-title">Compassion VS Confidence</h5>
             <p class="card-text">Test your core skills and technical skills and knowledge in your field.</p>
-            <a href="{{ route('technical.assesment') }}" class="btn btn-primary"> Assessment Library</a>
+            <a href="{{ route('CompassionVsConfidence') }}" class="btn btn-primary"> Assessment Library</a>
           </div>
         </div>
       </div>
@@ -29,7 +29,7 @@
           <div class="card-body text-center">
             <h5 class="card-title">Curiosity VS Practicality</h5>
             <p class="card-text">Understand your workplace behavior and how you interact with others.</p>
-            <a href="{{route('behaviour.assesment')}}" class="btn btn-primary">Start Assessment</a>
+            <a href="{{route('CuriosityVsPracticality')}}" class="btn btn-primary">Start Assessment</a>
           </div>
         </div>
       </div>
@@ -39,7 +39,7 @@
           <div class="card-body text-center">
             <h5 class="card-title">Discipline VS Adaptability</h5>
             <p class="card-text">Discover your core values and how they align with your work.</p>
-            <a href="{{url('candidate/value/assessment/1')}}" class="btn btn-primary">Start Assessment</a>
+            <a href="{{route('DisciplineVsAdaptability')}}" class="btn btn-primary">Start Assessment</a>
           </div>
         </div>
       </div>
@@ -51,7 +51,7 @@
           <div class="card-body text-center">
             <h5 class="card-title">Resillience VS Sensitivity</h5>
             <p class="card-text">Test your core skills and technical skills and knowledge in your field.</p>
-            <a href="{{ route('technical.assesment') }}" class="btn btn-primary"> Assessment Library</a>
+            <a href="{{route('ResilienceVsSensitivity')}}" class="btn btn-primary"> Assessment Library</a>
           </div>
         </div>
       </div>

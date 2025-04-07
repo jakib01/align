@@ -153,6 +153,11 @@
   @yield('behaviour_assesment')
   @yield('value_assesment')
   @yield('sociobilityVsReflectiveness')
+  @yield('ResilienceVsSensitivity')
+  @yield('DisciplineVsAdaptability')
+  @yield('CuriosityVsPracticality')
+  @yield('CompassionVsConfidence')
+  
   @yield('quiz')
   @yield('result')
   {{-- @yield('quiz_result') --}}
