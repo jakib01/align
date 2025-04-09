@@ -19,7 +19,21 @@
           <div class="card-body text-center">
             <h5 class="card-title">Compassion VS Confidence</h5>
             <p class="card-text">Test your core skills and technical skills and knowledge in your field.</p>
-            <a href="{{ route('CompassionVsConfidence') }}" class="btn btn-primary"> Assessment Library</a>
+
+            {{-- <a href="{{ route('CompassionVsConfidence') }}" class="btn btn-primary"> Start Assessment</a> --}}
+
+            @php
+            $candidate = auth()->guard('candidate')->user();
+            $completed = json_decode($candidate?->behaviour_assesment_completed_at, true) ?? [];
+            @endphp
+
+          {{-- Check if the assessment is completed or not --}} 
+
+          <a href="{{ isset($completed['t1']) ? '#' : route('CompassionVsConfidence') }}"
+            class="btn btn-primary {{ isset($completed['t1']) ? 'disabled' : '' }}">
+            {{ isset($completed['t1']) ? 'Completed' : 'Start Assessment' }}
+          </a>
+
           </div>
         </div>
       </div>

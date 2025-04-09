@@ -39,7 +39,34 @@
           <div class="card-body text-center">
             <h5 class="card-title">Values</h5>
             <p class="card-text">Discover your core values and how they align with your work.</p>
-            <a href="{{url('candidate/value/assessment/1')}}" class="btn btn-primary">Start Assessment</a>
+            {{-- <a href="{{url('candidate/value/assessment/1')}}" class="btn btn-primary">Start Assessment</a> --}}
+            {{-- @php
+            $assessmentDone = auth()->guard('candidate')->user()->value_assesment_completed_at;
+            $disabled = $assessmentDone && \Carbon\Carbon::parse($assessmentDone)->addYear()->isFuture();
+        @endphp
+
+        <a href="{{ $disabled ? '#' : url('candidate/value/assessment/1') }}"
+          class="btn btn-primary {{ $disabled ? 'disabled' : '' }}">
+          {{ $disabled ? 'Assessment Completed' : 'Start Assessment' }}
+        </a> --}}
+
+              @php
+          $completedAt = auth()->guard('candidate')->user()->value_assessment_completed_at;
+          $isWithinOneYear = $completedAt && \Carbon\Carbon::parse($completedAt)->addYear()->isFuture();
+      @endphp
+
+      @if ($completedAt)
+          {{-- ✅ Show result button --}}
+          <a href="" class="btn btn-success">
+              View Result
+          </a>
+      @else
+          {{-- 🟢 Show start button --}}
+          <a href="{{ url('candidate/value/assessment/1') }}" class="btn btn-primary">
+              Start Assessment
+          </a>
+      @endif
+
           </div>
         </div>
       </div>

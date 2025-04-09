@@ -192,7 +192,7 @@
             <div class="card-body profile-card pt-4">
               <h4 class="text-center">Values</h4>
               <canvas id="polarAreaChart" style="max-height: 400px;"></canvas>
-              <script>
+              {{-- <script>
                 document.addEventListener("DOMContentLoaded", () => {
                   new Chart(document.querySelector('#polarAreaChart'), {
                     type: 'radar',
@@ -208,7 +208,29 @@
                     }
                   });
                 });
+              </script> --}}
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  const labels = {!! json_encode(array_keys($valueScores)) !!};
+                  const data = {!! json_encode(array_values($valueScores)) !!};
+              
+                  new Chart(document.querySelector('#polarAreaChart'), {
+                    type: 'radar',
+                    data: {
+                      labels: labels,
+                      datasets: [{
+                        label: 'Your value graph',
+                        data: data,
+                        fill: true,
+                        backgroundColor: 'rgba(133, 250, 240, 0.2)',
+                        borderColor: 'rgb(68, 242, 248)',
+                      }]
+                    }
+                  });
+                });
               </script>
+
             </div>
           </div>
         </div>

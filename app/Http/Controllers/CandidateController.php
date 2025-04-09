@@ -33,7 +33,16 @@ class CandidateController extends Controller
 
     public function Dashboard()
     {
-        return view('candidate.candidate_profile');
+        // return view('candidate.candidate_profile');
+
+        $candidate = auth()->guard('candidate')->user();
+    $valueScores = json_decode($candidate->value_assessment_score, true) ?? [];
+
+    return view('candidate.candidate_profile', [
+        'candidate' => $candidate,
+        'valueScores' => $valueScores,
+    ]);
+
     }
 
     public function Assesment()
@@ -94,6 +103,34 @@ class CandidateController extends Controller
 
         $compassion_percentage = ($total_compassion / 2000) * 100;
         $confidence_percentage = ($total_confidence / 2000) * 100;
+
+
+        
+
+        $current['compassion'] = $compassion_percentage;
+        $current['confidence'] = $confidence_percentage;
+
+        // start Store the scores & time in the candidate table
+
+        $candidate = auth()->guard('candidate')->user();
+        // Decode existing scores
+        $currentScores = json_decode($candidate->behaviour_assesment_score, true) ?? [];
+        if (!is_array($currentScores)) $currentScores = [];
+        $currentScores['compassion'] = $compassion_percentage;
+        $currentScores['confidence'] = $confidence_percentage;
+        
+        // Decode completion timestamps
+        $completed = json_decode($candidate->behaviour_assesment_completed_at, true) ?? [];
+        if (!is_array($completed)) $completed = [];
+        $completed['t1'] = now()->toDateTimeString();
+        
+        // Save both
+        DB::table('candidates')->where('id', $candidate->id)->update([
+            'behaviour_assesment_score' => json_encode($currentScores),
+            'behaviour_assesment_completed_at' => json_encode($completed),
+        ]);
+
+        // end Store the scores & time in the candidate table
 
         return view('candidate.CompassionVsConfidenceResult', compact(
             'total_compassion',
@@ -365,6 +402,18 @@ class CandidateController extends Controller
             $item->percentage = round(($item->total / 25) * 100, 2);
             return $item;
         });
+
+         // 🔄 Convert to key-value pair for JSON storage
+    $scoreData = $results->pluck('percentage', 'mother_word')->toArray();
+
+    // 💾 Store JSON in the candidates table
+    DB::table('candidates')
+        ->where('id', $candidateId)
+        ->update([
+            'value_assessment_score' => json_encode($scoreData),
+            'value_assessment_completed_at' => now(),
+        ]);
+
 
     return view('candidate.result', ['results' => $results]);
 }
