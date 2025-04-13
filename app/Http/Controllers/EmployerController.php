@@ -54,6 +54,7 @@ class EmployerController extends Controller
         // Pass a flag to the view if no team members are found
         $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
 
+
         return view('employer.employer_team', compact('teamMembers', 'noTeamMembersMessage'));
     }
 
@@ -69,7 +70,6 @@ class EmployerController extends Controller
         $employer = Auth::guard('employer')->user(); // or use auth()->user()
         return view('employer.employer_profile_update', compact('employer'));
     }
-
 
     public function updateProfile(Request $request)
     {
@@ -125,9 +125,6 @@ class EmployerController extends Controller
 
         return redirect()->route('employer.profile')->with('success', 'Profile updated successfully!');
     }
-
-
-
 
     // Membership Management
     public function Membership()
@@ -205,9 +202,6 @@ class EmployerController extends Controller
         return response()->json($teamMembers);
     }
 
-
-
-
     public function store(Request $request)
     {
         // Fetch the authenticated employer user using the 'employer' guard
@@ -234,20 +228,18 @@ class EmployerController extends Controller
                 'employer_id' => $employer->id, // Link the team member to the employer
             ]);
 
-            // Return the newly added member as a JSON response
-            return response()->json([
-                'success' => true,
-                'member' => $teamMember,
-            ]);
+            // Fetch only the team members belonging to the authenticated employer
+            $teamMembers = TeamMember::get();
+
+            // Pass a flag to the view if no team members are found
+            $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
+
+            return view('employer.employer_team', compact('teamMembers', 'noTeamMembersMessage'))->with('success', 'Team member added successfully.');
+
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
-
-
-
-    // In EmployerController.php
 
     public function destroy($id)
     {
@@ -255,13 +247,28 @@ class EmployerController extends Controller
 
         if ($member) {
             $member->delete();
-            return response()->json(['success' => true]);
+            // Fetch only the team members belonging to the authenticated employer
+            $teamMembers = TeamMember::get();
+
+            // Pass a flag to the view if no team members are found
+            $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
+
+            return view('employer.employer_team', compact('teamMembers', 'noTeamMembersMessage'))->with('success', 'Team member added successfully.');
         }
 
         // Ensure clear response for non-existing members
         return response()->json(['success' => false, 'error' => 'Team member not found'], 404);
     }
 
+    public function edit($id)
+    {
+        $teamMember = TeamMember::findOrFail($id);
+
+        $teamMembers = TeamMember::get();
+        $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
+
+        return view('employer.employer_team', compact('teamMembers', 'teamMember', 'noTeamMembersMessage'));
+    }
 
     public function updateTeam(Request $request, $id)
     {
@@ -276,32 +283,20 @@ class EmployerController extends Controller
 
         $teamMember->update($validatedData);
 
-        return response()->json(['success' => true]);
+        // Fetch only the team members belonging to the authenticated employer
+        $teamMembers = TeamMember::get();
+
+        // Pass a flag to the view if no team members are found
+        $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
+
+        return view('employer.employer_team', compact('teamMembers', 'noTeamMembersMessage'));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // Other Pages
     public function TeamAssesment()
     {
         return view('employer.employer_team_assesment');
     }
-
-
 
     public function ApplicantTracking()
     {
@@ -327,23 +322,26 @@ class EmployerController extends Controller
     {
         return view('employer.employer_pricing');
     }
+
     public function trends()
     {
         return view('employer.trends'); // Return the view for employer inbox
     }
+
     public function inbox()
     {
         return view('employer.employer_inbox'); // Return the view for employer inbox
     }
+
     public function demo()
     {
         return view('employer.employer_demo'); // Return the view for employer inbox
     }
+
     public function register()
     {
         return view('employer.employer_register'); // Return the view for employer inbox
     }
-
 
     public function showPostedJobs()
     {
@@ -356,6 +354,7 @@ class EmployerController extends Controller
         // Return the view with the jobs
         return view('employer.employer_jobs', compact('jobs'));
     }
+
     public function update(Request $request, $jobId)
     {
         $job = Job::findOrFail($jobId);
@@ -370,14 +369,12 @@ class EmployerController extends Controller
         return redirect()->route('employer.jobs')->with('success', 'Job updated successfully!');
     }
 
-
-
-
     public function showForm()
     {
         // Simply return the view for the form
         return view('employer.employer_job_posting');
     }
+
     public function storeJobPosting(Request $request)
     {
         $employer = Auth::guard('employer')->user(); // or use auth()->user()
@@ -459,15 +456,14 @@ class EmployerController extends Controller
 
     }
 
-
     public function SavedApplicant()
-    {  
+    {
         $applicant=DB::table('job_applieds')->where('save_applicant','=','1')->get();
         return view('employer.saved_applicant',compact('applicant'));
     }
 
     public function FirstInterview()
-    {   
+    {
         $applicant=DB::table('job_applieds')->where('first_interview','=','1')->get();
         return view('employer.first_interview',compact('applicant'));
     }
@@ -499,20 +495,17 @@ class EmployerController extends Controller
 
         return response()->json(['success' => 'Date-Time updated successfully!']);
         }
-        
-        
+
+
 
         // return response()->json(['success' => 'Date-Time updated successfully!']);
     }
 
-
     public function SecondInterview()
-    {  
+    {
         $applicant=DB::table('job_applieds')->where('second_interview','=','2')->get();
         return view('employer.second_interview',compact('applicant'));
     }
-
-
 
     public function SecondInterviewDate(Request $request)
     {
@@ -524,7 +517,7 @@ class EmployerController extends Controller
         $value = $request->input('interviewStage');
 
 
-        
+
         if($value == 2){
             $id = $request->input('id');
         $applicant1= DB::table('job_applieds')->where('job_post_id',$id)->update(['second_interview'=>2,'second_interview_date'=>$request->datetime]);
@@ -536,8 +529,8 @@ class EmployerController extends Controller
 
         return response()->json(['success' => 'Date-Time updated successfully!']);
         }
-        
-        
+
+
 
         // return response()->json(['success' => 'Date-Time updated successfully!']);
     }
@@ -559,19 +552,18 @@ class EmployerController extends Controller
         $value = $request->input('interviewStage');
 
 
-        
+
         if($value == 3){
             $id = $request->input('id');
         $applicant1= DB::table('job_applieds')->where('job_post_id',$id)->update(['third_interview'=>3,'third_interview_date'=>$request->datetime]);
         return response()->json(['success' => 'Date-Time updated successfully!']);
         }
-        
-        
-        
+
+
+
 
         // return response()->json(['success' => 'Date-Time updated successfully!']);
     }
-
 
     public function offerletter(Request $request,$id)
     {
@@ -581,13 +573,11 @@ class EmployerController extends Controller
          $record->offerletter_message = $request->offer_letter_content;
 
             $record->save();
-        
+
             return redirect()->back()->with('success', 'Offer letter sent successfully!');
 
         // return response()->json(['success' => 'Date-Time updated successfully!']);
     }
-
-
 
     public function pagination()
     {
