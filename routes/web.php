@@ -8,6 +8,7 @@ use App\Http\Controllers\CandidateAuthController;
 use App\Http\Controllers\EmployerAuthController;
 
 
+use App\Http\Controllers\TeamMemberAssessmentController;
 use App\Http\Middleware\Candidate;
 use Illuminate\Support\Facades\Route;
 
@@ -234,17 +235,14 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
     // admin route ends-----
 
+    Route::post('/employer/send-assessment-link', [TeamMemberAssessmentController::class, 'sendAssessmentLink'])->name('employee.assessment.send');
+    Route::get('/employer/assessment/{token}', [TeamMemberAssessmentController::class, 'accessAssessmentPage'])->name('employee.assessment.access');
+
 });
 
 // Prevent back after logout
 
-
-
-
-
 //all default routes start-------
-
-
 
 Route::get('/', function () {
     return view('welcome');
