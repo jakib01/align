@@ -228,16 +228,10 @@ class EmployerController extends Controller
                 'employer_id' => $employer->id, // Link the team member to the employer
             ]);
 
-            // Fetch only the team members belonging to the authenticated employer
-            $teamMembers = TeamMember::get();
-
-            // Pass a flag to the view if no team members are found
-            $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
-
-            return view('employer.employer_team', compact('teamMembers', 'noTeamMembersMessage'))->with('success', 'Team member added successfully.');
+            return redirect()->route('employer.dashboard')->with('success', 'Team member added successfully.');
 
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return redirect()->route('employer.dashboard')->with('error', $e->getMessage());
         }
     }
 
@@ -253,7 +247,7 @@ class EmployerController extends Controller
             // Pass a flag to the view if no team members are found
             $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
 
-            return view('employer.employer_team', compact('teamMembers', 'noTeamMembersMessage'))->with('success', 'Team member added successfully.');
+            return redirect()->route('employer.dashboard')->with('success', 'Team member deleted successfully.');
         }
 
         // Ensure clear response for non-existing members
@@ -283,13 +277,7 @@ class EmployerController extends Controller
 
         $teamMember->update($validatedData);
 
-        // Fetch only the team members belonging to the authenticated employer
-        $teamMembers = TeamMember::get();
-
-        // Pass a flag to the view if no team members are found
-        $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
-
-        return view('employer.employer_team', compact('teamMembers', 'noTeamMembersMessage'));
+        return redirect()->route('employer.dashboard')->with('success', 'Team member updated successfully.');
     }
 
     // Other Pages

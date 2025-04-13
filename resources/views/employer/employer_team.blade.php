@@ -18,6 +18,7 @@
                                     </button>
 
                                     <!-- Modal -->
+                                    @if(isset($teamMember))
                                     <div class="modal fade" id="addTeamMemberModal" tabindex="-1" aria-labelledby="addTeamMemberModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -64,7 +65,7 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                    @endif
 
                                 </div>
                                 <div class="table-responsive d-none d-md-block">
@@ -134,6 +135,14 @@
                 myModal.show();
             });
         </script>
+    @endif
+
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 <script>
     document.addEventListener("DOMContentLoaded", () => {
