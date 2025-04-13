@@ -165,53 +165,146 @@
           <div class="card">
             <div class="card-body profile-card pt-4">
               <h4 class="text-center">Behavior</h4>
-              <canvas id="radarChart" style="max-height: 400px;"></canvas>
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new Chart(document.querySelector('#radarChart'), {
-                    type: 'radar',
-                    data: {
-                      labels: ['Curiosity', 'Practicality', 'Discipline', 'Adaptability', 'Sociability', 'Reflectiveness', 'Compassion', 'Confidence', 'Resilience', 'Sensitivity'],
-                      datasets: [{
-                        label: 'Your behavior graph',
-                        data: [65, 59, 90, 81, 56, 81, 96, 55, 40, 89],
-                        fill: true,
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgb(255, 99, 132)',
-                      }]
-                    },
-                    options: { elements: { line: { borderWidth: 3 } } }
+        
+              {{-- Debug Output --}}
+              {{-- <pre>{{ json_encode($behaviourScores, JSON_PRETTY_PRINT) }}</pre> --}}
+        
+              @if (!empty($behaviourScores))
+                <canvas id="radarChart" style="max-height: 400px;"></canvas>
+                <script>
+                  document.addEventListener("DOMContentLoaded", () => {
+                    const labels = {!! json_encode(array_keys($behaviourScores)) !!};
+                    const data = {!! json_encode(array_values($behaviourScores)) !!};
+        
+                    // Make it accessible in browser console for debugging
+                    window.labels = labels;
+                    window.data = data;
+        
+                    console.log("Behavior Labels:", labels);
+                    console.log("Behavior Data:", data);
+        
+                    new Chart(document.querySelector('#radarChart'), {
+                      type: 'radar',
+                      data: {
+                        labels: labels,
+                        datasets: [{
+                          label: 'Your behavior graph',
+                          data: data,
+                          fill: true,
+                          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                          borderColor: 'rgb(255, 99, 132)',
+                        }]
+                      },
+                      options: {
+                        scales: {
+                          r: {
+                            beginAtZero: true,
+                            suggestedMax: 100
+                          }
+                        },
+                        elements: {
+                          line: {
+                            borderWidth: 3
+                          }
+                        }
+                      }
+                    });
                   });
-                });
-              </script>
+                </script>
+              @else
+                <div class="text-center text-muted pt-5">
+                  <p>You didn't participate in the behavior assessment test.</p>
+                </div>
+              @endif
             </div>
+
+            @php
+          $candidate = auth()->guard('candidate')->user();
+          $completed = json_decode($candidate?->behaviour_assesment_completed_at, true) ?? [];
+
+          $requiredTests = ['t1', 't2', 't3', 't4', 't5'];
+          $allCompleted = !array_diff($requiredTests, array_keys($completed));
+
+          $latestDate = null;
+          if ($allCompleted) {
+              $latestDate = collect($completed)->sort()->last();
+              $isWithinOneYear = \Carbon\Carbon::parse($latestDate)->addYear()->isFuture();
+          } else {
+              $isWithinOneYear = false;
+          }
+         @endphp
+
+            @if ($allCompleted && $isWithinOneYear)
+                {{-- ✅ All tests completed and recent – Show Result button --}}
+                <a href="{{ route('behaviour.assesment.result') }}" class="btn btn-success">
+                    View Result
+                </a>
+
+                @endif
+            
+            
+
+
           </div>
+
+          <p>Assessment taken date: {{ $behaviourassessmentTakenDate ? \Carbon\Carbon::parse($behaviourassessmentTakenDate)->format('d M Y') : 'N/A' }}</p>
+          <p>Assessment expire date: {{ $behaviourassessmentExpireDate ? \Carbon\Carbon::parse($behaviourassessmentExpireDate)->format('d M Y') : 'N/A' }}</p>
+
         </div>
+        
+        
         <div class="col-md-6">
           <div class="card">
             <div class="card-body profile-card pt-4">
               <h4 class="text-center">Values</h4>
-              <canvas id="polarAreaChart" style="max-height: 400px;"></canvas>
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new Chart(document.querySelector('#polarAreaChart'), {
-                    type: 'radar',
-                    data: {
-                      labels: ['Security', 'Achievement', 'Universalism', 'Benevolence', 'Conformity', 'Tradition', 'Hedonism', 'Power', 'Self-Direction', 'Stimulation'],
-                      datasets: [{
-                        label: 'Your value graph',
-                        data: [17, 16, 7, 3, 14, 6, 26, 19, 11, 2],
-                        fill: true,
-                        backgroundColor: 'rgba(133, 250, 240, 0.2)',
-                        borderColor: 'rgb(68, 242, 248)',
-                      }]
-                    }
+        
+              @if (!empty($valueScores))
+                <canvas id="polarAreaChart" style="max-height: 400px;"></canvas>
+                <script>
+                  document.addEventListener("DOMContentLoaded", () => {
+                    const labels = {!! json_encode(array_keys($valueScores)) !!};
+                    const data = {!! json_encode(array_values($valueScores)) !!};
+        
+                    new Chart(document.querySelector('#polarAreaChart'), {
+                      type: 'radar',
+                      data: {
+                        labels: labels,
+                        datasets: [{
+                          label: 'Your value graph',
+                          data: data,
+                          fill: true,
+                          backgroundColor: 'rgba(133, 250, 240, 0.2)',
+                          borderColor: 'rgb(68, 242, 248)',
+                        }]
+                      }
+                    });
                   });
-                });
-              </script>
+                </script>
+              @else
+                <div class="text-center text-muted pt-5">
+                  <p>You didn't participate in the value assessment test.</p>
+                </div>
+              @endif
+        
             </div>
+            @php
+            $completedAt = auth()->guard('candidate')->user()->value_assessment_completed_at;
+            $isWithinOneYear = $completedAt && \Carbon\Carbon::parse($completedAt)->addYear()->isFuture();
+        @endphp
+  
+        @if ($completedAt)
+            {{-- ✅ Show result button --}}
+            <a href="{{route('value.result')}}" class="btn btn-success">
+                View Result
+            </a>
+        @endif
           </div>
+          
+          <p>Assessment taken date: {{ $valueassessmentTakenDate ? \Carbon\Carbon::parse($valueassessmentTakenDate)->format('d M Y') : 'N/A' }}</p>
+          <p>Assessment expire date: {{ $valueassessmentExpireDate ? \Carbon\Carbon::parse($valueassessmentExpireDate)->format('d M Y') : 'N/A' }}</p>
+
         </div>
+        
       </div>
     </div>
   </section>
