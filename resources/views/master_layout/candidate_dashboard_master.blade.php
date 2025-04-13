@@ -160,6 +160,8 @@
   
   @yield('quiz')
   @yield('result')
+  @yield('behaviour_result')
+  
   {{-- @yield('quiz_result') --}}
   @yield('application_tracking')
   @yield('job_search')

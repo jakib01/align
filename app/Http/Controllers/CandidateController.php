@@ -8,6 +8,7 @@ use App\Models\AssessmentQuestion;
 use App\Models\AssessmentOption;
 use App\Models\CandidateAnswer;
 use App\Models\CandidateAssessment;
+use Carbon\Carbon;
 
 
 
@@ -31,19 +32,114 @@ class CandidateController extends Controller
         return view('candidate.candidate_register'); // Return the registration form view
     }
 
-    public function Dashboard()
-    {
-        // return view('candidate.candidate_profile');
+    // public function Dashboard()
+    // {
+    //     $candidate = auth()->guard('candidate')->user();
+    
+    //     $valueScores = [];
+    //     $behaviourScores = [];
+    
+    //     if (!empty($candidate->value_assessment_score)) {
+    //         $decoded = json_decode($candidate->value_assessment_score, true);
+    //         $valueScores = is_array($decoded) ? $decoded : [];
+    //     }
+    
+    //     if (!empty($candidate->behaviour_assesment_score)) {
+    //         $decoded = json_decode($candidate->behaviour_assesment_score, true);
+    //         if (json_last_error() === JSON_ERROR_NONE) {
+    //             $behaviourScores = is_array($decoded) ? $decoded : [];
+    //         }
+    //     }
 
-        $candidate = auth()->guard('candidate')->user();
-    $valueScores = json_decode($candidate->value_assessment_score, true) ?? [];
+    //    $valueassessmentTakenDate = $candidate->value_assessment_completed_at ?? null;
+    //    $valueassessmentExpireDate = $valueassessmentTakenDate ? Carbon::parse($valueassessmentTakenDate)->addYear() : null;
+
+    //    $t5Date = null;
+
+    //     if (!empty($candidate->behaviour_assesment_completed_at)) {
+    //         $decoded = json_decode($candidate->behaviour_assesment_completed_at, true);
+
+    //         if (json_last_error() === JSON_ERROR_NONE && isset($decoded['t5'])) {
+    //             try {
+    //                 $t5Date = \Carbon\Carbon::parse($decoded['t5']);
+    //             } catch (\Exception $e) {
+    //                 $t5Date = null;
+    //             }
+    //         }
+    //     }
+
+    //     $behaviourassessmentTakenDate = $t5Date;
+    //     $behaviourassessmentExpireDate = $t5Date ? $t5Date->copy()->addYear() : null;
+
+    
+    //     return view('candidate.candidate_profile', [
+    //         'candidate' => $candidate,
+    //         'valueScores' => $valueScores,
+    //         'behaviourScores' => $behaviourScores,
+    //         'behaviourassessmentTakenDate' => $behaviourassessmentTakenDate,
+    //         'behaviourassessmentExpireDate' => $behaviourassessmentExpireDate,
+
+    //         'valueassessmentTakenDate' => $valueassessmentTakenDate,
+    //         'valueassessmentExpireDate' => $valueassessmentExpireDate,
+    //     ]);
+    // }
+    
+    public function Dashboard()
+{
+    $candidate = auth()->guard('candidate')->user();
+
+    $valueScores = [];
+    $behaviourScores = [];
+    $behaviourassessmentTakenDate = null;
+    $behaviourassessmentExpireDate = null;
+
+    // Handle Value Assessment
+    if (!empty($candidate->value_assessment_score)) {
+        $decoded = json_decode($candidate->value_assessment_score, true);
+        $valueScores = is_array($decoded) ? $decoded : [];
+    }
+
+    $valueassessmentTakenDate = $candidate->value_assessment_completed_at ?? null;
+    $valueassessmentExpireDate = $valueassessmentTakenDate ? Carbon::parse($valueassessmentTakenDate)->addYear() : null;
+
+    // Handle Behaviour Assessment
+    if (!empty($candidate->behaviour_assesment_score) && !empty($candidate->behaviour_assesment_completed_at)) {
+        $scoreDecoded = json_decode($candidate->behaviour_assesment_score, true);
+        $completedDecoded = json_decode($candidate->behaviour_assesment_completed_at, true);
+
+        if (
+            json_last_error() === JSON_ERROR_NONE &&
+            is_array($scoreDecoded) &&
+            is_array($completedDecoded)
+        ) {
+            $requiredTimestamps = ['t1', 't2', 't3', 't4', 't5'];
+            $allTimestampsPresent = !array_diff($requiredTimestamps, array_keys(array_filter($completedDecoded)));
+
+            if ($allTimestampsPresent) {
+                $behaviourScores = $scoreDecoded;
+
+                try {
+                    $t5Date = Carbon::parse($completedDecoded['t5']);
+                    $behaviourassessmentTakenDate = $t5Date;
+                    $behaviourassessmentExpireDate = $t5Date->copy()->addYear();
+                } catch (\Exception $e) {
+                    // Invalid t5 date format
+                }
+            }
+        }
+    }
 
     return view('candidate.candidate_profile', [
         'candidate' => $candidate,
         'valueScores' => $valueScores,
+        'behaviourScores' => $behaviourScores,
+        'behaviourassessmentTakenDate' => $behaviourassessmentTakenDate,
+        'behaviourassessmentExpireDate' => $behaviourassessmentExpireDate,
+        'valueassessmentTakenDate' => $valueassessmentTakenDate,
+        'valueassessmentExpireDate' => $valueassessmentExpireDate,
     ]);
+}
 
-    }
 
     public function Assesment()
     {
@@ -67,6 +163,30 @@ class CandidateController extends Controller
         // }
 
         return view('candidate.behaviour_assesment');
+    }
+
+    public function BehaviourAssesmentResult()
+    {
+        $candidate = auth()->guard('candidate')->user();
+    
+        
+        $behaviourScores = [];
+    
+    
+        if (!empty($candidate->behaviour_assesment_score)) {
+            $decoded = json_decode($candidate->behaviour_assesment_score, true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $behaviourScores = is_array($decoded) ? $decoded : [];
+            }
+        }
+
+        
+    
+        return view('candidate.behaviour_assesment_result', [
+            'candidate' => $candidate,
+            
+            'behaviourScores' => $behaviourScores,
+        ]);
     }
 
     public function showCompassionVsConfidence()
@@ -132,12 +252,15 @@ class CandidateController extends Controller
 
         // end Store the scores & time in the candidate table
 
-        return view('candidate.CompassionVsConfidenceResult', compact(
-            'total_compassion',
-            'total_confidence',
-            'compassion_percentage',
-            'confidence_percentage'
-        ));
+        // return view('candidate.CompassionVsConfidenceResult', compact(
+        //     'total_compassion',
+        //     'total_confidence',
+        //     'compassion_percentage',
+        //     'confidence_percentage'
+        // ));
+
+        return redirect()->route('CuriosityVsPracticality');
+
     }
 
     
@@ -177,12 +300,37 @@ class CandidateController extends Controller
         $curiosity_percentage = ($total_curiosity / 2000) * 100;
         $practicality_percentage = ($total_practicality / 2000) * 100;
 
-        return view('candidate.CuriosityVsPracticalityResult', compact(
-            'total_curiosity',
-            'total_practicality',
-            'curiosity_percentage',
-            'practicality_percentage'
-        ));
+        // start Store the scores & time in the candidate table
+
+        $candidate = auth()->guard('candidate')->user();
+        // Decode existing scores
+        $currentScores = json_decode($candidate->behaviour_assesment_score, true) ?? [];
+        if (!is_array($currentScores)) $currentScores = [];
+        $currentScores['curiosity'] = $curiosity_percentage;
+        $currentScores['practicality'] = $practicality_percentage;
+        
+        // Decode completion timestamps
+        $completed = json_decode($candidate->behaviour_assesment_completed_at, true) ?? [];
+        if (!is_array($completed)) $completed = [];
+        $completed['t2'] = now()->toDateTimeString();
+        
+        // Save both
+        DB::table('candidates')->where('id', $candidate->id)->update([
+            'behaviour_assesment_score' => json_encode($currentScores),
+            'behaviour_assesment_completed_at' => json_encode($completed),
+        ]);
+
+        // end Store the scores & time in the candidate table
+
+        // return view('candidate.CuriosityVsPracticalityResult', compact(
+        //     'total_curiosity',
+        //     'total_practicality',
+        //     'curiosity_percentage',
+        //     'practicality_percentage'
+        // ));
+
+        return redirect()->route('DisciplineVsAdaptability');
+
     }
 
     public function showDisciplineVsAdaptability()
@@ -220,12 +368,37 @@ class CandidateController extends Controller
         $discipline_percentage = ($total_discipline / 2000) * 100;
         $adaptability_percentage = ($total_adaptability / 2000) * 100;
 
-        return view('candidate.DisciplineVsAdaptabilityResult', compact(
-            'total_discipline',
-            'total_adaptability',
-            'discipline_percentage',
-            'adaptability_percentage'
-        ));
+        // start Store the scores & time in the candidate table
+
+        $candidate = auth()->guard('candidate')->user();
+        // Decode existing scores
+        $currentScores = json_decode($candidate->behaviour_assesment_score, true) ?? [];
+        if (!is_array($currentScores)) $currentScores = [];
+        $currentScores['discipline'] = $discipline_percentage;
+        $currentScores['adaptability'] = $adaptability_percentage;
+        
+        // Decode completion timestamps
+        $completed = json_decode($candidate->behaviour_assesment_completed_at, true) ?? [];
+        if (!is_array($completed)) $completed = [];
+        $completed['t3'] = now()->toDateTimeString();
+        
+        // Save both
+        DB::table('candidates')->where('id', $candidate->id)->update([
+            'behaviour_assesment_score' => json_encode($currentScores),
+            'behaviour_assesment_completed_at' => json_encode($completed),
+        ]);
+
+        // end Store the scores & time in the candidate table
+
+        // return view('candidate.DisciplineVsAdaptabilityResult', compact(
+        //     'total_discipline',
+        //     'total_adaptability',
+        //     'discipline_percentage',
+        //     'adaptability_percentage'
+        // ));
+
+        return redirect()->route('ResilienceVsSensitivity');
+
     }
 
     public function showtResilienceVsSensitivity()
@@ -263,12 +436,36 @@ class CandidateController extends Controller
         $resilience_percentage = ($total_resilience / 2000) * 100;
         $sensitivity_percentage = ($total_sensitivity / 2000) * 100;
 
-        return view('candidate.ResilienceVsSensitivityResult', compact(
-            'total_resilience',
-            'total_sensitivity',
-            'resilience_percentage',
-            'sensitivity_percentage'
-        ));
+        // start Store the scores & time in the candidate table
+
+        $candidate = auth()->guard('candidate')->user();
+        // Decode existing scores
+        $currentScores = json_decode($candidate->behaviour_assesment_score, true) ?? [];
+        if (!is_array($currentScores)) $currentScores = [];
+        $currentScores['resilience'] = $resilience_percentage;
+        $currentScores['sensitivity'] = $sensitivity_percentage;
+        
+        // Decode completion timestamps
+        $completed = json_decode($candidate->behaviour_assesment_completed_at, true) ?? [];
+        if (!is_array($completed)) $completed = [];
+        $completed['t4'] = now()->toDateTimeString();
+        
+        // Save both
+        DB::table('candidates')->where('id', $candidate->id)->update([
+            'behaviour_assesment_score' => json_encode($currentScores),
+            'behaviour_assesment_completed_at' => json_encode($completed),
+        ]);
+
+        // end Store the scores & time in the candidate table
+
+        // return view('candidate.ResilienceVsSensitivityResult', compact(
+        //     'total_resilience',
+        //     'total_sensitivity',
+        //     'resilience_percentage',
+        //     'sensitivity_percentage'
+        // ));
+        return redirect()->route('SociobilityVsReflectiveness');
+        
     }
 
     public function showtSociobilityVsReflectiveness()
@@ -308,12 +505,37 @@ class CandidateController extends Controller
         $sociability_percentage = ($total_sociability / 2000) * 100;
         $reflectiveness_percentage = ($total_reflectiveness / 2000) * 100;
 
-        return view('candidate.sociobilityVsReflectivenessResult', compact(
-            'total_sociability',
-            'total_reflectiveness',
-            'sociability_percentage',
-            'reflectiveness_percentage'
-        ));
+        // start Store the scores & time in the candidate table
+
+        $candidate = auth()->guard('candidate')->user();
+        // Decode existing scores
+        $currentScores = json_decode($candidate->behaviour_assesment_score, true) ?? [];
+        if (!is_array($currentScores)) $currentScores = [];
+        $currentScores['sociability'] = $sociability_percentage;
+        $currentScores['reflectiveness'] = $reflectiveness_percentage;
+        
+        // Decode completion timestamps
+        $completed = json_decode($candidate->behaviour_assesment_completed_at, true) ?? [];
+        if (!is_array($completed)) $completed = [];
+        $completed['t5'] = now()->toDateTimeString();
+        
+        // Save both
+        DB::table('candidates')->where('id', $candidate->id)->update([
+            'behaviour_assesment_score' => json_encode($currentScores),
+            'behaviour_assesment_completed_at' => json_encode($completed),
+        ]);
+
+        // end Store the scores & time in the candidate table
+
+        // return view('candidate.sociobilityVsReflectivenessResult', compact(
+        //     'total_sociability',
+        //     'total_reflectiveness',
+        //     'sociability_percentage',
+        //     'reflectiveness_percentage'
+        // ));
+
+        return redirect()->route('behaviour.assesment.result');
+
     }
 
     // Show words for the current page

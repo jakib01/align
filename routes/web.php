@@ -147,6 +147,8 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::get('/technical/assesment', [CandidateController::class, 'TechnicalAssesment'])->name('technical.assesment')->middleware('candidate');
         Route::get('/behaviour/assesment', [CandidateController::class, 'BehaviourAssesment'])->name('behaviour.assesment')->middleware('candidate');
 
+        Route::get('/behaviour/assesment/result', [CandidateController::class, 'BehaviourAssesmentResult'])->name('behaviour.assesment.result')->middleware('candidate');
+
         Route::get('/CompassionVsConfidence', [CandidateController::class, 'showCompassionVsConfidence'])->name('CompassionVsConfidence');
         Route::post('/CompassionVsConfidence/submit', [CandidateController::class, 'savet1'])->name('store.CompassionVsConfidence');
 

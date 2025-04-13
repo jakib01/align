@@ -11,7 +11,7 @@
     <h3>Interpretation:</h3>
     @if ($total_resilience > $total_sensitivity)
         <p><strong>You are more Resilient.</strong></p>
-    @elseif ($total_sociability < $total_reflectiveness)
+    @elseif ($total_resilience < $total_sensitivity)
         <p><strong>You are more Sensitive.</strong></p>
     @else
         <p><strong>You have a balanced approach.</strong></p>
