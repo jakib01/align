@@ -2,6 +2,16 @@
 
 @section('employer_team')
     <main id="main" class="main">
+
+        {{-- ✅ Success/Error Messages --}}
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
+
         <section class="section dashboard">
             <div class="row">
                 <div class="col-lg-12">
@@ -18,7 +28,7 @@
                                     </button>
 
                                     <!-- Modal -->
-                                    @if(isset($teamMember))
+{{--                                    @if(isset($teamMember))--}}
                                     <div class="modal fade" id="addTeamMemberModal" tabindex="-1" aria-labelledby="addTeamMemberModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -65,7 +75,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @endif
+{{--                                    @endif--}}
 
                                 </div>
                                 <div class="table-responsive d-none d-md-block">
@@ -98,6 +108,19 @@
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-danger btn-sm">
                                                                 <i class="fas fa-trash-alt"></i>
+                                                            </button>
+                                                        </form>
+
+                                                        <!-- Send Test Link Button -->
+                                                        <form action="{{ route('employee.assessment.send') }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Are you sure?')">
+                                                            @csrf
+                                                            <input type="hidden" name="member_id" value="{{ $member->id }}">
+                                                            <input type="hidden" name="employee_email" value="{{ $member->email }}">
+
+                                                            <button type="submit" class="btn btn-sm
+                                                                {{ $member->is_done_assesment ? 'btn-secondary' : ($member->is_send_link ? 'btn-success' : 'btn-primary') }}"
+                                                                {{ $member->is_send_link || $member->is_done_assesment ? 'disabled' : '' }}>
+                                                                {{ $member->is_done_assesment ? 'Assessment Done' : ($member->is_send_link ? 'Link Sent' : 'Send Test Link') }}
                                                             </button>
                                                         </form>
                                                     </td>
@@ -135,14 +158,6 @@
                 myModal.show();
             });
         </script>
-    @endif
-
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 <script>
     document.addEventListener("DOMContentLoaded", () => {

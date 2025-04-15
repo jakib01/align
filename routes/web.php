@@ -108,6 +108,13 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         //search in applicant review
 
         Route::get('/search-applicant', [EmployerController::class, 'searchApplicant'])->name('search.applicant')->middleware('employer');
+
+        // Employer mail assessment
+        Route::post('/employer/send-assessment-link', [TeamMemberAssessmentController::class, 'sendAssessmentLink'])->name('employee.assessment.send')->middleware('employer');
+        Route::get('/value/assessment/{page}/{token}', [TeamMemberAssessmentController::class, 'accessAssessmentPage'])->name('employee.assessment.access')->middleware('employer');
+
+        Route::post('/value/assessment/submit', [TeamMemberAssessmentController::class, 'valueAssessmentSubmit'])->middleware('employer');
+        Route::get('/value/assessment/result', [TeamMemberAssessmentController::class, 'result'])->name('value.result')->middleware('employer');
     });
 
     // Employer route ends------------
@@ -230,14 +237,10 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         // Routes for showing specific assessment forms
         Route::get('assessment/behavior', [AdminController::class, 'showAssessmentForm'])->name('assessment.form.behavior')->middleware('admin');
         Route::get('assessment/values', [AdminController::class, 'showAssessmentForm'])->name('assessment.form.values')->middleware('admin');
+
     });
 
-
     // admin route ends-----
-
-    Route::post('/employer/send-assessment-link', [TeamMemberAssessmentController::class, 'sendAssessmentLink'])->name('employee.assessment.send');
-    Route::get('/employer/assessment/{token}', [TeamMemberAssessmentController::class, 'accessAssessmentPage'])->name('employee.assessment.access');
-
 });
 
 // Prevent back after logout

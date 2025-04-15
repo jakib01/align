@@ -20,6 +20,12 @@ class TeamMember extends Model
         'email',
         'admin_status',
         'status', // This field should be nullable, if you don't intend to use it immediately
+        'behaviour_assessment_score',
+        'value_assessment_score',
+        'value_assessment_completed_at',
+        'behaviour_assessment_completed_at',
+        'is_send_link',
+        'is_done_assessment'
     ];
 
     // Define the relationship with the Employer model

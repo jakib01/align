@@ -49,11 +49,10 @@ class EmployerController extends Controller
         }
 
         // Fetch only the team members belonging to the authenticated employer
-        $teamMembers = TeamMember::where('employer_id', $employer->id)->get();
+        $teamMembers = TeamMember::get();
 
         // Pass a flag to the view if no team members are found
         $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
-
 
         return view('employer.employer_team', compact('teamMembers', 'noTeamMembersMessage'));
     }
