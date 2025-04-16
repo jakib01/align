@@ -73,10 +73,6 @@ class TeamMemberAssessmentController extends Controller
 			'totalPages' => $totalPages,
 			'token' => $token,
 		]);
-//
-//		$link->update(['is_used' => true]);
-//
-//		return view('employee.test-page'); // your test page
 	}
 
 	public function valueAssessmentSubmit(Request $request)
@@ -120,11 +116,44 @@ class TeamMemberAssessmentController extends Controller
 			}
 		}
 
-//		$link->update(['is_used' => true]);
+        $results = DB::table('employer_selections')
+            ->join('value_words', 'employer_selections.value_word_id', '=', 'value_words.id')
+            ->where('employer_selections.team_member_id',  $link->team_member_id)
+            ->select('value_words.mother_word', DB::raw('SUM(employer_selections.score) as total'))
+            ->groupBy('value_words.mother_word')
+            ->get()
+            ->map(function ($item) {
+                $item->percentage = round(($item->total / 25) * 100, 2);
+                return $item;
+            });
 
+        // 🔄 Convert to key-value pair for JSON storage
+        $scoreData = $results->pluck('percentage', 'mother_word')->toArray();
 
-		// Return success response
+        // 💾 Store JSON in the candidates table
+        DB::table('team_members')
+            ->where('id', $link->team_member_id)
+            ->update([
+                'value_assessment_score' => json_encode($scoreData),
+                'value_assessment_completed_at' => now(),
+            ]);
+
+        $teamMember = TeamMember::Where('id', $link->team_member_id)->first();
+
+        if (isset($teamMember->value_assessment_completed_at) && isset($teamMember->behaviour_assessment_completed_at)) {
+            TeamMember::where('id',  $request->member_id)
+                ->update([
+                    'is_done_assessment' => 1,
+                ]);
+        }
+
 		return response()->json(['success' => true]);
 	}
 
+    public function showResult(Request $request)
+    {
+        $assessmentName = $request->query('assessment');
+
+        return view('employer.assessment-success', compact('assessmentName'));
+    }
 }

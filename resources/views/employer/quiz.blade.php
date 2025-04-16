@@ -123,7 +123,9 @@
                     } else {
                         alert('Selections submitted successfully!');
                         localStorage.removeItem('selected_words');
-                        window.location.href = "{{ route('value.result') }}";
+
+                        let assessmentName = @json('Values');
+                        window.location.href = "{{ route('employee.value.result') }}?assessment=" + encodeURIComponent(assessmentName);
                     }
                 })
                 .catch((error) => console.error('Error:', error));

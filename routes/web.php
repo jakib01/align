@@ -114,7 +114,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::get('/value/assessment/{page}/{token}', [TeamMemberAssessmentController::class, 'accessAssessmentPage'])->name('employee.assessment.access')->middleware('employer');
 
         Route::post('/value/assessment/submit', [TeamMemberAssessmentController::class, 'valueAssessmentSubmit'])->middleware('employer');
-        Route::get('/value/assessment/result', [TeamMemberAssessmentController::class, 'result'])->name('value.result')->middleware('employer');
+        Route::get('/value/assessment/result', [TeamMemberAssessmentController::class, 'showResult'])->name('employee.value.result')->middleware('employer');
     });
 
     // Employer route ends------------
