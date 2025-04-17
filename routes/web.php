@@ -8,6 +8,7 @@ use App\Http\Controllers\CandidateAuthController;
 use App\Http\Controllers\EmployerAuthController;
 
 
+use App\Http\Controllers\TeamMemberAssessmentController;
 use App\Http\Middleware\Candidate;
 use Illuminate\Support\Facades\Route;
 
@@ -25,18 +26,8 @@ use Illuminate\Support\Facades\Route;
 // Prevent back after logout
 
 Route::group(['middleware' => 'prevent-back-history'], function () {
-
-
-
-
-
     // Employer route starts------------
-
-
-
     Route::prefix('employer')->group(function () {
-
-
         Route::get('/login', [EmployerController::class, 'Index'])->name('employer_login_form');
         Route::post('/login', [EmployerController::class, 'Login'])->name('employer.login');
         Route::get('/logout', [EmployerController::class, 'Logout'])->name('employer.logout')->middleware('employer');
@@ -45,7 +36,6 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::post('/register', [EmployerAuthController::class, 'register'])->name('employer.register');
 
         Route::get('/dashboard', [EmployerController::class, 'Dashboard'])->name('employer.dashboard')->middleware('employer');
-
 
         Route::get('/profile', [EmployerController::class, 'showProfile'])->name('employer.profile')->middleware('employer');
         Route::get('/profile/edit', [EmployerController::class, 'editProfile'])->name('employer.profile.edit')->middleware('employer');
@@ -65,6 +55,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
         Route::post('/team/store', [EmployerController::class, 'store'])->name('team.store')->middleware('employer');
         Route::delete('/team/{id}', [EmployerController::class, 'destroy'])->name('team.destroy')->middleware('employer');
+        Route::get('/team/{id}/edit', [EmployerController::class, 'edit'])->name('team.edit')->middleware('employer');
         Route::put('/team/{id}', [EmployerController::class, 'updateTeam'])->name('team.update')->middleware('employer');
 
 
@@ -118,13 +109,18 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
         Route::get('/search-applicant', [EmployerController::class, 'searchApplicant'])->name('search.applicant')->middleware('employer');
 
+        // Employer mail assessment
+        Route::post('/employer/send-assessment-link', [TeamMemberAssessmentController::class, 'sendAssessmentLink'])->name('employee.assessment.send')->middleware('employer');
+        Route::get('/value/assessment/{page}/{token}', [TeamMemberAssessmentController::class, 'accessAssessmentPage'])->name('employee.assessment.access')->middleware('employer');
+
+        Route::post('/value/assessment/submit', [TeamMemberAssessmentController::class, 'valueAssessmentSubmit'])->middleware('employer');
+        Route::get('/value/assessment/result', [TeamMemberAssessmentController::class, 'showResult'])->name('employee.value.result')->middleware('employer');
     });
 
     // Employer route ends------------
 
 
     // candidate route starts-----
-
     Route::prefix('candidate')->group(function () {
         // Login Form (GET request)
         Route::get('/login/form', [CandidateController::class, 'Index'])->name('candidate_login_form');
@@ -202,15 +198,9 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
 
     });
-
-
-
     // candidate route ends-----
 
-
-
     // admin route starts-----
-
     Route::prefix('admin')->group(function () {
 
         Route::get('/', [AdminController::class, 'Index'])->name('admin_login_form');
@@ -248,24 +238,14 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::get('assessment/behavior', [AdminController::class, 'showAssessmentForm'])->name('assessment.form.behavior')->middleware('admin');
         Route::get('assessment/values', [AdminController::class, 'showAssessmentForm'])->name('assessment.form.values')->middleware('admin');
 
-
-
     });
 
-
     // admin route ends-----
-
 });
 
 // Prevent back after logout
 
-
-
-
-
 //all default routes start-------
-
-
 
 Route::get('/', function () {
     return view('welcome');
