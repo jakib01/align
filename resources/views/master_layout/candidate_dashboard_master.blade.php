@@ -120,6 +120,31 @@
         </a>
       </li>
 
+      @php
+     $canSeeJobs = $hasCompletedBehaviour && $hasCompletedValue;
+      @endphp
+
+@if($canSeeJobs)
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="{{ route('job.search') }}">
+      <i class="fa-solid fa-briefcase"></i> <span>Jobs</span>
+    </a>
+  </li>
+@else
+  <li class="nav-item">
+    <a class="nav-link collapsed disabled" href="#" style="pointer-events: none; opacity: 0.5;" title="Complete both assessments to unlock Jobs">
+      <i class="fa-solid fa-lock"></i> <span>Jobs (Please complete Assessments)</span>
+    </a>
+  </li>
+@endif
+
+
+      {{-- @if($hasCompletedBehaviour && $hasCompletedValue)
+    <a href="{{ route('job.search') }}">Browse Jobs</a>
+     @else
+        <a class="disabled" href="#" title="Complete both assessments to unlock jobs">Jobs (Locked)</a>
+     @endif --}}
+
       <li class="nav-item">
         <a class="nav-link collapsed" href="{{route('application.tracking')}}">
           <i class="fa-regular fa-file-lines"></i> <span>Applications</span>

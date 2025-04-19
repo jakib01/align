@@ -10,6 +10,8 @@ use App\Models\CandidateAnswer;
 use App\Models\CandidateAssessment;
 use Carbon\Carbon;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 
 
@@ -92,6 +94,7 @@ class CandidateController extends Controller
     $behaviourScores = [];
     $behaviourassessmentTakenDate = null;
     $behaviourassessmentExpireDate = null;
+    $jobPreferences = [];
 
     // Handle Value Assessment
     if (!empty($candidate->value_assessment_score)) {
@@ -129,6 +132,15 @@ class CandidateController extends Controller
         }
     }
 
+    if (!empty($candidate->job_preferences)) {
+        $decoded = json_decode($candidate->job_preferences, true);
+        $jobPreferences = is_array($decoded) ? $decoded : [];
+    }
+
+    $hasCompletedBehaviour = !empty($behaviourassessmentTakenDate);
+    $hasCompletedValue = !empty($valueassessmentTakenDate);
+
+
     return view('candidate.candidate_profile', [
         'candidate' => $candidate,
         'valueScores' => $valueScores,
@@ -137,8 +149,118 @@ class CandidateController extends Controller
         'behaviourassessmentExpireDate' => $behaviourassessmentExpireDate,
         'valueassessmentTakenDate' => $valueassessmentTakenDate,
         'valueassessmentExpireDate' => $valueassessmentExpireDate,
+
+        'hasCompletedBehaviour' => $hasCompletedBehaviour,
+        'hasCompletedValue' => $hasCompletedValue,
+        'jobPreferences' => $jobPreferences,
+
     ]);
 }
+
+public function updateProfilePhoto(Request $request)
+{
+    $request->validate([
+        'profile_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    $candidate = \App\Models\Candidate::find(auth()->guard('candidate')->id());
+
+    if ($candidate && $request->hasFile('profile_photo')) {
+        $file = $request->file('profile_photo');
+        $filename = time() . '.' . $file->getClientOriginalExtension();
+        $file->storeAs('public/profile_photos', $filename);
+        $candidate->profile_photo = 'storage/profile_photos/' . $filename;
+        $candidate->save();
+    }
+
+    return redirect()->back()->with('success', 'Profile photo updated!');
+}
+
+
+public function updateSinglePreference(Request $request, $id)
+{
+    $key = $request->input('key');
+    $value = $request->input('value');
+
+    $allowedKeys = ['location', 'seniority', 'salary', 'contract', 'sponsorship_required'];
+
+    if (!in_array($key, $allowedKeys)) {
+        return response()->json(['success' => false, 'message' => 'Invalid key']);
+    }
+
+    $candidate = DB::table('candidates')->where('id', $id)->first();
+
+    $preferences = json_decode($candidate->job_preferences ?? '{}', true);
+    $preferences[$key] = $value;
+
+    DB::table('candidates')
+        ->where('id', $id)
+        ->update([
+            'job_preferences' => json_encode($preferences),
+            'updated_at' => now(),
+        ]);
+
+    return response()->json(['success' => true]);
+}
+
+
+
+public function downloadProfilePdf()
+{
+    $candidate = auth()->guard('candidate')->user();
+
+    $valueScores = [];
+    $behaviourScores = [];
+    $behaviourassessmentTakenDate = null;
+    $behaviourassessmentExpireDate = null;
+
+    if (!empty($candidate->value_assessment_score)) {
+        $decoded = json_decode($candidate->value_assessment_score, true);
+        $valueScores = is_array($decoded) ? $decoded : [];
+    }
+
+    $valueassessmentTakenDate = $candidate->value_assessment_completed_at ?? null;
+    $valueassessmentExpireDate = $valueassessmentTakenDate ? Carbon::parse($valueassessmentTakenDate)->addYear() : null;
+
+    if (!empty($candidate->behaviour_assesment_score) && !empty($candidate->behaviour_assesment_completed_at)) {
+        $scoreDecoded = json_decode($candidate->behaviour_assesment_score, true);
+        $completedDecoded = json_decode($candidate->behaviour_assesment_completed_at, true);
+
+        if (
+            json_last_error() === JSON_ERROR_NONE &&
+            is_array($scoreDecoded) &&
+            is_array($completedDecoded)
+        ) {
+            $requiredTimestamps = ['t1', 't2', 't3', 't4', 't5'];
+            $allTimestampsPresent = !array_diff($requiredTimestamps, array_keys(array_filter($completedDecoded)));
+
+            if ($allTimestampsPresent) {
+                $behaviourScores = $scoreDecoded;
+
+                try {
+                    $t5Date = Carbon::parse($completedDecoded['t5']);
+                    $behaviourassessmentTakenDate = $t5Date;
+                    $behaviourassessmentExpireDate = $t5Date->copy()->addYear();
+                } catch (\Exception $e) {
+                    // Handle error
+                }
+            }
+        }
+    }
+
+    $pdf = Pdf::loadView('pdf.candidate_profile_pdf', [
+        'candidate' => $candidate,
+        'valueScores' => $valueScores,
+        'behaviourScores' => $behaviourScores,
+        'behaviourassessmentTakenDate' => $behaviourassessmentTakenDate,
+        'behaviourassessmentExpireDate' => $behaviourassessmentExpireDate,
+        'valueassessmentTakenDate' => $valueassessmentTakenDate,
+        'valueassessmentExpireDate' => $valueassessmentExpireDate,
+    ]);
+
+    return $pdf->download("{$candidate->candidate_name}_JobPass.pdf");
+}
+
 
 
     public function Assesment()

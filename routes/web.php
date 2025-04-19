@@ -23,6 +23,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/php-info', function () {
+    return phpinfo();
+});
+
+
 // Prevent back after logout
 
 Route::group(['middleware' => 'prevent-back-history'], function () {
@@ -137,8 +142,14 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
         Route::get('/logout', [CandidateController::class, 'Logout'])->name('candidate.logout')->middleware('candidate');
 
-
         Route::get('/dashboard', [CandidateController::class, 'Dashboard'])->name('candidate.dashboard')->middleware('candidate');
+
+        Route::post('/update-photo', [CandidateController::class, 'updateProfilePhoto'])->name('candidate.updatePhoto')->middleware('candidate');
+
+
+        Route::post('/candidates/{id}/preferences/update-field', [CandidateController::class, 'updateSinglePreference']);
+
+
         Route::get('/assesment', [CandidateController::class, 'Assesment'])->name('candidate.assesment')->middleware('candidate');
         Route::get('/technical/assesment', [CandidateController::class, 'TechnicalAssesment'])->name('technical.assesment')->middleware('candidate');
         Route::get('/behaviour/assesment', [CandidateController::class, 'BehaviourAssesment'])->name('behaviour.assesment')->middleware('candidate');
@@ -169,6 +180,11 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         ->where('page', '[0-9]+')->middleware('candidate');
         Route::post('/value/assessment/submit', [CandidateController::class, 'submit'])->middleware('candidate');
         Route::get('/value/assessment/result', [CandidateController::class, 'result'])->name('value.result')->middleware('candidate');
+
+        // job pass download pdf route
+
+        Route::get('/download-pdf', [CandidateController::class, 'downloadProfilePdf'])->name('candidate.download.pdf');
+
 
         // Submit Quiz Answers (AJAX Post)
         // Route::post('/submit-quiz', [CandidateController::class, 'store']);
