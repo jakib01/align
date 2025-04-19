@@ -414,7 +414,7 @@ class EmployerController extends Controller
                 'candidates.candidate_name as candidate_name',
                 'candidates.email as candidate_email',
                 'candidates.skill_assesment_score', // Ensure this column exists
-                'candidates.value_assesment_score', // Ensure this column exists
+                'candidates.value_assessment_score', // Ensure this column exists
             )
             ->paginate(5);
 
