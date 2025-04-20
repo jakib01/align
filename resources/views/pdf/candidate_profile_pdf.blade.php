@@ -72,6 +72,66 @@
     <div class="content">
         <h1>Candidate Assessment Report</h1>
 
+        {{-- @php
+        $path = public_path(''storage/' . $candidate->profile_photo'); // Path to the image file
+        $imageType = pathinfo($path, PATHINFO_EXTENSION);
+        $imageData = base64_encode(file_get_contents($path));
+    @endphp
+
+<img src="data:image/{{ $imageType }};base64,{{ $imageData }}" alt="Signature" width="150"> --}}
+
+{{-- @php
+    $photoData = null;
+    $photoPath = public_path('storage/' . $candidate->profile_photo);
+
+    if (!empty($candidate->profile_photo) && file_exists($photoPath)) {
+        $photoType = pathinfo($photoPath, PATHINFO_EXTENSION);
+        $photoData = base64_encode(file_get_contents($photoPath));
+    }
+@endphp
+
+@if($photoData)
+    <img src="data:image/{{ $photoType }};base64,{{ $photoData }}"
+         alt="Profile Photo"
+         style="width: 120px; height: 120px; padding-top: 20px;">
+@else
+    <p><em>No profile photo available.</em></p>
+@endif --}}
+
+@php
+    $photoData = null;
+
+    if (!empty($candidate->profile_photo)) {
+        $photoFullPath = public_path( $candidate->profile_photo);
+
+        // echo '<pre>' . $photoFullPath . '</pre>';
+
+
+        if (file_exists($photoFullPath)) {
+            $photoType = pathinfo($photoFullPath, PATHINFO_EXTENSION);
+            $photoData = base64_encode(file_get_contents($photoFullPath));
+        }
+    }
+@endphp
+
+@if($photoData)
+    <img src="data:image/{{ $photoType }};base64,{{ $photoData }}"
+         alt="Profile Photo"
+         style="width: 120px; height: 120px; padding-top: 20px;">
+@else
+    <p><em>No profile photo available.</em></p>
+@endif
+
+
+
+
+    {{-- <img id="profilePhoto" 
+    src="{{ asset('storage/' . $candidate->profile_photo) }}" 
+    alt="Profile" 
+    class="rounded-circle mb-3" 
+    style="width: 120px; height: 120px; padding-top: 20px;"> --}}
+
+
         <p><strong>Name:</strong> {{ $candidate->candidate_name }}</p>
         <p><strong>Email:</strong> {{ $candidate->email }}</p>
 

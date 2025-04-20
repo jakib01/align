@@ -114,11 +114,11 @@
         </a>
       </li>
 
-      <li class="nav-item">
+      {{-- <li class="nav-item">
         <a class="nav-link collapsed" href="{{route('job.search')}}">
           <i class="fa-solid fa-briefcase"></i> <span>Jobs</span>
         </a>
-      </li>
+      </li> --}}
 
       @php
      $canSeeJobs = $hasCompletedBehaviour && $hasCompletedValue;
