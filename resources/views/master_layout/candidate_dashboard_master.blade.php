@@ -177,6 +177,7 @@
 
   @yield('behaviour_assesment')
   @yield('value_assesment')
+  @yield('coreskill_reasoning')
   @yield('sociobilityVsReflectiveness')
   @yield('ResilienceVsSensitivity')
   @yield('DisciplineVsAdaptability')
@@ -186,6 +187,7 @@
   @yield('quiz')
   @yield('result')
   @yield('behaviour_result')
+  @yield('core_assessment_result')
   
   {{-- @yield('quiz_result') --}}
   @yield('application_tracking')

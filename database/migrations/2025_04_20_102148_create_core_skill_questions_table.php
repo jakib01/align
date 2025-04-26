@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('team_member_assessments', function (Blueprint $table) {
+        Schema::create('core_skill_questions', function (Blueprint $table) {
             $table->id();
-            $table->string('team_member_id');
-            $table->string('team_member_email');
-            $table->uuid('access_token')->unique();
-            $table->boolean('is_used')->default(false);
-            $table->timestamp('expires_at')->nullable();
-            $table->timestamps();
+        $table->text('prompt');
+        $table->string('skill')->nullable();
+        $table->string('sub_skill')->nullable();
+        $table->string('theme_tags')->nullable();
+        $table->json('options');
+        $table->timestamps();
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('team_member_assessments');
+        Schema::dropIfExists('core_skill_questions');
     }
 };
