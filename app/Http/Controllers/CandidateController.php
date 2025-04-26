@@ -273,6 +273,32 @@ public function downloadProfilePdf()
         return view('candidate.technical_assessment');
     }
 
+    public function CoreSkillAssesment()
+    {
+        $questions = DB::table('core_skill_questions')->get();
+        return view('candidate.coreskill_reasoning', compact('questions'));
+    }
+
+    public function CoreSkillAssesmentSubmit(Request $request)
+    {
+        $candidateId = auth()->guard('candidate')->id();
+        $questions = DB::table('core_skill_questions')->get();
+        $score = 0;
+
+        foreach ($questions as $question) {
+            $selected = $request->input("question_{$question->id}");
+            $options = json_decode($question->options, true);
+            $score += $options[$selected]['score'] ?? 0;
+        }
+
+        DB::table('candidates')->where('id', $candidateId)->update([
+            'technical_assessment_score' => $score,
+            'technical_assessment_completed_at' => now()
+        ]);
+
+        return view('candidate.core_assessment_result', compact('score'));
+    }
+
     public function BehaviourAssesment()
     {
         // $questions = AssessmentQuestion::where('assessment_type', 'behavior')

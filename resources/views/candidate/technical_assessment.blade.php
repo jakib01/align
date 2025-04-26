@@ -60,10 +60,11 @@
                     <div class="col-lg-4 col-md-6">
                 <div class="card">
                     <div class="card-body text-center">
-                        <h5 class="card-title">Numerical Reasoning</h5>
+                        <h5 class="card-title">Candidate Qualification & Reasoning</h5>
                         <p class="card-text">Test your mathematical and analytical skills. Lorem ipsum consectetur adipiscing, dolor sit amet, consectetur elit. Quisque sit amet accumsan arcu.</p>
                         <div class="d-flex align-items-center">
-                        <button class="btn btn-primary me-2" onclick="startAssessment()">Complete</button>
+                        {{-- <button class="btn btn-primary me-2" onclick="startAssessment()">Start</button> --}}
+                        <a href="{{route('coreskill.assesment')}}"  class="btn btn-primary me-2">start</a>
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNumerical">Details</button>
                     </div>
                     </div>

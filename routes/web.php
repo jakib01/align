@@ -152,6 +152,8 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
         Route::get('/assesment', [CandidateController::class, 'Assesment'])->name('candidate.assesment')->middleware('candidate');
         Route::get('/technical/assesment', [CandidateController::class, 'TechnicalAssesment'])->name('technical.assesment')->middleware('candidate');
+        Route::get('/core-skill/assesment', [CandidateController::class, 'CoreSkillAssesment'])->name('coreskill.assesment')->middleware('candidate');
+        Route::post('/core-skill/assesment/submit', [CandidateController::class, 'CoreSkillAssesmentSubmit'])->name('coreskill.assesment.submit')->middleware('candidate');
         Route::get('/behaviour/assesment', [CandidateController::class, 'BehaviourAssesment'])->name('behaviour.assesment')->middleware('candidate');
 
         Route::get('/behaviour/assesment/result', [CandidateController::class, 'BehaviourAssesmentResult'])->name('behaviour.assesment.result')->middleware('candidate');
