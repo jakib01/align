@@ -115,11 +115,27 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::get('/search-applicant', [EmployerController::class, 'searchApplicant'])->name('search.applicant')->middleware('employer');
 
         // Employer mail assessment
-        Route::post('/employer/send-assessment-link', [TeamMemberAssessmentController::class, 'sendAssessmentLink'])->name('employee.assessment.send')->middleware('employer');
-        Route::get('/value/assessment/{page}/{token}', [TeamMemberAssessmentController::class, 'accessAssessmentPage'])->name('employee.assessment.access')->middleware('employer');
+        Route::post('/employer/send-assessment-link', [TeamMemberAssessmentController::class, 'sendAssessmentLink'])->name('employee.assessment.send');
 
-        Route::post('/value/assessment/submit', [TeamMemberAssessmentController::class, 'valueAssessmentSubmit'])->middleware('employer');
-        Route::get('/value/assessment/result', [TeamMemberAssessmentController::class, 'showResult'])->name('employee.value.result')->middleware('employer');
+        Route::get('/value/assessment/{page}/{token}', [TeamMemberAssessmentController::class, 'accessValuesAssessmentPage'])->name('employee.values.assessment.access');
+        Route::post('/value/assessment/submit', [TeamMemberAssessmentController::class, 'valueAssessmentSubmit']);
+
+        Route::get('/behavior/assessment/{token}', [TeamMemberAssessmentController::class, 'accessBehaviorAssessmentPage'])->name('employee.behavior.assessment.access');
+        Route::post('/behavior/assessment/submit', [TeamMemberAssessmentController::class, 'behaviorAssessmentSubmit']);
+
+        Route::get('/behavior/curiosityVsPracticality/{token}', [TeamMemberAssessmentController::class, 'accessCuriosityVsPracticality'])->name('employer.behavior.assessment.CuriosityVsPracticality');
+        Route::post('/behavior/CuriosityVsPracticality/submit', [TeamMemberAssessmentController::class, 'behaviorCuriosityVsPracticalitySubmit']);
+
+        Route::get('/behavior/DisciplineVsAdaptability/{token}', [TeamMemberAssessmentController::class, 'accessDisciplineVsAdaptability'])->name('employer.behavior.assessment.DisciplineVsAdaptability');
+        Route::post('/behavior/DisciplineVsAdaptability/submit', [TeamMemberAssessmentController::class, 'behaviorDisciplineVsAdaptabilitySubmit']);
+
+        Route::get('/behavior/ResilienceVsSensitivity/{token}', [TeamMemberAssessmentController::class, 'accessResilienceVsSensitivity'])->name('employer.behavior.assessment.ResilienceVsSensitivity');;
+        Route::post('/behavior/ResilienceVsSensitivity/submit', [TeamMemberAssessmentController::class, 'behaviorResilienceVsSensitivitySubmit']);
+
+        Route::get('/behavior/SocioblityVsReflectiveness/{token}', [TeamMemberAssessmentController::class, 'accessSocioblityVsReflectiveness'])->name('employer.behavior.assessment.SociobilityVsReflectiveness');
+        Route::post('/behavior/SocioblityVsReflectiveness/submit', [TeamMemberAssessmentController::class, 'behaviorSocioblityVsReflectivenessSubmit']);
+
+        Route::get('/value/assessment/result', [TeamMemberAssessmentController::class, 'showResult'])->name('employee.value.result');
     });
 
     // Employer route ends------------
