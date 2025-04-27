@@ -120,7 +120,7 @@
                                                             <button type="submit" class="btn btn-sm
                                                                 {{ $member->is_done_assesment ? 'btn-secondary' : ($member->is_send_link ? 'btn-success' : 'btn-primary') }}"
                                                                 {{ $member->is_send_link || $member->is_done_assesment ? 'disabled' : '' }}>
-                                                                {{ $member->is_done_assesment ? 'Assessment Done' : ($member->is_send_link ? 'Link Sent' : 'Send Test Link') }}
+                                                                {{ $member->is_done_assessment ? 'Assessment Done' : ($member->is_send_link ? 'Link Sent' : 'Send Test Link') }}
                                                             </button>
                                                         </form>
                                                     </td>
