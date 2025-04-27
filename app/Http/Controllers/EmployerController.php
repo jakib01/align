@@ -51,10 +51,67 @@ class EmployerController extends Controller
         // Fetch only the team members belonging to the authenticated employer
         $teamMembers = TeamMember::get();
 
+        $orderedValueKeys = [
+            'Achievement',
+            'Security',
+            'Universalism',
+            'Benevolence',
+            'Conformity',
+            'Tradition',
+            'Hedonism',
+            'Power',
+            'Self-Direction',
+            'Stimulation'
+        ];
+
+        $orderedBehaviourKeys = [
+            'compassion',
+            'confidence',
+            'curiosity',
+            'practicality',
+            'discipline',
+            'adaptability',
+            'resilience',
+            'sensitivity',
+            'sociability',
+            'reflectiveness'
+        ];
+
+        $valuesAssessmentData = [];
+        $behaviourAssessmentData = [];
+
+        foreach ($teamMembers as $member) {
+            // For value_assessment_score
+            if (!empty($member->value_assessment_score)) {
+                $scores = json_decode($member->value_assessment_score, true);
+
+                if (is_array($scores)) {
+                    $row = [];
+                    foreach ($orderedValueKeys as $key) {
+                        $row[] = $scores[$key] ?? 0;
+                    }
+                    $valuesAssessmentData[] = $row;
+                }
+            }
+
+            // For behaviour_assessment_score
+            if (!empty($member->behaviour_assessment_score)) {
+                $scores = json_decode($member->behaviour_assessment_score, true);
+
+                if (is_array($scores)) {
+                    $row = [];
+                    foreach ($orderedBehaviourKeys as $key) {
+                        $row[] = $scores[$key] ?? 0;
+                    }
+                    $behaviourAssessmentData[] = $row;
+                }
+            }
+        }
+
         // Pass a flag to the view if no team members are found
         $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
 
-        return view('employer.employer_team', compact('teamMembers', 'noTeamMembersMessage'));
+        return view('employer.employer_team', compact('teamMembers', 'noTeamMembersMessage', 'valuesAssessmentData', 'behaviourAssessmentData'));
     }
 
     // Profile Management

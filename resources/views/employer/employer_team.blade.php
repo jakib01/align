@@ -161,17 +161,6 @@
     @endif
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        const valuesAssessmentData = [
-            [65, 59, 90, 81, 56, 55, 40, 78, 83, 67],
-            [70, 65, 85, 80, 60, 58, 45, 75, 85, 68],
-            [60, 58, 88, 79, 54, 53, 42, 76, 82, 65]
-        ];
-
-        const behaviourAssessmentData = [
-            [28, 48, 40, 19, 96, 27, 100, 90, 87, 66],
-            [30, 50, 38, 18, 95, 30, 98, 88, 85, 65],
-            [25, 45, 42, 20, 94, 29, 99, 89, 86, 67]
-        ];
 
         function calculateAverage(data) {
             let numMembers = data.length;
@@ -188,8 +177,8 @@
             return averages;
         }
 
-        const avgValuesAssessment = calculateAverage(valuesAssessmentData);
-        const avgBehaviourAssessment = calculateAverage(behaviourAssessmentData);
+        const avgValuesAssessment = calculateAverage(@json($valuesAssessmentData));
+        const avgBehaviourAssessment = calculateAverage(@json($behaviourAssessmentData));
 
         new Chart(document.querySelector('#valuesRadarChart'), {
             type: 'radar',
@@ -220,7 +209,7 @@
         new Chart(document.querySelector('#behaviourRadarChart'), {
             type: 'radar',
             data: {
-                labels: ['Emotional Stability', 'Flexibility', 'Emotional Sensitivity', 'Routine-Orientation', 'Assertiveness', 'Discipline', 'Cooperativeness', 'Socialibility', 'Flexibility', 'Reflectiveness', 'Exploration'],
+                labels: ['compassion', 'confidence', 'curiosity', 'practicality', 'discipline', 'adaptability', 'resilience', 'sensitivity', 'sociability', 'reflectiveness'],
                 datasets: [
                     {
                         label: 'Behaviour Assessment',
