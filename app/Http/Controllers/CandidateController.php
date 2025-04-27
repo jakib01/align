@@ -829,6 +829,7 @@ public function downloadProfilePdf()
     {
         $jobs = Job::all(); // Fetch jobs from the database
         $jobs = Job::with('employer')->get();
+        
 
         return view('candidate.job_search', compact('jobs'));
     }

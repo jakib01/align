@@ -615,7 +615,7 @@
             data-description=""
             data-requirements="Requirement 1, Requirement 2, Requirement 3"
             data-benefits="Benefit 1, Benefit 2, Benefit 3">
-            <div class="card flex-fill" style="padding: 20px; border: 1px solid #ddd; border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" onclick="showJobDetails(event)">
+            <div class="card flex-fill" style="padding: 20px; border: 1px solid #ddd; border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" >
                 <div class="card-body" >
                     <div class="d-flex justify-content-between align-items-center mb-1 mt-3">
                         <div class="d-flex align-items-center">
@@ -625,7 +625,7 @@
                                 object-fit: cover;
                                 border-radius: 5px;
                             " />
-                            <h6 class="ms-2 mb-0" style="font-size: 14px; font-weight: bold;">X Corp.</h6>
+                            <h6 class="ms-2 mb-0" style="font-size: 14px; font-weight: bold;">{{ $row->title }}</h6>
                         </div>
                     </div>
                     <h5 class="card-title mt-2 mb-2" style="font-size: 18px; font-weight: bold;">{{ $row->job_title }}</h5>
@@ -637,7 +637,7 @@
                     </p>
                     <p class="card-text text-muted mb-0 mt-1" style="font-size: 14px;">
                         <i class="bi bi-cash"></i>
-                        <span class="salary-text">£80,000 - £100,000</span>
+                        <span class="salary-text">{{ $row->salary_range}}</span>
                     </p>
                     <div class="d-flex justify-content-start align-items-center mt-1">
                         <span class="badge bg-light-blue text-dark d-flex align-items-center me-2" style="font-size: 10px;">
@@ -651,15 +651,29 @@
                         </span>
                     </div>
                     <p class="card-text mt-3 mb-1" style="font-size: 14px;">
-                        <span class="description-text" id="description1">Lorem ipsum dolor sit amet consectetur
-                            adipisicing elit.
-                            Natus laudantium neque earum, suscipit quo illum
-                            dolores...</span>
+                        <span class="description-text" id="description1">{{ $row->description}}</span>
                         <span id="read-more1" class="text-primary" style="cursor: pointer; display: none"
                             onclick="showFullDescription('description1', 'read-more1', 'Software Engineer', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus laudantium neque earum, suscipit quo illum dolores obcaecati architecto? Animi, praesentium?')">
                             Read more</span>
                     </p>
+                    <button class="btn btn-primary mt-2" onclick="showJobDetails(event)">Details</button>
+                    <button class="btn btn-info mt-2"
+    onclick="showScoresModal(this)"
+    data-behaviour='{"Leadership":80,"Communication":70,"Problem Solving":90,"Teamwork":85,"Critical Thinking":75}'
+    data-values='{"Integrity":88,"Respect":77,"Innovation":92,"Accountability":81,"Collaboration":79}'>
+    Check Score
+</button>
+
+                
+
+
+
+
+                    
+
                 </div>
+                
+
             </div>
         </div>
         @endforeach
@@ -717,6 +731,16 @@
             </div>
             <div class="modal-body">
                 <hr class="mb-3 mt-0" />
+
+                {{-- <div class="charts-section text-center">
+                    <h5>Behavior Chart</h5>
+                    <canvas id="modalRadarChart" style="max-height: 300px; margin-bottom: 30px;"></canvas>
+                
+                    <h5>Value Chart</h5>
+                    <canvas id="modalValueChart" style="max-height: 300px;"></canvas>
+                </div> --}}
+                
+
                 <p class="modal-text">
                     <strong> Description:</strong>
                     <span id="job-description"></span>
@@ -740,9 +764,57 @@
                     <span id="job-sponsorship"></span>
                 </p> -->
             </div>
+
+            <!-- Scores Modal -->
+
+
+
+            
+        </div>
+
+        
+    </div>
+
+   <!-- Scores Modal -->
+<div id="scores-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header sticky-top bg-light w-100 d-flex justify-content-between align-items-center">
+                <h5 class="modal-title">Assessment Scores</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="charts-section text-center">
+                    <h5>Behavior Chart</h5>
+                    <canvas id="modalRadarChart" style="max-height: 300px; margin-bottom: 30px;"></canvas>
+
+                    <h5>Value Chart</h5>
+                    <canvas id="modalValueChart" style="max-height: 300px;"></canvas>
+                </div>
+            </div>
+
         </div>
     </div>
+</div>
+
+
 </main>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const scoresModalEl = document.getElementById('scores-modal');
+
+scoresModalEl.addEventListener('hide.bs.modal', function () {
+    document.activeElement.blur(); // Unfocus the canvas or any focused element
+});
+
+</script>
+
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
         class="bi bi-arrow-up-short"></i></a>
 <script>
@@ -795,5 +867,113 @@
     }
 </script>
 
+   <!-- Bootstrap Bundle with Popper.js -->
+   {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
+
+<script>
+   function loadChartsInScoresModal(behaviourScores, valueScores) {
+    const behaviorLabels = Object.keys(behaviourScores || {});
+    const behaviorData = Object.values(behaviourScores || {});
+
+    const ctxBehavior = document.getElementById('modalRadarChart').getContext('2d');
+ctxBehavior.clearRect(0, 0, ctxBehavior.canvas.width, ctxBehavior.canvas.height);
+
+    
+    if (window.modalRadarChart && typeof window.modalRadarChart.destroy === 'function') {
+        window.modalRadarChart.destroy();
+    }
+    
+    window.modalRadarChart = new Chart(ctxBehavior, {
+        type: 'radar',
+        data: {
+            labels: behaviorLabels,
+            datasets: [{
+                label: 'Behavior Assessment',
+                data: behaviorData,
+                fill: true,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgb(255, 99, 132)',
+                borderWidth: 3
+            }]
+        },
+        options: {
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    suggestedMax: 100
+                }
+            }
+        }
+    });
+
+    const valueLabels = Object.keys(valueScores || {});
+    const valueData = Object.values(valueScores || {});
+
+    const ctxValue = document.getElementById('modalValueChart').getContext('2d');
+ctxValue.clearRect(0, 0, ctxValue.canvas.width, ctxValue.canvas.height);
+
+    
+    if (window.modalValueChart && typeof window.modalValueChart.destroy === 'function') {
+        window.modalValueChart.destroy();
+    }
+    
+    window.modalValueChart = new Chart(ctxValue, {
+        type: 'radar',
+        data: {
+            labels: valueLabels,
+            datasets: [{
+                label: 'Value Assessment',
+                data: valueData,
+                fill: true,
+                backgroundColor: 'rgba(133, 250, 240, 0.2)',
+                borderColor: 'rgb(68, 242, 248)',
+                borderWidth: 3
+            }]
+        }
+    });
+}
+
+    </script>
+
+<script>
+    function showScoresModal(button) {
+    const behaviourScores = JSON.parse(button.getAttribute('data-behaviour'));
+    const valueScores = JSON.parse(button.getAttribute('data-values'));
+
+    loadChartsInScoresModal(behaviourScores, valueScores);
+
+    const modalElement = document.getElementById('scores-modal');
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}
+
+
+    </script>
+    
+    
+
+    
+    
+ 
+
+
 
 @endsection
+
+{{-- <script>
+
+function showScoresModal(button) {
+    const behaviourScores = JSON.parse(button.getAttribute('data-behaviour'));
+    const valueScores = JSON.parse(button.getAttribute('data-values'));
+
+    loadChartsInScoresModal(behaviourScores, valueScores);
+
+    const modalElement = document.getElementById('scores-modal');
+    const modal = bootstrap.Modal.getOrCreateInstance(modalElement); // IMPORTANT
+    modal.show(); // show the modal properly
+}
+
+
+</script> --}}
