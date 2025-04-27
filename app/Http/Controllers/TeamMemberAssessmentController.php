@@ -143,7 +143,7 @@ class TeamMemberAssessmentController extends Controller
         $teamMember = TeamMember::Where('id', $link->team_member_id)->first();
 
         if (isset($teamMember->value_assessment_completed_at) && isset($teamMember->behaviour_assessment_completed_at)) {
-            TeamMember::where('id',  $request->member_id)
+            TeamMember::where('id',  $link->team_member_id)
                 ->update([
                     'is_done_assessment' => 1,
                 ]);
@@ -292,7 +292,7 @@ class TeamMemberAssessmentController extends Controller
         ]);
 
         if (isset($teamMember->value_assessment_completed_at) && isset($teamMember->behaviour_assessment_completed_at)) {
-            TeamMember::where('id',  $request->member_id)
+            TeamMember::where('id',  $link->team_member_id)
                 ->update([
                     'is_done_assessment' => 1,
                 ]);
@@ -363,7 +363,7 @@ class TeamMemberAssessmentController extends Controller
         ]);
 
         if (isset($teamMember->value_assessment_completed_at) && isset($teamMember->behaviour_assessment_completed_at)) {
-            TeamMember::where('id',  $request->member_id)
+            TeamMember::where('id',  $link->team_member_id)
                 ->update([
                     'is_done_assessment' => 1,
                 ]);
@@ -435,7 +435,7 @@ class TeamMemberAssessmentController extends Controller
         ]);
 
         if (isset($teamMember->value_assessment_completed_at) && isset($teamMember->behaviour_assessment_completed_at)) {
-            TeamMember::where('id',  $request->member_id)
+            TeamMember::where('id',  $link->team_member_id)
                 ->update([
                     'is_done_assessment' => 1,
                 ]);
@@ -506,7 +506,7 @@ class TeamMemberAssessmentController extends Controller
         ]);
 
         if (isset($teamMember->value_assessment_completed_at) && isset($teamMember->behaviour_assessment_completed_at)) {
-            TeamMember::where('id',  $request->member_id)
+            TeamMember::where('id',  $link->team_member_id)
                 ->update([
                     'is_done_assessment' => 1,
                 ]);
