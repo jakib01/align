@@ -1,4 +1,4 @@
-@extends('master_layout.candidate_dashboard_master')
+@extends('master_layout.employer_assessment_dashboard_master')
 @section('CuriosityVsPracticality')
 
 <main id="main" class="main">

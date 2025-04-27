@@ -201,7 +201,7 @@ class TeamMemberAssessmentController extends Controller
         $current['confidence'] = $confidence_percentage;
 
         // Decode existing scores
-        $currentScores = json_decode($teamMember->behaviour_assesment_score, true) ?? [];
+        $currentScores = json_decode($teamMember->behaviour_assessment_score, true) ?? [];
         if (!is_array($currentScores)) $currentScores = [];
         $currentScores['compassion'] = $compassion_percentage;
         $currentScores['confidence'] = $confidence_percentage;
@@ -275,7 +275,7 @@ class TeamMemberAssessmentController extends Controller
         $practicality_percentage = ($total_practicality / 2000) * 100;
 
         // Decode existing scores
-        $currentScores = json_decode($teamMember->behaviour_assesment_score, true) ?? [];
+        $currentScores = json_decode($teamMember->behaviour_assessment_score, true) ?? [];
         if (!is_array($currentScores)) $currentScores = [];
         $currentScores['curiosity'] = $curiosity_percentage;
         $currentScores['practicality'] = $practicality_percentage;
@@ -346,7 +346,7 @@ class TeamMemberAssessmentController extends Controller
         $adaptability_percentage = ($total_adaptability / 2000) * 100;
 
         // Decode existing scores
-        $currentScores = json_decode($teamMember->behaviour_assesment_score, true) ?? [];
+        $currentScores = json_decode($teamMember->behaviour_assessment_score, true) ?? [];
         if (!is_array($currentScores)) $currentScores = [];
         $currentScores['discipline'] = $discipline_percentage;
         $currentScores['adaptability'] = $adaptability_percentage;
@@ -418,7 +418,7 @@ class TeamMemberAssessmentController extends Controller
 
 
         // Decode existing scores
-        $currentScores = json_decode($teamMember->behaviour_assesment_score, true) ?? [];
+        $currentScores = json_decode($teamMember->behaviour_assessment_score, true) ?? [];
         if (!is_array($currentScores)) $currentScores = [];
         $currentScores['resilience'] = $resilience_percentage;
         $currentScores['sensitivity'] = $sensitivity_percentage;
@@ -487,7 +487,7 @@ class TeamMemberAssessmentController extends Controller
         $sociability_percentage = ($total_sociability / 2000) * 100;
         $reflectiveness_percentage = ($total_reflectiveness / 2000) * 100;
 
-        $currentScores = json_decode($teamMember->behaviour_assesment_score, true) ?? [];
+        $currentScores = json_decode($teamMember->behaviour_assessment_score, true) ?? [];
         if (!is_array($currentScores)) $currentScores = [];
         $currentScores['sociability'] = $sociability_percentage;
         $currentScores['reflectiveness'] = $reflectiveness_percentage;
