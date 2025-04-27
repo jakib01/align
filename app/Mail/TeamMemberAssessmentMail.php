@@ -10,12 +10,14 @@ class TeamMemberAssessmentMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $link;
+    public $linkValues;
+    public $behaviorValues;
     public $memberId;
 
-    public function __construct($link, $memberId)
+    public function __construct($linkValues, $behaviorValues, $memberId)
     {
-        $this->link = $link;
+        $this->linkValues = $linkValues;
+        $this->behaviorValues = $behaviorValues;
         $this->memberId = $memberId;
     }
 
