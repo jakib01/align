@@ -107,8 +107,8 @@
                         <td>sdf</td>
                         <td>sdf</td>
                         <td>sdf</td>
-                        <td>{{$row->skill_assesment_score}}</td>
-                        <td>{{$row->value_assessment_score}}</td>
+                        <td></td>
+                        <td></td>
                         <td>
 
                             <button @php

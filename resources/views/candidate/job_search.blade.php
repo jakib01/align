@@ -657,13 +657,13 @@
                             Read more</span>
                     </p>
                     <button class="btn btn-primary mt-2" onclick="showJobDetails(event)">Details</button>
-                    <button class="btn btn-info mt-2"
+                    {{-- <button class="btn btn-info mt-2"
     onclick="showScoresModal(this)"
     data-behaviour='{"Leadership":80,"Communication":70,"Problem Solving":90,"Teamwork":85,"Critical Thinking":75}'
     data-values='{"Integrity":88,"Respect":77,"Innovation":92,"Accountability":81,"Collaboration":79}'>
     Check Score
-</button>
-
+</button> --}}
+<button class="btn btn-primary mt-2" onclick="CheckScore(event)">Check Score</button>
                 
 
 
@@ -732,15 +732,7 @@
             <div class="modal-body">
                 <hr class="mb-3 mt-0" />
 
-                {{-- <div class="charts-section text-center">
-                    <h5>Behavior Chart</h5>
-                    <canvas id="modalRadarChart" style="max-height: 300px; margin-bottom: 30px;"></canvas>
-                
-                    <h5>Value Chart</h5>
-                    <canvas id="modalValueChart" style="max-height: 300px;"></canvas>
-                </div> --}}
-                
-
+            
                 <p class="modal-text">
                     <strong> Description:</strong>
                     <span id="job-description"></span>
@@ -752,20 +744,11 @@
                     <strong>Benefits:</strong> <span id="job-benefits"></span>
                 </p>
                 
-                <!-- <p class="modal-text">
-                    <strong>About Us:</strong> <span id="job-aboutus"></span>
-                </p> -->
-                <!-- <p class="modal-text">
-                    <strong>Application Deadline:</strong>
-                    <span id="job-deadline"></span>
-                </p> -->
-                <!-- <p class="modal-text">
-                    <strong>Visa Sponsorship:</strong>
-                    <span id="job-sponsorship"></span>
+           
                 </p> -->
             </div>
 
-            <!-- Scores Modal -->
+           
 
 
 
@@ -776,47 +759,66 @@
     </div>
 
    <!-- Scores Modal -->
-<div id="scores-modal" class="modal fade" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-
-            <div class="modal-header sticky-top bg-light w-100 d-flex justify-content-between align-items-center">
-                <h5 class="modal-title">Assessment Scores</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body">
-                <div class="charts-section text-center">
-                    <h5>Behavior Chart</h5>
-                    <canvas id="modalRadarChart" style="max-height: 300px; margin-bottom: 30px;"></canvas>
-
-                    <h5>Value Chart</h5>
-                    <canvas id="modalValueChart" style="max-height: 300px;"></canvas>
-                </div>
-            </div>
-
+   <!-- Modal Structure -->
+<div id="scores-modal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+  
+        <div class="modal-header sticky-top bg-light w-100 d-flex justify-content-between align-items-center">
+          <h5 class="modal-title">Assessment Scores</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+  
+        <div class="modal-body">
+          <h5 class="text-center">Behavior Comparison</h5>
+          <div class="row">
+              <div class="col-md-6">
+                  <canvas id="modalRadarChart1" style="max-height: 300px;"></canvas>
+              </div>
+              <div class="col-md-6">
+                  <canvas id="modalRadarChart2" style="max-height: 300px;"></canvas>
+              </div>
+          </div>
+  
+          <h5 class="text-center mt-4">Value Comparison</h5>
+          <div class="row">
+              <div class="col-md-6">
+                  <canvas id="modalValueChart1" style="max-height: 300px;"></canvas>
+              </div>
+              <div class="col-md-6">
+                  <canvas id="modalValueChart2" style="max-height: 300px;"></canvas>
+              </div>
+          </div>
+  
+          <h5 class="text-center mt-4" id="alignmentScoreText"></h5> <!-- Alignment Score Text -->
+        </div>
+  
+      </div>
     </div>
-</div>
+  </div>
+  
+
+
+
+
 
 
 </main>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
-    const scoresModalEl = document.getElementById('scores-modal');
 
-scoresModalEl.addEventListener('hide.bs.modal', function () {
-    document.activeElement.blur(); // Unfocus the canvas or any focused element
-});
 
-</script>
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
         class="bi bi-arrow-up-short"></i></a>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        
+
+      
 <script>
     function showJobDetails(event) {
         const jobCard = event.currentTarget.closest(".job-card");
@@ -867,90 +869,164 @@ scoresModalEl.addEventListener('hide.bs.modal', function () {
     }
 </script>
 
-   <!-- Bootstrap Bundle with Popper.js -->
-   {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
-
 <script>
-   function loadChartsInScoresModal(behaviourScores, valueScores) {
-    const behaviorLabels = Object.keys(behaviourScores || {});
-    const behaviorData = Object.values(behaviourScores || {});
+    let radarChart1, radarChart2, valueChart1, valueChart2;
 
-    const ctxBehavior = document.getElementById('modalRadarChart').getContext('2d');
-ctxBehavior.clearRect(0, 0, ctxBehavior.canvas.width, ctxBehavior.canvas.height);
+    function CheckScore(event) {
+        const modalElement = document.getElementById('scores-modal');
 
-    
-    if (window.modalRadarChart && typeof window.modalRadarChart.destroy === 'function') {
-        window.modalRadarChart.destroy();
+        if (!modalElement) {
+            console.error('Modal element not found!');
+            return;
+        }
+
+        // If already created modal instance, don't recreate it
+        let modalInstance = bootstrap.Modal.getInstance(modalElement);
+        if (!modalInstance) {
+            modalInstance = new bootstrap.Modal(modalElement);
+        }
+
+        modalInstance.show();
+
+        modalElement.addEventListener('shown.bs.modal', function onModalShown() {
+            modalElement.removeEventListener('shown.bs.modal', onModalShown);
+
+            setTimeout(() => {
+                renderCharts();
+            }, 100); // wait until canvas sizes are ready
+        });
     }
-    
-    window.modalRadarChart = new Chart(ctxBehavior, {
-        type: 'radar',
-        data: {
-            labels: behaviorLabels,
-            datasets: [{
-                label: 'Behavior Assessment',
-                data: behaviorData,
-                fill: true,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgb(255, 99, 132)',
-                borderWidth: 3
-            }]
-        },
-        options: {
-            scales: {
-                r: {
-                    beginAtZero: true,
-                    suggestedMax: 100
-                }
+
+    function renderCharts() {
+        const behaviourScores1 = {
+            "Leadership": 80,
+            "Teamwork": 75,
+            "Communication": 90,
+            "Problem Solving": 70,
+            "Critical Thinking": 85
+        };
+
+        const behaviourScores2 = {
+            "Leadership": 70,
+            "Teamwork": 65,
+            "Communication": 85,
+            "Problem Solving": 60,
+            "Critical Thinking": 75
+        };
+
+        const valueScores1 = {
+            "Integrity": 90,
+            "Innovation": 80,
+            "Respect": 85,
+            "Responsibility": 70,
+            "Excellence": 95
+        };
+
+        const valueScores2 = {
+            "Integrity": 80,
+            "Innovation": 70,
+            "Respect": 80,
+            "Responsibility": 65,
+            "Excellence": 90
+        };
+
+        // Destroy existing charts first if they exist
+        if (radarChart1) radarChart1.destroy();
+        if (radarChart2) radarChart2.destroy();
+        if (valueChart1) valueChart1.destroy();
+        if (valueChart2) valueChart2.destroy();
+
+        // Behavior Charts
+        radarChart1 = new Chart(document.getElementById('modalRadarChart1').getContext('2d'), {
+            type: 'radar',
+            data: {
+                labels: Object.keys(behaviourScores1),
+                datasets: [{
+                    label: 'Candidate 1 Behavior',
+                    data: Object.values(behaviourScores1),
+                    fill: true,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgb(255, 99, 132)'
+                }]
             }
-        }
-    });
+        });
 
-    const valueLabels = Object.keys(valueScores || {});
-    const valueData = Object.values(valueScores || {});
+        radarChart2 = new Chart(document.getElementById('modalRadarChart2').getContext('2d'), {
+            type: 'radar',
+            data: {
+                labels: Object.keys(behaviourScores2),
+                datasets: [{
+                    label: 'Candidate 2 Behavior',
+                    data: Object.values(behaviourScores2),
+                    fill: true,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgb(54, 162, 235)'
+                }]
+            }
+        });
 
-    const ctxValue = document.getElementById('modalValueChart').getContext('2d');
-ctxValue.clearRect(0, 0, ctxValue.canvas.width, ctxValue.canvas.height);
+        // Value Charts
+        valueChart1 = new Chart(document.getElementById('modalValueChart1').getContext('2d'), {
+            type: 'radar',
+            data: {
+                labels: Object.keys(valueScores1),
+                datasets: [{
+                    label: 'Candidate 1 Values',
+                    data: Object.values(valueScores1),
+                    fill: true,
+                    backgroundColor: 'rgba(133, 250, 240, 0.2)',
+                    borderColor: 'rgb(68, 242, 248)'
+                }]
+            }
+        });
 
-    
-    if (window.modalValueChart && typeof window.modalValueChart.destroy === 'function') {
-        window.modalValueChart.destroy();
+        valueChart2 = new Chart(document.getElementById('modalValueChart2').getContext('2d'), {
+            type: 'radar',
+            data: {
+                labels: Object.keys(valueScores2),
+                datasets: [{
+                    label: 'Candidate 2 Values',
+                    data: Object.values(valueScores2),
+                    fill: true,
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    borderColor: 'rgb(255, 206, 86)'
+                }]
+            }
+        });
+
+        // Calculate and show Alignment Score
+        const alignment = calculateAlignment(behaviourScores1, behaviourScores2, valueScores1, valueScores2);
+        document.getElementById('alignmentScoreText').innerText = `Alignment Score: ${alignment}%`;
     }
-    
-    window.modalValueChart = new Chart(ctxValue, {
-        type: 'radar',
-        data: {
-            labels: valueLabels,
-            datasets: [{
-                label: 'Value Assessment',
-                data: valueData,
-                fill: true,
-                backgroundColor: 'rgba(133, 250, 240, 0.2)',
-                borderColor: 'rgb(68, 242, 248)',
-                borderWidth: 3
-            }]
+
+    function calculateAlignment(scores1a, scores1b, scores2a, scores2b) {
+        let total = 0;
+        let count = 0;
+
+        for (const key in scores1a) {
+            total += 100 - Math.abs(scores1a[key] - scores1b[key]);
+            count++;
         }
-    });
-}
 
-    </script>
+        for (const key in scores2a) {
+            total += 100 - Math.abs(scores2a[key] - scores2b[key]);
+            count++;
+        }
 
-<script>
-    function showScoresModal(button) {
-    const behaviourScores = JSON.parse(button.getAttribute('data-behaviour'));
-    const valueScores = JSON.parse(button.getAttribute('data-values'));
+        return Math.round(total / count);
+    }
+</script>
 
-    loadChartsInScoresModal(behaviourScores, valueScores);
-
-    const modalElement = document.getElementById('scores-modal');
-    const modal = new bootstrap.Modal(modalElement);
-    modal.show();
-}
+    
+    
+    
+    
+    
 
 
-    </script>
+
+
+
     
     
 
