@@ -87,8 +87,8 @@
                         <th>SL No.</th>
                         <th>Candidate Name</th>
                         <th>Applied Job Title</th>
-                        <th>Profile</th>
                         <th>Score</th>
+                        <th>Profile</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -100,9 +100,13 @@
                             <td>{{$row->candidate_name}}</td>
                             <td>{{$row->job_title}}</td>
                             <td>
-                                <button class="btn btn-primary mt-2" onclick="openAssessmentModal({{ $row->candidate_id }})">Check Score</button>
+                                <button class="btn btn-primary mt-2"
+                                        onclick="openAssessmentModal({{ $row->candidate_id }})">Check Score
+                                </button>
                             </td>
-                            <td></td>
+                            <td>
+                                <button class="btn btn-primary mt-2">Profile</button>
+                            </td>
                             <td>
 
                                 <button @php
@@ -122,9 +126,7 @@
                                         style="font-size:11.5rem width: 30%" data-id="{{$row->job_post_id}}"
                                         class="unsave-button btn btn-secondary send-id">unsave
                                 </button>
-                                <button style="font-size:11.5rem width: 30%" class="btn btn-warning">Message</button>
-
-
+{{--                                <button style="font-size:11.5rem width: 30%" class="btn btn-warning">Message</button>--}}
                             </td>
                         </tr>
                     @endforeach
@@ -136,7 +138,7 @@
         </div>
 
         <div class="mb-3">
-            <a href="all-applicants.html" class="btn btn-link text-decoration-underline">View All</a>
+            {{--            <a href="all-applicants.html" class="btn btn-link text-decoration-underline">View All</a>--}}
         </div>
 
         <!-- Scores Modal -->
@@ -144,7 +146,8 @@
             <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
 
-                    <div class="modal-header sticky-top bg-light w-100 d-flex justify-content-between align-items-center">
+                    <div
+                        class="modal-header sticky-top bg-light w-100 d-flex justify-content-between align-items-center">
                         <h5 class="modal-title">Assessment Scores</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -200,7 +203,7 @@
             $.ajax({
                 url: "/employer/api/get-assessment", // <-- adjust the route if needed
                 method: "GET",
-                data: { candidate_id: candidate_id },
+                data: {candidate_id: candidate_id},
                 success: function (response) {
                     const {
                         employerBehaviorAssessment,
