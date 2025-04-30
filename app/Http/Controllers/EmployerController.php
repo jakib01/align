@@ -394,7 +394,8 @@ class EmployerController extends Controller
         $employer = Auth::guard('employer')->user();
 
         // Fetch all jobs posted by this employer
-        $jobs = Job::where('employer_id', $employer->id)->get();
+        // $jobs = Job::where('employer_id', $employer->id)->get();
+        $jobs = Job::get();
 
         // Return the view with the jobs
         return view('employer.employer_jobs', compact('jobs'));
@@ -405,10 +406,17 @@ class EmployerController extends Controller
         $job = Job::findOrFail($jobId);
 
         $job->update([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'job_location' => $request->input('job_location'),
-            'application_deadline' => $request->input('application_deadline'),
+            'title' => $request->title,
+            'description' => $request->description,
+            'requirements' => $request->requirements,
+            'benefits' => $request->benefits,
+            'salary_range' => $request->salary_range,
+            'seniority_level' => $request->seniority_level,
+            'job_location' => $request->job_location,
+            'working_pattern' => $request->working_pattern,
+            'industry' => $request->industry,
+            'visa_sponsorship' => $request->visa_sponsorship,
+            'application_deadline' => $request->application_deadline,
         ]);
 
         return redirect()->route('employer.jobs')->with('success', 'Job updated successfully!');
