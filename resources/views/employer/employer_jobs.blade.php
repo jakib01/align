@@ -4,13 +4,10 @@
 
     <main id="main" class="main ">
         <div class="container ">
-
             <div class="d-flex justify-content-end align-items-center mb-4">
-
                 <!-- Display Available Job Slots -->
                 <h5 class="text-muted mb-0 me-4">Available Job Slots: <span
                         class="font-weight-bold text-success">{{ $jobSlots ?? '0' }}</span></h5>
-
                 <!-- Post a Job Button -->
                 <div class="me-4">
                     <a href="{{ route('employer.job.posting') }}"
@@ -18,9 +15,7 @@
                         <i class="fas fa-plus-circle"></i> Post a Job
                     </a>
                 </div>
-
             </div>
-
         </div>
 
         @if($jobs->isEmpty())
@@ -284,8 +279,7 @@
                     </div>
                 @endforeach
             </div>
-            @endif
-            </div>
+        @endif
     </main>
 
 @endsection
