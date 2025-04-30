@@ -100,7 +100,7 @@
                             <td>{{$row->candidate_name}}</td>
                             <td>{{$row->job_title}}</td>
                             <td>
-                                <button class="btn btn-primary mt-2" onclick="CheckScore({{ $row->candidate_id }})">Check Score</button>
+                                <button class="btn btn-primary mt-2" onclick="openAssessmentModal({{ $row->candidate_id }})">Check Score</button>
                             </td>
                             <td></td>
                             <td>
@@ -153,20 +153,20 @@
                         <h5 class="text-center">Behavior Comparison</h5>
                         <div class="row">
                             <div class="col-md-6">
-                                <canvas id="employerBehaviourAssessmentChart" style="max-height: 300px;"></canvas>
+                                <canvas id="chartEmployerBehavior" style="max-height: 300px;"></canvas>
                             </div>
                             <div class="col-md-6">
-                                <canvas id="candidateBehaviourAssessmentChart" style="max-height: 300px;"></canvas>
+                                <canvas id="chartCandidateBehavior" style="max-height: 300px;"></canvas>
                             </div>
                         </div>
 
                         <h5 class="text-center mt-4">Value Comparison</h5>
                         <div class="row">
                             <div class="col-md-6">
-                                <canvas id="employerValuesAssessmentChart" style="max-height: 300px;"></canvas>
+                                <canvas id="chartEmployerValues" style="max-height: 300px;"></canvas>
                             </div>
                             <div class="col-md-6">
-                                <canvas id="candidateValuesAssessmentChart" style="max-height: 300px;"></canvas>
+                                <canvas id="chartCandidateValues" style="max-height: 300px;"></canvas>
                             </div>
                         </div>
 
@@ -181,9 +181,9 @@
 
     <script>
 
-        let employerBehaviourAssessmentRadarChart, candidateBehaviourAssessmentRadarChart, employerValuesAssessmentRadarChart, candidateValuesAssessmentRadarChart;
+        let chartEmployerBehavior, chartCandidateBehavior, chartEmployerValues, chartCandidateValues;
 
-        function CheckScore(candidate_id) {
+        function openAssessmentModal(candidate_id) {
             const modalElement = document.getElementById('scores-modal');
 
             if (!modalElement) {
@@ -203,9 +203,9 @@
                 data: { candidate_id: candidate_id },
                 success: function (response) {
                     const {
-                        employerBehaviourAssessment,
+                        employerBehaviorAssessment,
                         employerValueAssessment,
-                        candidateBehaviourAssessment,
+                        candidateBehaviorAssessment,
                         candidateValueAssessment
                     } = response;
 
@@ -215,8 +215,8 @@
                         modalElement.removeEventListener('shown.bs.modal', onModalShown);
                         setTimeout(() => {
                             renderCharts(
-                                employerBehaviourAssessment,
-                                candidateBehaviourAssessment,
+                                employerBehaviorAssessment,
+                                candidateBehaviorAssessment,
                                 employerValueAssessment,
                                 candidateValueAssessment
                             );
@@ -231,13 +231,13 @@
         }
 
         function renderCharts(employerBehaviourAssessmentData, candidateBehaviourAssessmentData, employerValuesAssessmentData, candidateValueAssessmentData) {
-            if (employerBehaviourAssessmentRadarChart) employerBehaviourAssessmentRadarChart.destroy();
-            if (candidateBehaviourAssessmentRadarChart) candidateBehaviourAssessmentRadarChart.destroy();
-            if (employerValuesAssessmentRadarChart) employerValuesAssessmentRadarChart.destroy();
-            if (candidateValuesAssessmentRadarChart) candidateValuesAssessmentRadarChart.destroy();
+            if (chartEmployerBehavior) chartEmployerBehavior.destroy();
+            if (chartCandidateBehavior) chartCandidateBehavior.destroy();
+            if (chartEmployerValues) chartEmployerValues.destroy();
+            if (chartCandidateValues) chartCandidateValues.destroy();
 
             // Behavior Charts
-            employerBehaviourAssessmentRadarChart = new Chart(document.getElementById('employerBehaviourAssessmentChart').getContext('2d'), {
+            chartEmployerBehavior = new Chart(document.getElementById('chartEmployerBehavior').getContext('2d'), {
                 type: 'radar',
                 data: {
                     labels: Object.keys(employerBehaviourAssessmentData),
@@ -251,7 +251,7 @@
                 }
             });
 
-            candidateBehaviourAssessmentRadarChart = new Chart(document.getElementById('candidateBehaviourAssessmentChart').getContext('2d'), {
+            chartCandidateBehavior = new Chart(document.getElementById('chartCandidateBehavior').getContext('2d'), {
                 type: 'radar',
                 data: {
                     labels: Object.keys(candidateBehaviourAssessmentData),
@@ -266,7 +266,7 @@
             });
 
             // Value Charts
-            employerValuesAssessmentRadarChart = new Chart(document.getElementById('employerValuesAssessmentChart').getContext('2d'), {
+            chartEmployerValues = new Chart(document.getElementById('chartEmployerValues').getContext('2d'), {
                 type: 'radar',
                 data: {
                     labels: Object.keys(employerValuesAssessmentData),
@@ -280,7 +280,7 @@
                 }
             });
 
-            candidateValuesAssessmentRadarChart = new Chart(document.getElementById('candidateValuesAssessmentChart').getContext('2d'), {
+            chartCandidateValues = new Chart(document.getElementById('chartCandidateValues').getContext('2d'), {
                 type: 'radar',
                 data: {
                     labels: Object.keys(candidateValueAssessmentData),

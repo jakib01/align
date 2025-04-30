@@ -638,173 +638,110 @@ class EmployerController extends Controller
 
     public function getAssessmentData(Request $request)
     {
-        $candidate_id = $request->candidate_id;
+        $candidateId = $request->candidate_id;
 
-        $employerAssessment = $this->getEmployerAssessment();
-        $candidateAssessment = $this->getCandidateAssessment($candidate_id);
+        $employerAssessment = $this->calculateEmployerAverages();
+        $candidateAssessment = $this->getCandidateAssessment($candidateId);
 
         return response()->json([
-            'employerBehaviourAssessment' => $employerAssessment['avgBehaviourAssessment'],
+            'employerBehaviorAssessment' => $employerAssessment['avgBehaviorAssessment'],
             'employerValueAssessment' => $employerAssessment['avgValueAssessment'],
-            'candidateBehaviourAssessment' => $candidateAssessment['behaviourAssessment'],
+            'candidateBehaviorAssessment' => $candidateAssessment['behaviorAssessment'],
             'candidateValueAssessment' => $candidateAssessment['valueAssessment'],
         ]);
     }
 
-
-    public function getEmployerAssessment(): array
+    private function calculateEmployerAverages(): array
     {
-        $teamMembers = TeamMember::get();
+        $teamMembers = TeamMember::all();
 
-        $orderedValueKeys = [
-            'Achievement',
-            'Security',
-            'Universalism',
-            'Benevolence',
-            'Conformity',
-            'Tradition',
-            'Hedonism',
-            'Power',
-            'Self-Direction',
-            'Stimulation'
+        $valueKeys = [
+            'Achievement', 'Security', 'Universalism', 'Benevolence', 'Conformity',
+            'Tradition', 'Hedonism', 'Power', 'Self-Direction', 'Stimulation'
         ];
 
-        $orderedBehaviourKeys = [
-            'compassion',
-            'confidence',
-            'curiosity',
-            'practicality',
-            'discipline',
-            'adaptability',
-            'resilience',
-            'sensitivity',
-            'sociability',
-            'reflectiveness'
+        $behaviorKeys = [
+            'compassion', 'confidence', 'curiosity', 'practicality', 'discipline',
+            'adaptability', 'resilience', 'sensitivity', 'sociability', 'reflectiveness'
         ];
 
-        $valuesAssessmentData = [];
-        $behaviourAssessmentData = [];
+        $valueSums = array_fill_keys($valueKeys, 0);
+        $behaviorSums = array_fill_keys($behaviorKeys, 0);
 
-        $valueSums = array_fill_keys($orderedValueKeys, 0);
         $valueCount = 0;
-
-        $behaviourSums = array_fill_keys($orderedBehaviourKeys, 0);
-        $behaviourCount = 0;
+        $behaviorCount = 0;
 
         foreach ($teamMembers as $member) {
-            // Value Assessment
-            if (!empty($member->value_assessment_score)) {
-                $scores = json_decode($member->value_assessment_score, true);
-                if (is_array($scores)) {
-                    $row = [];
-                    foreach ($orderedValueKeys as $key) {
-                        $score = $scores[$key] ?? 0;
-                        $row[$key] = $score;
-                        $valueSums[$key] += $score;
-                    }
-                    $valuesAssessmentData[] = $row;
-                    $valueCount++;
+            // Process value scores
+            $valueScores = json_decode($member->value_assessment_score, true);
+            if (is_array($valueScores)) {
+                foreach ($valueKeys as $key) {
+                    $valueSums[$key] += $valueScores[$key] ?? 0;
                 }
+                $valueCount++;
             }
 
-            // Behaviour Assessment
-            if (!empty($member->behaviour_assessment_score)) {
-                $scores = json_decode($member->behaviour_assessment_score, true);
-                if (is_array($scores)) {
-                    $row = [];
-                    foreach ($orderedBehaviourKeys as $key) {
-                        $score = $scores[$key] ?? 0;
-                        $row[$key] = $score;
-                        $behaviourSums[$key] += $score;
-                    }
-                    $behaviourAssessmentData[] = $row;
-                    $behaviourCount++;
+            // Process behavior scores
+            $behaviorScores = json_decode($member->behaviour_assessment_score, true);
+            if (is_array($behaviorScores)) {
+                foreach ($behaviorKeys as $key) {
+                    $behaviorSums[$key] += $behaviorScores[$key] ?? 0;
                 }
+                $behaviorCount++;
             }
-        }
-
-        // Calculate averages
-        $avgValueAssessment = [];
-        foreach ($valueSums as $key => $total) {
-            $avgValueAssessment[$key] = $valueCount > 0 ? round($total / $valueCount, 2) : 0;
-        }
-
-        $avgBehaviourAssessment = [];
-        foreach ($behaviourSums as $key => $total) {
-            $avgBehaviourAssessment[$key] = $behaviourCount > 0 ? round($total / $behaviourCount, 2) : 0;
         }
 
         return [
-            'valuesAssessmentData' => $valuesAssessmentData,
-            'behaviourAssessmentData' => $behaviourAssessmentData,
-            'avgValueAssessment' => $avgValueAssessment,
-            'avgBehaviourAssessment' => $avgBehaviourAssessment
+            'avgValueAssessment' => $this->calculateAverages($valueSums, $valueCount),
+            'avgBehaviorAssessment' => $this->calculateAverages($behaviorSums, $behaviorCount)
         ];
     }
 
-    public function getCandidateAssessment($id): array
+    private function calculateAverages(array $sums, int $count): array
     {
-        $candidate = Candidate::find($id); // Assumes Candidate model exists
+        $averages = [];
+        foreach ($sums as $key => $total) {
+            $averages[$key] = $count > 0 ? round($total / $count, 2) : 0;
+        }
+        return $averages;
+    }
 
-        $orderedValueKeys = [
-            'Achievement',
-            'Security',
-            'Universalism',
-            'Benevolence',
-            'Conformity',
-            'Tradition',
-            'Hedonism',
-            'Power',
-            'Self-Direction',
-            'Stimulation'
+    public function getCandidateAssessment(int $candidateId): array
+    {
+        $candidate = Candidate::find($candidateId);
+
+        $valueKeys = [
+            'Achievement', 'Security', 'Universalism', 'Benevolence', 'Conformity',
+            'Tradition', 'Hedonism', 'Power', 'Self-Direction', 'Stimulation'
         ];
 
-        $orderedBehaviourKeys = [
-            'compassion',
-            'confidence',
-            'curiosity',
-            'practicality',
-            'discipline',
-            'adaptability',
-            'resilience',
-            'sensitivity',
-            'sociability',
-            'reflectiveness'
+        $behaviorKeys = [
+            'compassion', 'confidence', 'curiosity', 'practicality', 'discipline',
+            'adaptability', 'resilience', 'sensitivity', 'sociability', 'reflectiveness'
         ];
 
-        $valueAssessment = [];
-        $behaviourAssessment = [];
+        $valueAssessment = array_fill_keys($valueKeys, 0);
+        $behaviorAssessment = array_fill_keys($behaviorKeys, 0);
 
         if ($candidate) {
-            // Process value scores
             $valueScores = json_decode($candidate->value_assessment_score, true);
             if (is_array($valueScores)) {
-                foreach ($orderedValueKeys as $key) {
+                foreach ($valueKeys as $key) {
                     $valueAssessment[$key] = $valueScores[$key] ?? 0;
-                }
-            } else {
-                // Fallback in case it's null or invalid
-                foreach ($orderedValueKeys as $key) {
-                    $valueAssessment[$key] = 0;
                 }
             }
 
-            // Process behaviour scores
-            $behaviourScores = json_decode($candidate->behaviour_assesment_score, true);
-            if (is_array($behaviourScores)) {
-                foreach ($orderedBehaviourKeys as $key) {
-                    $behaviourAssessment[$key] = $behaviourScores[$key] ?? 0;
-                }
-            } else {
-                foreach ($orderedBehaviourKeys as $key) {
-                    $behaviourAssessment[$key] = 0;
+            $behaviorScores = json_decode($candidate->behaviour_assesment_score, true);
+            if (is_array($behaviorScores)) {
+                foreach ($behaviorKeys as $key) {
+                    $behaviorAssessment[$key] = $behaviorScores[$key] ?? 0;
                 }
             }
         }
 
         return [
             'valueAssessment' => $valueAssessment,
-            'behaviourAssessment' => $behaviourAssessment
+            'behaviorAssessment' => $behaviorAssessment
         ];
     }
 
