@@ -42,6 +42,9 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
         Route::get('/dashboard', [EmployerController::class, 'Dashboard'])->name('employer.dashboard')->middleware('employer');
 
+        Route::get('/api/get-assessment', [EmployerController::class, 'getAssessmentData'])->middleware('employer');
+
+
         Route::get('/profile', [EmployerController::class, 'showProfile'])->name('employer.profile')->middleware('employer');
         Route::get('/profile/edit', [EmployerController::class, 'editProfile'])->name('employer.profile.edit')->middleware('employer');
         Route::put('/profile/update', [EmployerController::class, 'updateProfile'])->name('employer.profile.update')->middleware('employer');

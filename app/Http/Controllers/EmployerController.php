@@ -469,6 +469,7 @@ class EmployerController extends Controller
             ->select(
                 'job_applieds.*',
                 'job_posts.job_title',
+                'candidates.id as candidate_id',
                 'candidates.candidate_name as candidate_name',
                 'candidates.email as candidate_email',
                 'candidates.skill_assesment_score', // Ensure this column exists
@@ -477,15 +478,7 @@ class EmployerController extends Controller
             )
             ->paginate(5);
 
-        $employerAssessment = $this->getEmployerAssessment();
-        $avgBehaviourAssessmenta = $employerAssessment['avgBehaviourAssessment'];
-        $avgValueAssessment = $employerAssessment['avgValueAssessment'];
-
-        $candidateAssessment = $this->getCandidateAssessment(1);
-        $candidateValueAssessment = $candidateAssessment['valueAssessment'];
-        $candidateBehaviourAssessment = $candidateAssessment['behaviourAssessment'];
-
-        return view('employer.applicant_review', compact('applied_job', 'avgBehaviourAssessmenta', 'avgValueAssessment', 'candidateValueAssessment', 'candidateBehaviourAssessment'));
+        return view('employer.applicant_review', compact('applied_job', ));
     }
 
     public function SaveApplicant(Request $request)
@@ -642,6 +635,22 @@ class EmployerController extends Controller
             ->paginate(5);
         return view('employer.pagination_applicant_review', compact('applied_job'))->render();
     }
+
+    public function getAssessmentData(Request $request)
+    {
+        $candidate_id = $request->candidate_id;
+
+        $employerAssessment = $this->getEmployerAssessment();
+        $candidateAssessment = $this->getCandidateAssessment($candidate_id);
+
+        return response()->json([
+            'employerBehaviourAssessment' => $employerAssessment['avgBehaviourAssessment'],
+            'employerValueAssessment' => $employerAssessment['avgValueAssessment'],
+            'candidateBehaviourAssessment' => $candidateAssessment['behaviourAssessment'],
+            'candidateValueAssessment' => $candidateAssessment['valueAssessment'],
+        ]);
+    }
+
 
     public function getEmployerAssessment(): array
     {

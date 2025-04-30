@@ -100,7 +100,7 @@
                             <td>{{$row->candidate_name}}</td>
                             <td>{{$row->job_title}}</td>
                             <td>
-                                <button class="btn btn-primary mt-2" onclick="CheckScore(event)">Check Score</button>
+                                <button class="btn btn-primary mt-2" onclick="CheckScore({{ $row->candidate_id }})">Check Score</button>
                             </td>
                             <td></td>
                             <td>
@@ -183,7 +183,7 @@
 
         let employerBehaviourAssessmentRadarChart, candidateBehaviourAssessmentRadarChart, employerValuesAssessmentRadarChart, candidateValuesAssessmentRadarChart;
 
-        function CheckScore(event) {
+        function CheckScore(candidate_id) {
             const modalElement = document.getElementById('scores-modal');
 
             if (!modalElement) {
@@ -191,32 +191,46 @@
                 return;
             }
 
-            // If already created modal instance, don't recreate it
             let modalInstance = bootstrap.Modal.getInstance(modalElement);
             if (!modalInstance) {
                 modalInstance = new bootstrap.Modal(modalElement);
             }
 
-            modalInstance.show();
+            // Fetch dynamic data before showing modal
+            $.ajax({
+                url: "/employer/api/get-assessment", // <-- adjust the route if needed
+                method: "GET",
+                data: { candidate_id: candidate_id },
+                success: function (response) {
+                    const {
+                        employerBehaviourAssessment,
+                        employerValueAssessment,
+                        candidateBehaviourAssessment,
+                        candidateValueAssessment
+                    } = response;
 
-            modalElement.addEventListener('shown.bs.modal', function onModalShown() {
-                modalElement.removeEventListener('shown.bs.modal', onModalShown);
+                    modalInstance.show();
 
-                setTimeout(() => {
-                    renderCharts();
-                }, 100); // wait until canvas sizes are ready
+                    modalElement.addEventListener('shown.bs.modal', function onModalShown() {
+                        modalElement.removeEventListener('shown.bs.modal', onModalShown);
+                        setTimeout(() => {
+                            renderCharts(
+                                employerBehaviourAssessment,
+                                candidateBehaviourAssessment,
+                                employerValueAssessment,
+                                candidateValueAssessment
+                            );
+                        }, 100);
+                    });
+
+                },
+                error: function (xhr) {
+                    console.error('Failed to load assessment data:', xhr.responseText);
+                }
             });
         }
 
-        function renderCharts() {
-
-            const employerBehaviourAssessmentData = @json($avgBehaviourAssessmenta);
-            const candidateBehaviourAssessmentData = @json($candidateBehaviourAssessment);
-
-            const employerValuesAssessmentData = @json($avgValueAssessment);
-            const candidateValueAssessmentData = @json($candidateValueAssessment);
-
-            // Destroy existing charts first if they exist
+        function renderCharts(employerBehaviourAssessmentData, candidateBehaviourAssessmentData, employerValuesAssessmentData, candidateValueAssessmentData) {
             if (employerBehaviourAssessmentRadarChart) employerBehaviourAssessmentRadarChart.destroy();
             if (candidateBehaviourAssessmentRadarChart) candidateBehaviourAssessmentRadarChart.destroy();
             if (employerValuesAssessmentRadarChart) employerValuesAssessmentRadarChart.destroy();
@@ -280,10 +294,15 @@
                 }
             });
 
-            // Calculate and show Alignment Score
-            const alignment = calculateAlignment(employerBehaviourAssessmentData, candidateBehaviourAssessmentData, employerValuesAssessmentData, candidateValueAssessmentData);
+            const alignment = calculateAlignment(
+                employerBehaviourAssessmentData,
+                candidateBehaviourAssessmentData,
+                employerValuesAssessmentData,
+                candidateValueAssessmentData
+            );
             document.getElementById('alignmentScoreText').innerText = `Alignment Score: ${alignment}%`;
         }
+
 
         function calculateAlignment(scores1a, scores1b, scores2a, scores2b) {
             let total = 0;
