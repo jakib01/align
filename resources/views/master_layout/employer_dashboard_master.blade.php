@@ -152,7 +152,7 @@
           <i class="bi bi-journal-text"></i><span> interviews </span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          
+
           <li>
             <a href="{{route('saved.applicant')}}">
               <i class="bi bi-circle"></i><span>saved applicant</span>

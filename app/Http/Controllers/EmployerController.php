@@ -340,7 +340,8 @@ class EmployerController extends Controller
     // Other Pages
     public function TeamAssesment()
     {
-        return view('employer.employer_team_assesment');
+        $candidates = Candidate::paginate(5);
+        return view('employer.employer_team_assesment', compact('candidates'));
     }
 
     public function ApplicantTracking()
