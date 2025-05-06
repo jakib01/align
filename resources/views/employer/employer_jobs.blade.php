@@ -46,11 +46,18 @@
                                     <p class="card-text text-muted mb-0">
                                         <strong>Deadline:</strong> {{ $job->application_deadline }}</p>
                                 </div>
-                                <!-- Edit Button to Trigger Modal -->
+                                <!-- Edit and View Buttons -->
                                 <div class="d-flex justify-content-end mt-auto">
+                                    <!-- Edit Button -->
                                     <button class="btn btn-primary rounded-pill" data-bs-toggle="modal"
                                             data-bs-target="#editJobModal{{ $job->id }}">
                                         <i class="fas fa-edit"></i> Edit
+                                    </button>
+
+                                    <!-- View Button -->
+                                    <button class="btn btn-outline-secondary rounded-pill ms-2" data-bs-toggle="modal"
+                                            data-bs-target="#viewJobModal{{ $job->id }}">
+                                        <i class="fas fa-eye"></i> View
                                     </button>
                                 </div>
                             </div>
@@ -277,6 +284,43 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- View Job Modal -->
+                    <div class="modal fade" id="viewJobModal{{ $job->id }}" tabindex="-1"
+                         aria-labelledby="viewJobModalLabel{{ $job->id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content shadow border-0 rounded-lg">
+                                <div class="modal-header bg-primary text-white">
+                                    <h5 class="modal-title" id="viewJobModalLabel{{ $job->id }}">
+                                        Job Details: {{ $job->title }}
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Title:</strong> {{ $job->title }}</p>
+                                    <p><strong>Description:</strong> {{ $job->description }}</p>
+                                    <p><strong>Location:</strong> {{ $job->job_location }}</p>
+                                    <p><strong>Salary Range:</strong> {{ $job->salary_range }}</p>
+                                    <p><strong>Seniority Level:</strong> {{ $job->seniority_level }}</p>
+                                    <p><strong>Working Pattern:</strong> {{ $job->working_pattern }}</p>
+                                    <p><strong>Industry:</strong> {{ $job->industry }}</p>
+                                    <p><strong>Visa Sponsorship:</strong> {{ $job->visa_sponsorship }}</p>
+                                    <p><strong>Skills:</strong>
+                                        {{ is_array($job->skills) ? implode(', ', $job->skills) : $job->skills }}
+                                    </p>
+                                    <p><strong>Requirements:</strong> {{ $job->requirements }}</p>
+                                    <p><strong>Benefits:</strong> {{ $job->benefits }}</p>
+                                    <p><strong>Application Deadline:</strong> {{ $job->application_deadline }}</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 @endforeach
             </div>
         @endif
