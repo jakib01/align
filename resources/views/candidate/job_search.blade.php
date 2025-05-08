@@ -638,9 +638,9 @@
 </ul>
     <div class="row">
         @foreach($jobs as $row)
-        <div class="col-md-4 job-card mb-3" data-title="Software Engineer" data-location="New York, NY"
+        <div class="col-md-4 job-card mb-3" data-title="{{ $row->title }}" data-location="{{ $row->job_location}}"
             data-type="Full-Time" data-company="X Corp." data-experience="Mid-Level"
-            data-salary="£80,000 - £100,000"
+            data-salary="{{ $row->salary_range}}" 
             data-description=""
             data-requirements="Requirement 1, Requirement 2, Requirement 3"
             data-benefits="Benefit 1, Benefit 2, Benefit 3">
@@ -666,7 +666,7 @@
                     </p>
                     <p class="card-text text-muted mb-0 mt-1" style="font-size: 14px;">
                         <i class="bi bi-cash"></i>
-                        <span class="salary-text">£30,000 - £50,000</span>
+                        <span class="salary-text">{{ $row->salary_range }}</span>
                     </p>
                     <div class="d-flex justify-content-start align-items-center mt-1">
                         <span class="badge bg-light-blue text-dark d-flex align-items-center me-2" style="font-size: 10px;">
@@ -1085,7 +1085,7 @@
     });
     </script> --}}
 
-    <script>
+    {{-- <script>
         document.addEventListener('DOMContentLoaded', function () {
             const searchBtn = document.querySelector('.btn.btn-primary.w-100');
         
@@ -1114,7 +1114,46 @@
                 });
             });
         });
-        </script>
+        </script> --}}
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const searchBtn = document.querySelector('.btn.btn-primary.w-100');
+            
+                searchBtn.addEventListener('click', function () {
+                    const keywordInput = document.querySelector('input[placeholder="Keywords..."]').value.toLowerCase().trim();
+                    const locationInput = document.querySelector('input[placeholder="Location..."]').value.toLowerCase().trim();
+                    const contract = document.getElementById('contractTypeDropdown').textContent.trim().toLowerCase();
+                    const pay = document.getElementById('payTypeDropdown').textContent.trim().toLowerCase();
+                    const sponsorship = document.getElementById('sponsorshipTypeDropdown').textContent.trim().toLowerCase();
+            
+                    const jobCards = document.querySelectorAll('.job-card');
+            
+                    jobCards.forEach(card => {
+                        const title = card.dataset.title?.toLowerCase() || '';
+                        const location = card.dataset.location?.toLowerCase() || '';
+                        const type = card.dataset.type?.toLowerCase() || '';
+                        const salary = card.dataset.salary?.toLowerCase() || '';
+                        const benefits = card.dataset.benefits?.toLowerCase() || '';
+            
+                        // Matching logic per filter
+                        const matchKeyword = !keywordInput || title.includes(keywordInput);
+                        const matchLocation = !locationInput || location.includes(locationInput);
+                        const matchContract = contract === 'contract' || type.includes(contract);
+                        const matchPay = pay === 'pay' || salary.includes(pay);
+                        const matchSponsorship = sponsorship === 'sponsorship' || benefits.includes(sponsorship);
+            
+                        // Show if all active filters match
+                        if (matchKeyword && matchLocation && matchContract && matchPay && matchSponsorship) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            </script>
+            
         
     
     
