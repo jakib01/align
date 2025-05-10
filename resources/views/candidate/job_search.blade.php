@@ -130,7 +130,7 @@
           <span class="input-group-text border-0" style="height: 38px; background: transparent;">
             <i class="bi bi-search"></i>
           </span>
-          <input type="text" class="form-control border-0" placeholder="Keywords..." aria-label="Keywords..." style="height: 38px; background: transparent;" />
+          <input type="text" class="form-control border-0" placeholder="Job Title" aria-label="Job Title" style="height: 38px; background: transparent;" />
         </div>
       </div>
       <div class="col-lg-2">
@@ -639,7 +639,7 @@
     <div class="row">
         @foreach($jobs as $row)
         <div class="col-md-4 job-card mb-3" data-title="{{ $row->title }}" data-location="{{ $row->job_location}}"
-            data-type="Full-Time" data-company="X Corp." data-experience="Mid-Level"
+            data-type="{{$row->working_pattern}}" data-company="X Corp." data-experience="Mid-Level"
             data-salary="{{ $row->salary_range}}" 
             data-description=""
             data-requirements="Requirement 1, Requirement 2, Requirement 3"
@@ -648,12 +648,12 @@
                 <div class="card-body" >
                     <div class="d-flex justify-content-between align-items-center mb-1 mt-3">
                         <div class="d-flex align-items-center">
-                            <img src="assets/img/images/xlogo.png" alt="" class="img-fluid" style="
+                            {{-- <img src="assets/img/images/xlogo.png" alt="" class="img-fluid" style="
                                 width: 64px;
                                 height: 64px;
                                 object-fit: cover;
                                 border-radius: 5px;
-                            " />
+                            " /> --}}
                             <h6 class="ms-2 mb-0" style="font-size: 14px; font-weight: bold;">{{ $row->title }}</h6>
                         </div>
                     </div>
@@ -676,7 +676,7 @@
                         <span class="me-1">|</span>
                         <span class="badge bg-light-blue text-dark d-flex align-items-center me-1" style="font-size: 10px;">
                             <i class="bi bi-briefcase me-1"></i>
-                            <span class="job-type-text text-muted">Full-Time</span>
+                            <span class="job-type-text text-muted">{{$row->working_pattern}}</span>
                         </span>
                     </div>
                     <p class="card-text mt-3 mb-1" style="font-size: 14px;">
@@ -687,11 +687,11 @@
                     </p>
                     <button class="btn btn-primary mt-2" onclick="showJobDetails(event)">Details</button>
                     {{-- <button class="btn btn-info mt-2"
-    onclick="showScoresModal(this)"
-    data-behaviour='{"Leadership":80,"Communication":70,"Problem Solving":90,"Teamwork":85,"Critical Thinking":75}'
-    data-values='{"Integrity":88,"Respect":77,"Innovation":92,"Accountability":81,"Collaboration":79}'>
-    Check Score
-</button> --}}
+                        onclick="showScoresModal(this)"
+                        data-behaviour='{"Leadership":80,"Communication":70,"Problem Solving":90,"Teamwork":85,"Critical Thinking":75}'
+                        data-values='{"Integrity":88,"Respect":77,"Innovation":92,"Accountability":81,"Collaboration":79}'>
+                        Check Score
+                    </button> --}}
 <button class="btn btn-primary mt-2" onclick="CheckScore(event)">Check Score</button>
                 
 
@@ -1121,7 +1121,7 @@
                 const searchBtn = document.querySelector('.btn.btn-primary.w-100');
             
                 searchBtn.addEventListener('click', function () {
-                    const keywordInput = document.querySelector('input[placeholder="Keywords..."]').value.toLowerCase().trim();
+                    const keywordInput = document.querySelector('input[placeholder="Job Title"]').value.toLowerCase().trim();
                     const locationInput = document.querySelector('input[placeholder="Location..."]').value.toLowerCase().trim();
                     const contract = document.getElementById('contractTypeDropdown').textContent.trim().toLowerCase();
                     const pay = document.getElementById('payTypeDropdown').textContent.trim().toLowerCase();
