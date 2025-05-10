@@ -340,7 +340,7 @@ class EmployerController extends Controller
     // Other Pages
     public function TeamAssesment()
     {
-        $candidates = Candidate::paginate(5);
+        $candidates = TeamMember::paginate(5);
         return view('employer.employer_team_assesment', compact('candidates'));
     }
 
@@ -351,7 +351,9 @@ class EmployerController extends Controller
 
     public function TalentSearch()
     {
-        return view('employer.talent_search');
+        $candidates = Candidate::paginate(5);
+//        dd($candidates->toArray());
+        return view('employer.talent_search', compact('candidates'));
     }
 
     public function landing()

@@ -87,52 +87,42 @@
             <table class="table table-bordered" id="candidates-table">
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Name</th>
-                        <th>Location</th>
-                        <th>Salary</th>
-                        <th>Skills 1</th>
-                        <th>Skills 2</th>
-                        <th>Skills 3</th>
-                        <th>Values Match</th>
+                        <th>Email</th>
+                        <th>Behavioral Assessment</th>
+                        <th>Value Assessment</th>
                     </tr>
                 </thead>
                 <tbody id="candidates-body">
-                    <tr>
-                        <td>John Doe</td>
-                        <td>London</td>
-                        <td>80000</td>
-                        <td>88%</td>
-                        <td>76%</td>
-                        <td>91%</td>
-                        <td>76%</td>
-                    </tr>
-                    <tr>
-                        <td>Jane Smith</td>
-                        <td>Liverpool</td>
-                        <td>90000</td>
-                        <td>60%</td>
-                        <td>54%</td>
-                        <td>87%</td>
-                        <td>62%</td>
-                    </tr>
-                    <tr>
-                        <td>Emily Johnson</td>
-                        <td>Scotland</td>
-                        <td>75000</td>
-                        <td>65%</td>
-                        <td>70%</td>
-                        <td>89%</td>
-                        <td>65%</td>
-                    </tr>
+                    @foreach($candidates as $index => $candidate)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $candidate->candidate_name }}</td>
+                            <td>{{ $candidate->email }}</td>
+                            <td>
+                                @if(isset($candidate->behaviour_assesment_score) && isset($candidate->behaviour_assesment_completed_at))
+                                    ✅ Completed
+                                @else
+                                    ❌ Not Completed
+                                @endif
+                            </td>
+                            <td>
+                                @if(isset($candidate->value_assessment_score) && isset($candidate->value_assessment_completed_at))
+                                    ✅ Completed
+                                @else
+                                    ❌ Not Completed
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
-    </div>
-    <div class="searched-jobs">
-        <div class="searched-bar">
-            <div class="searched-show">1000 Candidates displaying...</div>
-
+        <div class="mt-3">
+            {{ $candidates->links() }}
         </div>
+    </div>
 </main>
 
 <script>

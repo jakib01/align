@@ -20,13 +20,13 @@
     <main id="main" class="main">
         <div class="container-fluid">
             <section class="section mb-5 mt-5">
-                <h2 class="fs-5 mb-3">Candidates Assessment Details</h2>
+                <h2 class="fs-5 mb-3">Team Member Assessment Details</h2>
                 <div class="table-responsive d-none d-md-block">
                     <table class="table table-bordered table-hover">
                         <thead class="table-light">
                         <tr>
                             <th>#</th>
-                            <th>Candidate Name</th>
+                            <th>Team Member Name</th>
                             <th>Email</th>
                             <th>Behavioral Assessment</th>
                             <th>Value Assessment</th>
@@ -36,10 +36,10 @@
                             @foreach($candidates as $index => $candidate)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $candidate->candidate_name }}</td>
+                                    <td>{{ $candidate->name }}</td>
                                     <td>{{ $candidate->email }}</td>
                                     <td>
-                                        @if(isset($candidate->behaviour_assesment_score) && isset($candidate->behaviour_assesment_completed_at))
+                                        @if(isset($candidate->behaviour_assessment_score) && isset($candidate->behaviour_assessment_completed_at))
                                             ✅ Completed
                                         @else
                                             ❌ Not Completed
