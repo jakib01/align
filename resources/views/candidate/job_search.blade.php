@@ -1,5 +1,21 @@
 @extends('master_layout.candidate_dashboard_master')
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.dropdown-menu .dropdown-item').forEach(function (item) {
+            item.addEventListener('click', function (e) {
+                e.preventDefault();
+                const dropdown = this.closest('.dropdown');
+                const button = dropdown.querySelector('button');
+                button.textContent = this.textContent;
+            });
+        });
+    });
+</script>
+
+
 @section('job_search')
 
 <style>
@@ -114,24 +130,25 @@
           <span class="input-group-text border-0" style="height: 38px; background: transparent;">
             <i class="bi bi-search"></i>
           </span>
-          <input type="text" class="form-control border-0" placeholder="Keywords..." aria-label="Keywords..." style="height: 38px; background: transparent;" />
+          <input type="text" class="form-control border-0" placeholder="Job Title" aria-label="Job Title" style="height: 38px; background: transparent;" />
         </div>
       </div>
       <div class="col-lg-2">
         <div class="dropdown">
-          <button class="btn btn-outline-secondary w-100" type="button" id="contractTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="height: 38px;">
-            Contract
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="contractTypeDropdown">
-            <li><a class="dropdown-item" href="#">Full-time</a></li>
-            <li><a class="dropdown-item" href="#">Part-time</a></li>
-            <li><a class="dropdown-item" href="#">Contract</a></li>
-          </ul>
-        </div>
+            <button class="btn btn-outline-secondary w-100 dropdown-toggle" type="button" id="contractTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="height: 38px;">
+              Contract
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="contractTypeDropdown">
+              <li><a class="dropdown-item" href="#">Full-time</a></li>
+              <li><a class="dropdown-item" href="#">Part-time</a></li>
+              <li><a class="dropdown-item" href="#">Contract</a></li>
+            </ul>
+          </div>
+          
       </div>
       <div class="col-lg-2">
         <div class="dropdown">
-          <button class="btn btn-outline-secondary w-100" type="button" id="payTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="height: 38px;">
+          <button class="btn btn-outline-secondary w-100" type="button" id="payTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="height: 58px;">
             Pay
           </button>
           <ul class="dropdown-menu" aria-labelledby="payTypeDropdown">
@@ -143,6 +160,17 @@
         </div>
       </div>
       <div class="col-lg-2">
+        <div class="dropdown">
+          <button class="btn btn-outline-secondary w-100" type="button" id="sponsorshipTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="height: 38px;">
+            Sponsorship
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="sponsorshipTypeDropdown">
+            <li><a class="dropdown-item" href="#">Yes</a></li>
+            <li><a class="dropdown-item" href="#">No</a></li>
+          </ul>
+        </div>
+    </div>
+      {{-- <div class="col-lg-2">
         <div class="dropdown">
           <button class="btn btn-outline-secondary w-100" type="button" id="coreSkillsDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="height: 38px;">
             Core Skills
@@ -180,7 +208,7 @@
             </li>
           </ul>
         </div>
-      </div>
+      </div> --}}
     </div>
     <div class="row mb-3 align-items-center">
       <div class="col-lg-6">
@@ -191,7 +219,7 @@
           <input type="text" class="form-control border-0" placeholder="Location..." aria-label="Location..." style="height: 38px; background: transparent;" />
         </div>
       </div>
-      <div class="col-lg-2">
+      {{-- <div class="col-lg-2">
         <div class="dropdown">
           <button class="btn btn-outline-secondary w-100" type="button" id="technicalSkillsDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="height: 58px;">
             Technical Skills
@@ -255,6 +283,7 @@
             <li><a class="dropdown-item" href="#">No</a></li>
           </ul>
         </div>
+    </div> --}}
 </div>
      <div class=" mt-2 col-lg-2">
         <button class="btn btn-primary w-100" type="button" style="height: 38px;">Search</button>
@@ -609,9 +638,9 @@
 </ul>
     <div class="row">
         @foreach($jobs as $row)
-        <div class="col-md-4 job-card mb-3" data-title="Software Engineer" data-location="New York, NY"
-            data-type="Full-Time" data-company="X Corp." data-experience="Mid-Level"
-            data-salary="£80,000 - £100,000"
+        <div class="col-md-4 job-card mb-3" data-title="{{ $row->title }}" data-location="{{ $row->job_location}}"
+            data-type="{{$row->working_pattern}}" data-company="X Corp." data-experience="Mid-Level"
+            data-salary="{{ $row->salary_range}}" 
             data-description=""
             data-requirements="Requirement 1, Requirement 2, Requirement 3"
             data-benefits="Benefit 1, Benefit 2, Benefit 3">
@@ -619,12 +648,12 @@
                 <div class="card-body" >
                     <div class="d-flex justify-content-between align-items-center mb-1 mt-3">
                         <div class="d-flex align-items-center">
-                            <img src="assets/img/images/xlogo.png" alt="" class="img-fluid" style="
+                            {{-- <img src="assets/img/images/xlogo.png" alt="" class="img-fluid" style="
                                 width: 64px;
                                 height: 64px;
                                 object-fit: cover;
                                 border-radius: 5px;
-                            " />
+                            " /> --}}
                             <h6 class="ms-2 mb-0" style="font-size: 14px; font-weight: bold;">{{ $row->title }}</h6>
                         </div>
                     </div>
@@ -637,7 +666,7 @@
                     </p>
                     <p class="card-text text-muted mb-0 mt-1" style="font-size: 14px;">
                         <i class="bi bi-cash"></i>
-                        <span class="salary-text">{{ $row->salary_range}}</span>
+                        <span class="salary-text">{{ $row->salary_range }}</span>
                     </p>
                     <div class="d-flex justify-content-start align-items-center mt-1">
                         <span class="badge bg-light-blue text-dark d-flex align-items-center me-2" style="font-size: 10px;">
@@ -647,7 +676,7 @@
                         <span class="me-1">|</span>
                         <span class="badge bg-light-blue text-dark d-flex align-items-center me-1" style="font-size: 10px;">
                             <i class="bi bi-briefcase me-1"></i>
-                            <span class="job-type-text text-muted">Full-Time</span>
+                            <span class="job-type-text text-muted">{{$row->working_pattern}}</span>
                         </span>
                     </div>
                     <p class="card-text mt-3 mb-1" style="font-size: 14px;">
@@ -658,11 +687,11 @@
                     </p>
                     <button class="btn btn-primary mt-2" onclick="showJobDetails(event)">Details</button>
                     {{-- <button class="btn btn-info mt-2"
-    onclick="showScoresModal(this)"
-    data-behaviour='{"Leadership":80,"Communication":70,"Problem Solving":90,"Teamwork":85,"Critical Thinking":75}'
-    data-values='{"Integrity":88,"Respect":77,"Innovation":92,"Accountability":81,"Collaboration":79}'>
-    Check Score
-</button> --}}
+                        onclick="showScoresModal(this)"
+                        data-behaviour='{"Leadership":80,"Communication":70,"Problem Solving":90,"Teamwork":85,"Critical Thinking":75}'
+                        data-values='{"Integrity":88,"Respect":77,"Innovation":92,"Accountability":81,"Collaboration":79}'>
+                        Check Score
+                    </button> --}}
 <button class="btn btn-primary mt-2" onclick="CheckScore(event)">Check Score</button>
                 
 
@@ -810,7 +839,8 @@
 
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-        class="bi bi-arrow-up-short"></i></a>
+        class="bi bi-arrow-up-short"></i>
+</a>
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -1017,24 +1047,116 @@
     }
 </script>
 
+{{-- <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchBtn = document.querySelector('.btn.btn-primary.w-100');
+        searchBtn.addEventListener('click', function () {
+            const keywordInput = document.querySelector('input[placeholder="Keywords..."]').value.toLowerCase();
+            const locationInput = document.querySelector('input[placeholder="Location..."]').value.toLowerCase();
     
+            const contract = document.getElementById('contractTypeDropdown').textContent.trim().toLowerCase();
+            const pay = document.getElementById('payTypeDropdown').textContent.trim().toLowerCase();
+            const sponsorship = document.getElementById('sponsorshipTypeDropdown').textContent.trim().toLowerCase();
     
+            const jobCards = document.querySelectorAll('.job-card');
     
+            jobCards.forEach(card => {
+                const title = card.dataset.title?.toLowerCase() || '';
+                const location = card.dataset.location?.toLowerCase() || '';
+                const type = card.dataset.type?.toLowerCase() || '';
+                const salary = card.dataset.salary?.toLowerCase() || '';
+                const benefits = card.dataset.benefits?.toLowerCase() || '';
     
+                const matchKeyword = !keywordInput || title.includes(keywordInput);
+                const matchLocation = !locationInput || location.includes(locationInput);
+                const matchContract = contract === 'contract' || type.includes(contract);
+                const matchPay = pay === 'pay' || salary.includes(pay);
+                const matchSponsorship = sponsorship === 'yes' || benefits.includes(sponsorship);
     
+                if ( matchSponsorship) {
+                    // console.log('Match found:', title, location, type, salary, benefits);
+                    card.style.display = 'block';
+                } else {
+                    // console.log('no Match found:', title, location, type, salary, benefits);
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+    </script> --}}
 
+    {{-- <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchBtn = document.querySelector('.btn.btn-primary.w-100');
+        
+            searchBtn.addEventListener('click', function () {
+                const locationInput = document.querySelector('input[placeholder="Location..."]').value.toLowerCase().trim();
+                const contract = document.getElementById('contractTypeDropdown').textContent.trim().toLowerCase();
+        
+                const jobCards = document.querySelectorAll('.job-card');
+        
+                jobCards.forEach(card => {
+                    const location = card.dataset.location?.toLowerCase() || '';
+                    const type = card.dataset.type?.toLowerCase() || '';
+        
+                    const hasLocation = locationInput !== '';
+                    const hasContract = contract !== 'contract';
+        
+                    const matchLocation = hasLocation && location.includes(locationInput);
+                    const matchContract = hasContract && type.includes(contract);
+        
+                    // Show if either matches or if nothing is selected (show all)
+                    if ((hasLocation && matchLocation) || (hasContract && matchContract) || (!hasLocation && !hasContract)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+        </script> --}}
 
-
-
-
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const searchBtn = document.querySelector('.btn.btn-primary.w-100');
+            
+                searchBtn.addEventListener('click', function () {
+                    const keywordInput = document.querySelector('input[placeholder="Job Title"]').value.toLowerCase().trim();
+                    const locationInput = document.querySelector('input[placeholder="Location..."]').value.toLowerCase().trim();
+                    const contract = document.getElementById('contractTypeDropdown').textContent.trim().toLowerCase();
+                    const pay = document.getElementById('payTypeDropdown').textContent.trim().toLowerCase();
+                    const sponsorship = document.getElementById('sponsorshipTypeDropdown').textContent.trim().toLowerCase();
+            
+                    const jobCards = document.querySelectorAll('.job-card');
+            
+                    jobCards.forEach(card => {
+                        const title = card.dataset.title?.toLowerCase() || '';
+                        const location = card.dataset.location?.toLowerCase() || '';
+                        const type = card.dataset.type?.toLowerCase() || '';
+                        const salary = card.dataset.salary?.toLowerCase() || '';
+                        const benefits = card.dataset.benefits?.toLowerCase() || '';
+            
+                        // Matching logic per filter
+                        const matchKeyword = !keywordInput || title.includes(keywordInput);
+                        const matchLocation = !locationInput || location.includes(locationInput);
+                        const matchContract = contract === 'contract' || type.includes(contract);
+                        const matchPay = pay === 'pay' || salary.includes(pay);
+                        const matchSponsorship = sponsorship === 'sponsorship' || benefits.includes(sponsorship);
+            
+                        // Show if all active filters match
+                        if (matchKeyword && matchLocation && matchContract && matchPay && matchSponsorship) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            </script>
+            
+        
     
     
-
-    
-    
- 
-
-
 
 @endsection
 
@@ -1053,3 +1175,7 @@ function showScoresModal(button) {
 
 
 </script> --}}
+
+
+
+      
