@@ -10,6 +10,6 @@ class SalaryRange extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['salary_range'];
+    protected $fillable = ['salary_ranges'];
 }
 

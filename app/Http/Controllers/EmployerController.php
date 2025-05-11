@@ -4,6 +4,13 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Candidate;
+use App\Models\Hour;
+use App\Models\Industry;
+use App\Models\JobLocation;
+use App\Models\SalaryRange;
+use App\Models\SeniorityLevel;
+use App\Models\Skill;
+use App\Models\WorkingPattern;
 use Illuminate\Http\Request;
 use App\Models\Job;
 use App\Models\TeamMember;
@@ -351,10 +358,52 @@ class EmployerController extends Controller
 
     public function TalentSearch()
     {
+        $locations = JobLocation::get();
+        $salaryRanges = SalaryRange::get();
+        $seniorityLevels = SeniorityLevel::get();
+        $workingPatters = WorkingPattern::get();
+        $hours = Hour::get();
+        $industries = Industry::get();
+        $skills = Skill::get();
+
         $candidates = Candidate::paginate(5);
 //        dd($candidates->toArray());
-        return view('employer.talent_search', compact('candidates'));
+        return view('employer.talent_search', compact('candidates', 'locations', 'salaryRanges', 'seniorityLevels', 'workingPatters', 'hours', 'industries', 'skills'));
     }
+
+    public function searchCandidates(Request $request)
+    {
+        $query = Candidate::query();
+
+        if ($request->job_location) {
+            $query->where('job_location_id', $request->job_location);
+        }
+        if ($request->salary_range) {
+            $query->where('salary_range_id', $request->salary_range);
+        }
+        if ($request->seniority_level) {
+            $query->where('seniority_level_id', $request->seniority_level);
+        }
+        if ($request->working_pattern) {
+            $query->where('working_pattern_id', $request->working_pattern);
+        }
+        if ($request->hours) {
+            $query->where('hours_id', $request->hours);
+        }
+        if ($request->industries) {
+            $query->where('industry_id', $request->industries);
+        }
+        if ($request->skills) {
+            $query->whereHas('skills', function ($q) use ($request) {
+                $q->where('skill_id', $request->skills);
+            });
+        }
+
+        $candidates = $query->latest()->get();
+
+        return response()->json($candidates);
+    }
+
 
     public function landing()
     {

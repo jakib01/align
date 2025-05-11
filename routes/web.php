@@ -96,6 +96,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
         Route::get('/applicant_tracking', [EmployerController::class, 'ApplicantTracking'])->name('applicant.tracking')->middleware('employer');
         Route::get('/talent_search', [EmployerController::class, 'TalentSearch'])->name('talent.search')->middleware('employer');
+        Route::get('/talent_search-candidates', [EmployerController::class, 'searchCandidates'])->name('talent.search.candidates')->middleware('employer');
         Route::get('/trends', [EmployerController::class, 'trends'])->name('employer.trends')->middleware('employer');
         Route::get('/inbox', [EmployerController::class, 'inbox'])->name('employer.inbox')->middleware('employer');
 

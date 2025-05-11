@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Skill extends Model
 {
-    protected $table = 'skills'; // Ensure this matches the table name
+    protected $table = 'skill_lists'; // Ensure this matches the table name
 }
 
 

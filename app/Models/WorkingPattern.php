@@ -9,7 +9,7 @@ class WorkingPattern extends Model
 {
     use HasFactory;
 
-    protected $table = 'working_pattern'; // Explicitly specify the table name
+    protected $table = 'working_patterns'; // Explicitly specify the table name
     protected $fillable = ['working_pattern'];
 }
 

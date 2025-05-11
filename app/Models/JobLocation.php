@@ -9,6 +9,6 @@ class JobLocation extends Model
 {
     use HasFactory;
 
-    protected $table = 'job_location';
+    protected $table = 'job_locations';
 }
 
