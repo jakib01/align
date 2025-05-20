@@ -37,15 +37,15 @@ class CandidateController extends Controller
     // public function Dashboard()
     // {
     //     $candidate = auth()->guard('candidate')->user();
-    
+
     //     $valueScores = [];
     //     $behaviourScores = [];
-    
+
     //     if (!empty($candidate->value_assessment_score)) {
     //         $decoded = json_decode($candidate->value_assessment_score, true);
     //         $valueScores = is_array($decoded) ? $decoded : [];
     //     }
-    
+
     //     if (!empty($candidate->behaviour_assesment_score)) {
     //         $decoded = json_decode($candidate->behaviour_assesment_score, true);
     //         if (json_last_error() === JSON_ERROR_NONE) {
@@ -73,7 +73,7 @@ class CandidateController extends Controller
     //     $behaviourassessmentTakenDate = $t5Date;
     //     $behaviourassessmentExpireDate = $t5Date ? $t5Date->copy()->addYear() : null;
 
-    
+
     //     return view('candidate.candidate_profile', [
     //         'candidate' => $candidate,
     //         'valueScores' => $valueScores,
@@ -85,7 +85,7 @@ class CandidateController extends Controller
     //         'valueassessmentExpireDate' => $valueassessmentExpireDate,
     //     ]);
     // }
-    
+
     public function Dashboard()
 {
     $candidate = auth()->guard('candidate')->user();
@@ -316,11 +316,11 @@ public function downloadProfilePdf()
     public function BehaviourAssesmentResult()
     {
         $candidate = auth()->guard('candidate')->user();
-    
-        
+
+
         $behaviourScores = [];
-    
-    
+
+
         if (!empty($candidate->behaviour_assesment_score)) {
             $decoded = json_decode($candidate->behaviour_assesment_score, true);
             if (json_last_error() === JSON_ERROR_NONE) {
@@ -328,11 +328,11 @@ public function downloadProfilePdf()
             }
         }
 
-        
-    
+
+
         return view('candidate.behaviour_assesment_result', [
             'candidate' => $candidate,
-            
+
             'behaviourScores' => $behaviourScores,
         ]);
     }
@@ -373,7 +373,7 @@ public function downloadProfilePdf()
         $confidence_percentage = ($total_confidence / 2000) * 100;
 
 
-        
+
 
         $current['compassion'] = $compassion_percentage;
         $current['confidence'] = $confidence_percentage;
@@ -386,12 +386,12 @@ public function downloadProfilePdf()
         if (!is_array($currentScores)) $currentScores = [];
         $currentScores['compassion'] = $compassion_percentage;
         $currentScores['confidence'] = $confidence_percentage;
-        
+
         // Decode completion timestamps
         $completed = json_decode($candidate->behaviour_assesment_completed_at, true) ?? [];
         if (!is_array($completed)) $completed = [];
         $completed['t1'] = now()->toDateTimeString();
-        
+
         // Save both
         DB::table('candidates')->where('id', $candidate->id)->update([
             'behaviour_assesment_score' => json_encode($currentScores),
@@ -411,7 +411,7 @@ public function downloadProfilePdf()
 
     }
 
-    
+
 
     public function showCuriosityVsPracticality()
     {
@@ -456,12 +456,12 @@ public function downloadProfilePdf()
         if (!is_array($currentScores)) $currentScores = [];
         $currentScores['curiosity'] = $curiosity_percentage;
         $currentScores['practicality'] = $practicality_percentage;
-        
+
         // Decode completion timestamps
         $completed = json_decode($candidate->behaviour_assesment_completed_at, true) ?? [];
         if (!is_array($completed)) $completed = [];
         $completed['t2'] = now()->toDateTimeString();
-        
+
         // Save both
         DB::table('candidates')->where('id', $candidate->id)->update([
             'behaviour_assesment_score' => json_encode($currentScores),
@@ -524,12 +524,12 @@ public function downloadProfilePdf()
         if (!is_array($currentScores)) $currentScores = [];
         $currentScores['discipline'] = $discipline_percentage;
         $currentScores['adaptability'] = $adaptability_percentage;
-        
+
         // Decode completion timestamps
         $completed = json_decode($candidate->behaviour_assesment_completed_at, true) ?? [];
         if (!is_array($completed)) $completed = [];
         $completed['t3'] = now()->toDateTimeString();
-        
+
         // Save both
         DB::table('candidates')->where('id', $candidate->id)->update([
             'behaviour_assesment_score' => json_encode($currentScores),
@@ -592,12 +592,12 @@ public function downloadProfilePdf()
         if (!is_array($currentScores)) $currentScores = [];
         $currentScores['resilience'] = $resilience_percentage;
         $currentScores['sensitivity'] = $sensitivity_percentage;
-        
+
         // Decode completion timestamps
         $completed = json_decode($candidate->behaviour_assesment_completed_at, true) ?? [];
         if (!is_array($completed)) $completed = [];
         $completed['t4'] = now()->toDateTimeString();
-        
+
         // Save both
         DB::table('candidates')->where('id', $candidate->id)->update([
             'behaviour_assesment_score' => json_encode($currentScores),
@@ -613,7 +613,7 @@ public function downloadProfilePdf()
         //     'sensitivity_percentage'
         // ));
         return redirect()->route('SociobilityVsReflectiveness');
-        
+
     }
 
     public function showtSociobilityVsReflectiveness()
@@ -622,7 +622,7 @@ public function downloadProfilePdf()
         return view('candidate.sociobilityVsReflectiveness', compact('questions'));
     }
 
-    
+
 
     public function savet5(Request $request)
     {
@@ -661,12 +661,12 @@ public function downloadProfilePdf()
         if (!is_array($currentScores)) $currentScores = [];
         $currentScores['sociability'] = $sociability_percentage;
         $currentScores['reflectiveness'] = $reflectiveness_percentage;
-        
+
         // Decode completion timestamps
         $completed = json_decode($candidate->behaviour_assesment_completed_at, true) ?? [];
         if (!is_array($completed)) $completed = [];
         $completed['t5'] = now()->toDateTimeString();
-        
+
         // Save both
         DB::table('candidates')->where('id', $candidate->id)->update([
             'behaviour_assesment_score' => json_encode($currentScores),
@@ -822,14 +822,74 @@ public function downloadProfilePdf()
 
     public function ApplicationTracking()
     {
-        return view('candidate.application_tracking');
+        $candidateId = auth()->guard('candidate')->id();
+
+        $appliedJobs = DB::table('job_applieds')
+            ->join('jobs', 'job_applieds.job_post_id', '=', 'jobs.id')
+            ->where('job_applieds.candidate_id', $candidateId)
+            ->orderByDesc('job_applieds.created_at')
+            ->select(
+                'job_applieds.*',
+                'jobs.company_name',
+                'jobs.job_location',
+                'jobs.working_pattern',
+                'jobs.industry',
+                'jobs.title as job_title_from_jobs'
+            )
+            ->get();
+
+        $newJobs = [];
+        $shortlistedJobs = [];
+        $submittedJobs = [];
+
+        foreach ($appliedJobs as $job) {
+            // Determine interview phase
+            $interviewPhase = null;
+            if ($job->third_interview) {
+                $interviewPhase = 'Third Interview';
+            } elseif ($job->second_interview) {
+                $interviewPhase = 'Second Interview';
+            } elseif ($job->first_interview) {
+                $interviewPhase = 'First Interview';
+            }
+
+            $jobItem = [
+                'title' => $job->job_title,
+                'company' => $job->company_name ?? 'N/A',
+                'location' => $job->job_location ?? 'N/A',
+                'jobType' => $job->working_pattern ?? 'N/A',
+                'appliedDate' => $job->created_at ? Carbon::parse($job->created_at)->format('Y-m-d') : '',
+                'interviewPhase' => $interviewPhase,
+                'offerLetter' =>  $job->offerletter ?? 'N/A',
+                'offerLetterMessage' => $job->offerletter_message ?? '',
+                'offerAccepted' => $job->accept_offerletter == 1 ? true : false,
+            ];
+
+            if ($job->offerletter) {
+                $submittedJobs[] = $jobItem;
+            } elseif ($interviewPhase) {
+                $shortlistedJobs[] = $jobItem;
+            } elseif ($job->save_applicant) {
+                $newJobs[] = $jobItem;
+            }
+        }
+
+        $jobs = [
+            'newJobs' => $newJobs,
+            'shortlistedJobs' => $shortlistedJobs,
+            'submittedJobs' => $submittedJobs,
+        ];
+
+//        dd($jobs);
+
+        return view('candidate.application_tracking', compact('jobs'));
     }
 
     public function showAllJobs()
     {
         $jobs = Job::all(); // Fetch jobs from the database
         $jobs = Job::with('employer')->get();
-        
+
 
         return view('candidate.job_search', compact('jobs'));
     }

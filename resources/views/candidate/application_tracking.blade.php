@@ -77,8 +77,6 @@
     </nav>
   </div><!-- End Page Title -->
 
-
-
   <div class="d-flex justify-content-between align-items-center my-4">
     <h2>Jobs</h2>
     <button class="btn btn-primary">Create Job</button>
@@ -95,7 +93,7 @@
       <!-- New Jobs -->
       <div class="col-lg-4">
         <div class="job-section bg-light">
-          <div class="category-title">NEW (12)</div>
+          <div class="category-title">SUBMITTED ({{ count($jobs['newJobs']) }})</div>
           <div id="new-jobs-container"></div>
         </div>
       </div>
@@ -103,7 +101,7 @@
       <!-- Shortlisted Jobs -->
       <div class="col-lg-4">
         <div class="job-section bg-light">
-          <div class="category-title">SHORTLISTED (7)</div>
+          <div class="category-title">INTERVIEW PHASE ({{ count($jobs['shortlistedJobs']) }})</div>
           <div id="shortlisted-jobs-container"></div>
         </div>
       </div>
@@ -111,7 +109,7 @@
       <!-- Submitted Applications -->
       <div class="col-lg-4">
         <div class="job-section bg-light">
-          <div class="category-title">SUBMITTED (2)</div>
+          <div class="category-title">OFFERED ({{ count($jobs['submittedJobs']) }})</div>
           <div id="submitted-jobs-container"></div>
         </div>
       </div>
@@ -145,10 +143,8 @@
     </div>
   </div>
 
-
-
   <script>
-    const jobs = {
+    const jobs_old = {
       jobCategories: {
         newJobs: [
           {
@@ -315,6 +311,10 @@
       },
     };
 
+    const jobs = {
+        jobCategories: @json($jobs)
+    };
+
     // Function to display jobs
     function displayJobs() {
       const newJobsContainer = document.getElementById("new-jobs-container");
@@ -342,6 +342,11 @@
               <h6>${job.title}</h6>
               <p>${job.company} - ${job.location}</p>
               <span class="badge bg-secondary">${job.jobType}</span>
+              ${
+              job.interviewPhase
+                  ? `<span class="badge bg-primary">${job.interviewPhase}</span>`
+                  : ''
+              }
             </div>
           `
         )
