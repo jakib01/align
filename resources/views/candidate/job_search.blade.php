@@ -1,6 +1,8 @@
 @extends('master_layout.candidate_dashboard_master')
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -17,6 +19,22 @@
 
 
 @section('job_search')
+
+<style>
+  .discount-bar {
+    display: inline-block;
+    background-color: #ffc107; /* Bootstrap warning color */
+    color: #000;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    letter-spacing: 0.5px;
+  }
+</style>
+
+
 
 <style>
     .sidebar {
@@ -70,7 +88,7 @@
         position: relative;
     }
 
-    #job-details-modal {
+    /* #job-details-modal {
         display: none;
         position: fixed;
         z-index: 1000;
@@ -83,7 +101,7 @@
                 0,
                 0,
                 0.5);
-    }
+    } */
 
     .modal-content {
         position: absolute;
@@ -319,6 +337,11 @@
                         <!-- <img src="https://logo.clearbit.com/google.com" alt="" class="card__logo" width="64" height="64" /> -->
                     </div> 
                     <div class="card__content" style="display: flex; flex-direction: column; justify-content: space-between; width: 100%;">
+                        <p style="margin: 0;">
+                        <p style="margin: 0;">
+                        <span class="discount-bar">Aligned Score: 80%</span>
+                        </p>
+                        </p>
                         <div class="card__heading" style="font-weight: bold;">Software Engineer</div>
                         <div class="card__text" style="margin-top: 5px;">Google</div>
                         <p class="card-text text-muted mb-0 mt-1" style="font-size: 14px;">
@@ -350,6 +373,11 @@
         <!-- <img src="https://logo.clearbit.com/amazon.com" alt="" class="card__logo" width="64" height="64" /> -->
     </div>
     <div class="card__content" style="display: flex; flex-direction: column; justify-content: space-between; width: 100%;">
+                        <p style="margin: 0;">
+                        <p style="margin: 0;">
+                        <span class="discount-bar">Aligned Score: 85%</span>
+                        </p>
+                        </p>
                         <div class="card__heading" style="font-weight: bold;">Senior Software Engineer</div>
                         <div class="card__text" style="margin-top: 5px;">Amazon</div>
                         <p class="card-text text-muted mb-0 mt-1" style="font-size: 14px;">
@@ -381,6 +409,11 @@
 <!-- <img src="https://logo.clearbit.com/tcs.com" alt="" class="card__logo" width="64" height="64" /> -->
                     </div>
                     <div class="card__content" style="display: flex; flex-direction: column; justify-content: space-between; width: 100%;">
+                        <p style="margin: 0;">
+                        <p style="margin: 0;">
+                        <span class="discount-bar">Aligned Score: 90%</span>
+                        </p>
+                        </p>
                         <div class="card__heading" style="font-weight: bold;">Web Developer</div>
                         <div class="card__text" style="margin-top: 5px;">TCS</div>
                         <p class="card-text text-muted mb-0 mt-1" style="font-size: 14px;">
@@ -419,6 +452,11 @@
                         <!-- <img src="https://via.placeholder.com/64" alt="" class="card__logo" width="64" height="64" /> -->
                     </div>
                     <div class="card__content" style="display: flex; flex-direction: column; justify-content: space-between; width: 100%;">
+                        <p style="margin: 0;">
+                        <p style="margin: 0;">
+                        <span class="discount-bar">Aligned Score: 86%</span>
+                        </p>
+                        </p>
                         <div class="card__heading" style="font-weight: bold;">Web Developer</div>
                         <div class="card__text" style="margin-top: 5px;">Oracle</div>
                         <p class="card-text text-muted mb-0 mt-1" style="font-size: 14px;">
@@ -453,6 +491,11 @@
                         <!-- <img src="https://via.placeholder.com/64" alt="" class="card__logo" width="64" height="64" /> -->
                     </div>
                     <div class="card__content" style="display: flex; flex-direction: column; justify-content: space-between; width: 100%;">
+                        <p style="margin: 0;">
+                        <p style="margin: 0;">
+                        <span class="discount-bar">Aligned Score: 81%</span>
+                        </p>
+                        </p>
                         <div class="card__heading" style="font-weight: bold;">Software Developer</div>
                         <div class="card__text" style="margin-top: 5px;">Microsoft</div>
                         <p class="card-text text-muted mb-0 mt-1" style="font-size: 14px;">
@@ -487,6 +530,11 @@
                         <!-- <img src="https://via.placeholder.com/64" alt="" class="card__logo" width="64" height="64" /> -->
                     </div>
                     <div class="card__content" style="display: flex; flex-direction: column; justify-content: space-between; width: 100%;">
+                        <p style="margin: 0;">
+                        <p style="margin: 0;">
+                        <span class="discount-bar">Aligned Score: 95%</span>
+                        </p>
+                        </p>
                         <div class="card__heading" style="font-weight: bold;">Software Developer</div>
                         <div class="card__text" style="margin-top: 5px;">Microsoft</div>
                         <p class="card-text text-muted mb-0 mt-1" style="font-size: 14px;">
@@ -525,6 +573,11 @@
                         <!-- <img src="https://via.placeholder.com/64" alt="" class="card__logo" width="64" height="64" /> -->
                     </div>
                     <div class="card__content" style="display: flex; flex-direction: column; justify-content: space-between; width: 100%;">
+                        <p style="margin: 0;">
+                        <p style="margin: 0;">
+                        <span class="discount-bar">Aligned Score: 95%</span>
+                        </p>
+                        </p>
                         <div class="card__heading" style="font-weight: bold;">Software Engineer</div>
                         <div class="card__text" style="margin-top: 5px;">AMD</div>
                         <p class="card-text text-muted mb-0 mt-1" style="font-size: 14px;">
@@ -559,6 +612,11 @@
                         <!-- <img src="https://via.placeholder.com/64" alt="" class="card__logo" width="64" height="64" /> -->
                     </div>
                     <div class="card__content" style="display: flex; flex-direction: column; justify-content: space-between; width: 100%;">
+                        <p style="margin: 0;">
+                        <p style="margin: 0;">
+                        <span class="discount-bar">Aligned Score: 95%</span>
+                        </p>
+                        </p>
                         <div class="card__heading" style="font-weight: bold;">Devops Engineer</div>
                         <div class="card__text" style="margin-top: 5px;">Microsoft</div>
                         <p class="card-text text-muted mb-0 mt-1" style="font-size: 14px;">
@@ -593,6 +651,11 @@
                         <!-- <img src="https://via.placeholder.com/64" alt="" class="card__logo" width="64" height="64" /> -->
                     </div>
                     <div class="card__content" style="display: flex; flex-direction: column; justify-content: space-between; width: 100%;">
+                        <p style="margin: 0;">
+                        <p style="margin: 0;">
+                        <span class="discount-bar">Aligned Score: 85%</span>
+                        </p>
+                        </p>
                         <div class="card__heading" style="font-weight: bold;">Software Developer</div>
                         <div class="card__text" style="margin-top: 5px;">Microsoft</div>
                         <p class="card-text text-muted mb-0 mt-1" style="font-size: 14px;">
@@ -639,11 +702,12 @@
     <div class="row">
         @foreach($jobs as $row)
         <div class="col-md-4 job-card mb-3" data-title="{{ $row->title }}" data-location="{{ $row->job_location}}"
-            data-type="{{$row->working_pattern}}" data-company="X Corp." data-experience="Mid-Level"
-            data-salary="{{ $row->salary_range}}" 
-            data-description=""
-            data-requirements="Requirement 1, Requirement 2, Requirement 3"
-            data-benefits="Benefit 1, Benefit 2, Benefit 3">
+            data-type="{{$row->working_pattern}}" data-company="{{ $row->company_name }}" data-experience="{{ $row->seniority_level }}"
+            data-salary="{{ $row->salary_range}}"
+            data-candidate-id="{{ $row->employer_id }}" 
+            data-description="{{ $row->description}}"
+            data-requirements="{{ $row->requirements }}"
+            data-benefits="{{ $row->benefits }}">
             <div class="card flex-fill" style="padding: 20px; border: 1px solid #ddd; border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" >
                 <div class="card-body" >
                     <div class="d-flex justify-content-between align-items-center mb-1 mt-3">
@@ -658,6 +722,7 @@
                         </div>
                     </div>
                     <h5 class="card-title mt-2 mb-2" style="font-size: 18px; font-weight: bold;">{{ $row->job_title }}</h5>
+                    <h4 class="card-title  mb-2" style="font-size: 18px; font-weight: bold;">{{ $row->company_name }}</h4>
                     <p class="card-text text-muted mb-0" style="font-size: 14px;">
                         <i class="bi bi-geo-alt"></i>
                         <span class="location-text">{{ $row->job_location}}</span>
@@ -710,7 +775,7 @@
 </div>
            
 
-    <!-- Job Details Modal -->
+    {{-- <!-- Job Details Modal -->
     <div id="job-details-modal">
         <div class="modal-content">
             <!-- Header Section -->
@@ -774,7 +839,7 @@
                 </p>
                 
            
-                </p> -->
+                
             </div>
 
            
@@ -785,7 +850,10 @@
         </div>
 
         
-    </div>
+    </div> --}}
+
+   
+
 
    <!-- Scores Modal -->
    <!-- Modal Structure -->
@@ -802,20 +870,20 @@
           <h5 class="text-center">Behavior Comparison</h5>
           <div class="row">
               <div class="col-md-6">
-                  <canvas id="modalRadarChart1" style="max-height: 300px;"></canvas>
+                  <canvas id="chartEmployerBehavior" style="max-height: 300px;"></canvas>
               </div>
               <div class="col-md-6">
-                  <canvas id="modalRadarChart2" style="max-height: 300px;"></canvas>
+                  <canvas id="chartCandidateBehavior" style="max-height: 300px;"></canvas>
               </div>
           </div>
   
           <h5 class="text-center mt-4">Value Comparison</h5>
           <div class="row">
               <div class="col-md-6">
-                  <canvas id="modalValueChart1" style="max-height: 300px;"></canvas>
+                  <canvas id="chartEmployerValues" style="max-height: 300px;"></canvas>
               </div>
               <div class="col-md-6">
-                  <canvas id="modalValueChart2" style="max-height: 300px;"></canvas>
+                  <canvas id="chartCandidateValues" style="max-height: 300px;"></canvas>
               </div>
           </div>
   
@@ -842,14 +910,14 @@
         class="bi bi-arrow-up-short"></i>
 </a>
 
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> --}}
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         
 
       
-<script>
+{{-- <script>
     function showJobDetails(event) {
         const jobCard = event.currentTarget.closest(".job-card");
         const title = jobCard.getAttribute("data-title");
@@ -897,224 +965,13 @@
         document.getElementById(readMoreId).style.display = "none"; 
         document.getElementById(descriptionId).style.cursor = "default"; 
     }
-</script>
+</script> --}}
 
-<script>
-    let radarChart1, radarChart2, valueChart1, valueChart2;
 
-    function CheckScore(event) {
-        const modalElement = document.getElementById('scores-modal');
 
-        if (!modalElement) {
-            console.error('Modal element not found!');
-            return;
-        }
 
-        // If already created modal instance, don't recreate it
-        let modalInstance = bootstrap.Modal.getInstance(modalElement);
-        if (!modalInstance) {
-            modalInstance = new bootstrap.Modal(modalElement);
-        }
 
-        modalInstance.show();
 
-        modalElement.addEventListener('shown.bs.modal', function onModalShown() {
-            modalElement.removeEventListener('shown.bs.modal', onModalShown);
-
-            setTimeout(() => {
-                renderCharts();
-            }, 100); // wait until canvas sizes are ready
-        });
-    }
-
-    function renderCharts() {
-        const behaviourScores1 = {
-            "Leadership": 80,
-            "Teamwork": 75,
-            "Communication": 90,
-            "Problem Solving": 70,
-            "Critical Thinking": 85
-        };
-
-        const behaviourScores2 = {
-            "Leadership": 70,
-            "Teamwork": 65,
-            "Communication": 85,
-            "Problem Solving": 60,
-            "Critical Thinking": 75
-        };
-
-        const valueScores1 = {
-            "Integrity": 90,
-            "Innovation": 80,
-            "Respect": 85,
-            "Responsibility": 70,
-            "Excellence": 95
-        };
-
-        const valueScores2 = {
-            "Integrity": 80,
-            "Innovation": 70,
-            "Respect": 80,
-            "Responsibility": 65,
-            "Excellence": 90
-        };
-
-        // Destroy existing charts first if they exist
-        if (radarChart1) radarChart1.destroy();
-        if (radarChart2) radarChart2.destroy();
-        if (valueChart1) valueChart1.destroy();
-        if (valueChart2) valueChart2.destroy();
-
-        // Behavior Charts
-        radarChart1 = new Chart(document.getElementById('modalRadarChart1').getContext('2d'), {
-            type: 'radar',
-            data: {
-                labels: Object.keys(behaviourScores1),
-                datasets: [{
-                    label: 'Candidate 1 Behavior',
-                    data: Object.values(behaviourScores1),
-                    fill: true,
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgb(255, 99, 132)'
-                }]
-            }
-        });
-
-        radarChart2 = new Chart(document.getElementById('modalRadarChart2').getContext('2d'), {
-            type: 'radar',
-            data: {
-                labels: Object.keys(behaviourScores2),
-                datasets: [{
-                    label: 'Candidate 2 Behavior',
-                    data: Object.values(behaviourScores2),
-                    fill: true,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgb(54, 162, 235)'
-                }]
-            }
-        });
-
-        // Value Charts
-        valueChart1 = new Chart(document.getElementById('modalValueChart1').getContext('2d'), {
-            type: 'radar',
-            data: {
-                labels: Object.keys(valueScores1),
-                datasets: [{
-                    label: 'Candidate 1 Values',
-                    data: Object.values(valueScores1),
-                    fill: true,
-                    backgroundColor: 'rgba(133, 250, 240, 0.2)',
-                    borderColor: 'rgb(68, 242, 248)'
-                }]
-            }
-        });
-
-        valueChart2 = new Chart(document.getElementById('modalValueChart2').getContext('2d'), {
-            type: 'radar',
-            data: {
-                labels: Object.keys(valueScores2),
-                datasets: [{
-                    label: 'Candidate 2 Values',
-                    data: Object.values(valueScores2),
-                    fill: true,
-                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                    borderColor: 'rgb(255, 206, 86)'
-                }]
-            }
-        });
-
-        // Calculate and show Alignment Score
-        const alignment = calculateAlignment(behaviourScores1, behaviourScores2, valueScores1, valueScores2);
-        document.getElementById('alignmentScoreText').innerText = `Alignment Score: ${alignment}%`;
-    }
-
-    function calculateAlignment(scores1a, scores1b, scores2a, scores2b) {
-        let total = 0;
-        let count = 0;
-
-        for (const key in scores1a) {
-            total += 100 - Math.abs(scores1a[key] - scores1b[key]);
-            count++;
-        }
-
-        for (const key in scores2a) {
-            total += 100 - Math.abs(scores2a[key] - scores2b[key]);
-            count++;
-        }
-
-        return Math.round(total / count);
-    }
-</script>
-
-{{-- <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const searchBtn = document.querySelector('.btn.btn-primary.w-100');
-        searchBtn.addEventListener('click', function () {
-            const keywordInput = document.querySelector('input[placeholder="Keywords..."]').value.toLowerCase();
-            const locationInput = document.querySelector('input[placeholder="Location..."]').value.toLowerCase();
-    
-            const contract = document.getElementById('contractTypeDropdown').textContent.trim().toLowerCase();
-            const pay = document.getElementById('payTypeDropdown').textContent.trim().toLowerCase();
-            const sponsorship = document.getElementById('sponsorshipTypeDropdown').textContent.trim().toLowerCase();
-    
-            const jobCards = document.querySelectorAll('.job-card');
-    
-            jobCards.forEach(card => {
-                const title = card.dataset.title?.toLowerCase() || '';
-                const location = card.dataset.location?.toLowerCase() || '';
-                const type = card.dataset.type?.toLowerCase() || '';
-                const salary = card.dataset.salary?.toLowerCase() || '';
-                const benefits = card.dataset.benefits?.toLowerCase() || '';
-    
-                const matchKeyword = !keywordInput || title.includes(keywordInput);
-                const matchLocation = !locationInput || location.includes(locationInput);
-                const matchContract = contract === 'contract' || type.includes(contract);
-                const matchPay = pay === 'pay' || salary.includes(pay);
-                const matchSponsorship = sponsorship === 'yes' || benefits.includes(sponsorship);
-    
-                if ( matchSponsorship) {
-                    // console.log('Match found:', title, location, type, salary, benefits);
-                    card.style.display = 'block';
-                } else {
-                    // console.log('no Match found:', title, location, type, salary, benefits);
-                    card.style.display = 'none';
-                }
-            });
-        });
-    });
-    </script> --}}
-
-    {{-- <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const searchBtn = document.querySelector('.btn.btn-primary.w-100');
-        
-            searchBtn.addEventListener('click', function () {
-                const locationInput = document.querySelector('input[placeholder="Location..."]').value.toLowerCase().trim();
-                const contract = document.getElementById('contractTypeDropdown').textContent.trim().toLowerCase();
-        
-                const jobCards = document.querySelectorAll('.job-card');
-        
-                jobCards.forEach(card => {
-                    const location = card.dataset.location?.toLowerCase() || '';
-                    const type = card.dataset.type?.toLowerCase() || '';
-        
-                    const hasLocation = locationInput !== '';
-                    const hasContract = contract !== 'contract';
-        
-                    const matchLocation = hasLocation && location.includes(locationInput);
-                    const matchContract = hasContract && type.includes(contract);
-        
-                    // Show if either matches or if nothing is selected (show all)
-                    if ((hasLocation && matchLocation) || (hasContract && matchContract) || (!hasLocation && !hasContract)) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
-        });
-        </script> --}}
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
@@ -1160,22 +1017,217 @@
 
 @endsection
 
-{{-- <script>
+ <!-- Job Details Modal -->
+<div id="job-details-modal" class="modal fade" tabindex="-1" aria-labelledby="job-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <!-- Header Section -->
+            <div class="modal-header sticky-top bg-light w-100 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <img  id="modal-logo" />
+                    {{-- <img src="" alt="Logo" class="img-fluid me-2" style="width: 40px; height: auto" id="modal-logo" /> --}}
+                    <div>
+                        <p class="text-muted mb-0" id="job-company-name"></p>
+                        <h5 class="modal-title mb-0 title-font" id="job-title">
+                            <strong></strong>
+                        </h5>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-success btn-apply me-2">
+                        <i class="bi bi-check-circle"></i> Apply
+                    </button>
+                    <button class="btn btn-light btn-save me-2">
+                        <i class="bi bi-heart"></i> Save
+                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
 
-function showScoresModal(button) {
-    const behaviourScores = JSON.parse(button.getAttribute('data-behaviour'));
-    const valueScores = JSON.parse(button.getAttribute('data-values'));
+            <div class="modal-subtitle mb-2 ms-3 mt-2 text-muted d-flex justify-content-start">
+                <i class="bi bi-geo-alt me-2"></i>
+                <span id="job-location"></span>
+                <span class="mx-1">|</span>
+                <i class="bi bi-laptop me-2"></i>
+                <span>Remote</span>
+            </div>
 
-    loadChartsInScoresModal(behaviourScores, valueScores);
+            <div class="d-flex justify-content-between ms-3 mb-2">
+                <div>
+                    <i class="bi bi-star"></i>
+                    <span class="text-muted" id="job-experience"></span>
+                    <span class="mx-1">|</span>
+                    <i class="bi bi-briefcase"></i>
+                    <span class="text-muted" id="job-type"></span>
+                </div>
+            </div>
 
-    const modalElement = document.getElementById('scores-modal');
-    const modal = bootstrap.Modal.getOrCreateInstance(modalElement); // IMPORTANT
-    modal.show(); // show the modal properly
+            <div class="d-flex ms-3 mb-2">
+                <i class="bi bi-cash me-2"></i>
+                <span class="text-muted" id="job-salary"></span>
+            </div>
+
+            <div class="modal-body">
+                <hr class="mb-3 mt-0" />
+                <p class="modal-text">
+                    <strong>Description:</strong> <span id="job-description"></span>
+                </p>
+                <p class="modal-text">
+                    <strong>Requirements:</strong> <span id="job-requirements"></span>
+                </p>
+                <p class="modal-text">
+                    <strong>Benefits:</strong> <span id="job-benefits"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let chartEmployerBehavior, chartCandidateBehavior, chartEmployerValues, chartCandidateValues;
+
+    window.CheckScore = function(event) {
+        const modalElement = document.getElementById('scores-modal');
+        const jobCard = event.currentTarget.closest('.job-card');
+
+        // console.log('jobCard:', jobCard); // Debug log
+        const candidate_id = jobCard?.getAttribute('data-candidate-id');
+        // console.log('candidate_id:', candidate_id); // Debug log
+
+        // if (!candidate_id) {
+        //     console.error("Candidate ID missing.");
+        //     return;
+        // }
+
+        const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+
+        fetch(`/employer/api/get-assessment?candidate_id=${candidate_id}`)
+            .then(response => response.json())
+            .then(data => {
+                modalInstance.show();
+                modalElement.addEventListener('shown.bs.modal', () => {
+                    renderCharts(
+                        data.employerBehaviorAssessment,
+                        data.candidateBehaviorAssessment,
+                        data.employerValueAssessment,
+                        data.candidateValueAssessment
+                    );
+                }, { once: true });
+            })
+            .catch(err => console.error('Error loading assessment:', err));
+    };
+
+    function renderCharts(empBeh, candBeh, empVal, candVal) {
+        if (chartEmployerBehavior) chartEmployerBehavior.destroy();
+        if (chartCandidateBehavior) chartCandidateBehavior.destroy();
+        if (chartEmployerValues) chartEmployerValues.destroy();
+        if (chartCandidateValues) chartCandidateValues.destroy();
+
+        chartEmployerBehavior = new Chart(document.getElementById('chartEmployerBehavior').getContext('2d'), {
+            type: 'radar',
+            data: {
+                labels: Object.keys(empBeh),
+                datasets: [{
+                    label: 'Employer Behavior',
+                    data: Object.values(empBeh),
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgb(255, 99, 132)'
+                }]
+            }
+        });
+
+        chartCandidateBehavior = new Chart(document.getElementById('chartCandidateBehavior').getContext('2d'), {
+            type: 'radar',
+            data: {
+                labels: Object.keys(candBeh),
+                datasets: [{
+                    label: 'Candidate Behavior',
+                    data: Object.values(candBeh),
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgb(54, 162, 235)'
+                }]
+            }
+        });
+
+        chartEmployerValues = new Chart(document.getElementById('chartEmployerValues').getContext('2d'), {
+            type: 'radar',
+            data: {
+                labels: Object.keys(empVal),
+                datasets: [{
+                    label: 'Employer Values',
+                    data: Object.values(empVal),
+                    backgroundColor: 'rgba(133, 250, 240, 0.2)',
+                    borderColor: 'rgb(68, 242, 248)'
+                }]
+            }
+        });
+
+        chartCandidateValues = new Chart(document.getElementById('chartCandidateValues').getContext('2d'), {
+            type: 'radar',
+            data: {
+                labels: Object.keys(candVal),
+                datasets: [{
+                    label: 'Candidate Values',
+                    data: Object.values(candVal),
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    borderColor: 'rgb(255, 206, 86)'
+                }]
+            }
+        });
+
+        const alignment = calculateAlignment(empBeh, candBeh, empVal, candVal);
+        document.getElementById('alignmentScoreText').innerText = `Alignment Score: ${alignment}%`;
+    }
+
+    function calculateAlignment(scores1a, scores1b, scores2a, scores2b) {
+        let total = 0;
+        let count = 0;
+
+        for (const key in scores1a) {
+            total += 100 - Math.abs(scores1a[key] - scores1b[key]);
+            count++;
+        }
+
+        for (const key in scores2a) {
+            total += 100 - Math.abs(scores2a[key] - scores2b[key]);
+            count++;
+        }
+
+        return Math.round(total / count);
+    }
+</script>
+
+
+
+<script>
+    function showJobDetails(event) {
+    const jobCard = event.currentTarget.closest(".job-card");
+    const title = jobCard.getAttribute("data-title");
+    const location = jobCard.getAttribute("data-location");
+    const type = jobCard.getAttribute("data-type");
+    const company = jobCard.getAttribute("data-company");
+    const experience = jobCard.getAttribute("data-experience");
+    const salary = jobCard.getAttribute("data-salary");
+    const description = jobCard.getAttribute("data-description");
+    const requirements = jobCard.getAttribute("data-requirements");
+    const benefits = jobCard.getAttribute("data-benefits");
+    const logoImg = jobCard.querySelector("img");
+    const logo = logoImg ? logoImg.src : '';
+
+    document.getElementById("modal-logo").src = logo;
+    document.getElementById("job-title").innerText = title;
+    document.getElementById("job-location").innerText = location;
+    document.getElementById("job-type").innerText = type;
+    document.getElementById("job-experience").innerText = experience;
+    document.getElementById("job-salary").innerText = salary;
+    document.getElementById("job-description").innerText = description;
+    document.getElementById("job-requirements").innerText = requirements;
+    document.getElementById("job-benefits").innerText = benefits;
+    document.getElementById("job-company-name").innerText = company;
+
+    const modal = new bootstrap.Modal(document.getElementById("job-details-modal"));
+    modal.show();
 }
 
-
-</script> --}}
-
-
-
+</script>
       

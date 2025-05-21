@@ -42,7 +42,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
         Route::get('/dashboard', [EmployerController::class, 'Dashboard'])->name('employer.dashboard')->middleware('employer');
 
-        Route::get('/api/get-assessment', [EmployerController::class, 'getAssessmentData'])->middleware('employer');
+        Route::get('/api/get-assessment', [EmployerController::class, 'getAssessmentData']);
 
 
         Route::get('/profile', [EmployerController::class, 'showProfile'])->name('employer.profile')->middleware('employer');

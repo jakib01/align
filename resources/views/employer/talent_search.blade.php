@@ -18,69 +18,69 @@
                 <div class="col-lg-12">
                     <div class="applicant-filters">
                         <div class="row">
-                            <div class="col-md-2 form-group">
+                            <div class="col-md-3 form-group">
                                 <label for="job_location">Job Location</label>
                                 <select id="job_location" class="form-control">
                                     <option value="">Select Job Location</option>
                                 @foreach($locations as $location)
-                                        <option value={{ $location->my_row_id }}>{{ $location->job_location }}</option>
+                                        <option value={{ $location->job_location }}>{{ $location->job_location }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-2 form-group">
+                            <div class="col-md-3 form-group">
                                 <label for="salary_range">Salary Range</label>
                                 <select id="salary_range" class="form-control">
                                     <option value="">Select Salary Range</option>
                                     @foreach($salaryRanges as $salary_range)
-                                        <option value={{ $salary_range->my_row_id }}>{{ $salary_range->salary_range }}</option>
+                                        <option value={{ $salary_range->salary_range }}>{{ $salary_range->salary_range }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-2 form-group">
+                            <div class="col-md-3 form-group">
                                 <label for="seniority_level">Seniority Level</label>
                                 <select id="seniority_level" class="form-control">
                                     <option value="">Select Seniority Level</option>
                                     @foreach($seniorityLevels as $seniorityLevel)
-                                        <option value={{ $seniorityLevel->my_row_id }}>{{ $seniorityLevel->seniority_level }}</option>
+                                        <option value={{ $seniorityLevel->seniority_level }}>{{ $seniorityLevel->seniority_level }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-2 form-group">
-                                <label for="working_pattern">Working Patter</label>
+                            <div class="col-md-3 form-group">
+                                <label for="working_pattern">Contract</label>
                                 <select id="working_pattern" class="form-control">
-                                    <option value="">Select Working Patter</option>
+                                    <option value="">Select Contract</option>
                                     @foreach($workingPatters as $workingPatter)
-                                        <option value={{ $workingPatter->my_row_id }}>{{ $workingPatter->working_pattern }}</option>
+                                        <option value={{ $workingPatter->working_pattern }}>{{ $workingPatter->working_pattern }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-2 form-group">
+                            {{-- <div class="col-md-2 form-group">
                                 <label for="hours">Working Hours</label>
                                 <select id="hours" class="form-control">
                                     <option value="">Select Working Hours</option>
                                     @foreach($hours as $hour)
-                                        <option value={{ $hour->my_row_id }}>{{ $hour->hours }}</option>
+                                        <option value={{ $hour->hours }}>{{ $hour->hours }}</option>
                                     @endforeach
                                 </select>
-                            </div>
-                            <div class="col-md-2 form-group">
+                            </div> --}}
+                            {{-- <div class="col-md-2 form-group">
                                 <label for="industries">Industries</label>
                                 <select id="industries" class="form-control">
                                     <option value="">Select Industries</option>
                                     @foreach($industries as $industry)
-                                        <option value={{ $industry->my_row_id }}>{{ $industry->industries }}</option>
+                                        <option value={{ $industry->industries }}>{{ $industry->industries }}</option>
                                     @endforeach
                                 </select>
-                            </div>
-                            <div class="col-md-2 form-group">
+                            </div> --}}
+                            {{-- <div class="col-md-2 form-group">
                                 <label for="skills">Skills</label>
                                 <select id="skills" class="form-control">
                                     <option value="">Select Skills</option>
                                     @foreach($skills as $skill)
-                                        <option value={{ $skill->my_row_id }}>{{ $skill->skills }}</option>
+                                        <option value={{ $skill->skills }}>{{ $skill->skills }}</option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div> --}}
 
                         </div>
                     </div>
