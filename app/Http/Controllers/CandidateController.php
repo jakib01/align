@@ -132,10 +132,12 @@ class CandidateController extends Controller
         }
     }
 
-    if (!empty($candidate->job_preferences)) {
-        $decoded = json_decode($candidate->job_preferences, true);
-        $jobPreferences = is_array($decoded) ? $decoded : [];
-    }
+    // if (!empty($candidate->job_preferences)) {
+    //     $decoded = json_decode($candidate->job_preferences, true);
+    //     $jobPreferences = is_array($decoded) ? $decoded : [];
+    // }
+
+    $jobPreferences = $candidate->job_preferences ?? [];
 
     $hasCompletedBehaviour = !empty($behaviourassessmentTakenDate);
     $hasCompletedValue = !empty($valueassessmentTakenDate);
@@ -190,7 +192,11 @@ public function updateSinglePreference(Request $request, $id)
 
     $candidate = DB::table('candidates')->where('id', $id)->first();
 
+    // $preferences = json_decode($candidate->job_preferences ?? '{}', true);
     $preferences = json_decode($candidate->job_preferences ?? '{}', true);
+    if (!is_array($preferences)) {
+        $preferences = [];
+    }
     $preferences[$key] = $value;
 
     DB::table('candidates')

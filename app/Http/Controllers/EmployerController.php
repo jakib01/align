@@ -373,35 +373,112 @@ class EmployerController extends Controller
 
     public function searchCandidates(Request $request)
     {
-        $query = Candidate::query();
+        
+        // $query = Candidate::query();
 
-        if ($request->job_location) {
-            $query->where('job_location_id', $request->job_location);
-        }
-        if ($request->salary_range) {
-            $query->where('salary_range_id', $request->salary_range);
-        }
-        if ($request->seniority_level) {
-            $query->where('seniority_level_id', $request->seniority_level);
-        }
-        if ($request->working_pattern) {
-            $query->where('working_pattern_id', $request->working_pattern);
-        }
-        if ($request->hours) {
-            $query->where('hours_id', $request->hours);
-        }
-        if ($request->industries) {
-            $query->where('industry_id', $request->industries);
-        }
-        if ($request->skills) {
-            $query->whereHas('skills', function ($q) use ($request) {
-                $q->where('skill_id', $request->skills);
-            });
-        }
+        // if ($request->job_location) {
+        //     $query->where('job_location_id', $request->job_location);
+        // }
+        // if ($request->salary_range) {
+        //     $query->where('salary_range_id', $request->salary_range);
+        // }
+        // if ($request->seniority_level) {
+        //     $query->where('seniority_level_id', $request->seniority_level);
+        // }
+        // if ($request->working_pattern) {
+        //     $query->where('working_pattern_id', $request->working_pattern);
+        // }
+        // if ($request->hours) {
+        //     $query->where('hours_id', $request->hours);
+        // }
+        // if ($request->industries) {
+        //     $query->where('industry_id', $request->industries);
+        // }
+        // if ($request->skills) {
+        //     $query->whereHas('skills', function ($q) use ($request) {
+        //         $q->where('skill_id', $request->skills);
+        //     });
+        // }
 
-        $candidates = $query->latest()->get();
+        // $candidates = $query->latest()->get();
 
-        return response()->json($candidates);
+        // return response()->json($candidates);
+
+    //     $query = Candidate::query();
+
+    // if ($request->filled('job_location')) {
+    //     $query->where('job_preferences->location', $request->job_location);
+    // }
+
+    // if ($request->filled('salary_range')) {
+    //     $query->where('job_preferences->salary', $request->salary_range);
+    // }
+
+    // if ($request->filled('seniority_level')) {
+    //     $query->where('job_preferences->seniority', $request->seniority_level);
+    // }
+
+    // if ($request->filled('working_pattern')) {
+    //     $query->where('job_preferences->working_pattern', $request->working_pattern);
+    // }
+
+    // if ($request->filled('hours')) {
+    //     $query->where('job_preferences->hours', $request->hours);
+    // }
+
+    // if ($request->filled('industries')) {
+    //     $query->where('job_preferences->industry', $request->industries);
+    // }
+
+    // if ($request->filled('skills')) {
+    //     $query->whereJsonContains('job_preferences->skills', $request->skills);
+    // }
+
+    // $candidates = $query->latest()->get();
+
+    // return response()->json($candidates);
+
+//     $candidate = Candidate::first();
+//   dd($candidate->job_preferences);
+
+ $query = Candidate::query()->whereNotNull('job_preferences');
+
+    if ($request->filled('seniority_level')) {
+        $query->where('job_preferences->seniority', $request->seniority_level);
+    }
+
+    if ($request->filled('salary_range')) {
+        $query->where('job_preferences->salary', $request->salary_range);
+    }
+
+    if ($request->filled('job_location')) {
+        $query->where('job_preferences->location', $request->job_location);
+    }
+
+    if ($request->filled('working_pattern')) {
+        $query->where('job_preferences->contract', $request->working_pattern);
+    }
+
+    $candidates = $query->get();
+
+    return response()->json($candidates);
+
+//  dd([
+//     'filters' => $request->all(),
+//     'first_candidate' => Candidate::first()->job_preferences,
+// ]);
+// $candidates = Candidate::whereRaw("JSON_UNQUOTE(JSON_EXTRACT(job_preferences, '$.seniority')) = ?", [$request->seniority_level])->get();
+
+// dd([
+//     'SQL' => $query->toSql(),
+//     'Bindings' => $query->getBindings(),
+//     'ResultsCount' => $query->count(),
+//     'RequestValue' => $request->seniority_level,
+//     'ExampleValue' => Candidate::whereNotNull('job_preferences')->first()->job_preferences['seniority'] ?? null,
+// ]);
+
+
+
     }
 
 

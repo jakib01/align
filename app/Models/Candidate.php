@@ -47,5 +47,6 @@ class Candidate extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'job_preferences' => 'array',
     ];
 }
