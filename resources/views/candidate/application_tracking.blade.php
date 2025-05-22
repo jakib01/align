@@ -125,13 +125,17 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p id="jobModalTitle"><strong>Title:</strong></p>
-          <p id="jobModalCompany"><strong>Company:</strong></p>
-          <p id="jobModalLocation"><strong>Location:</strong></p>
-          <p id="jobModalType"><strong>Job Type:</strong></p>
-          <p id="jobModalApplied">
-            <strong>Applied:</strong> Yes, on [Date]
-          </p>
+            <p id="jobModalTitle"><strong>Title:</strong></p>
+            <p id="jobModalCompany"><strong>Company:</strong></p>
+            <p id="jobModalLocation"><strong>Location:</strong></p>
+            <p id="jobModalType"><strong>Job Type:</strong></p>
+            <p id="jobModalApplied">
+                <strong>Applied:</strong> Yes, on [Date]
+            </p>
+            <p id="jobModalInterviewPhase" style="display:none;"><strong>Interview Phase:</strong> <span class="badge bg-primary"
+                    id="interviewPhaseValue"></span></p>
+            <p id="jobModalOfferMessage" style="display:none;"><strong>Offer Message:</strong> <span class="badge bg-success"
+                    id="offerLetterMessageValue"></span></p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -144,173 +148,6 @@
   </div>
 
   <script>
-    const jobs_old = {
-      jobCategories: {
-        newJobs: [
-          {
-            title: "Account Manager",
-            company: "ABC Corp",
-            location: "New York, NY",
-            jobType: "Full Time",
-            appliedDate: "2024-04-15",
-          },
-          {
-            title: "Sales Manager",
-            company: "XYZ Inc",
-            location: "San Francisco, CA",
-            jobType: "Part Time",
-            appliedDate: "2024-04-10",
-          },
-          {
-            title: "Marketing Specialist",
-            company: "Creative Agency",
-            location: "Los Angeles, CA",
-            jobType: "Full Time",
-            appliedDate: "2024-04-05",
-          },
-          {
-            title: "Project Manager",
-            company: "ConsultTech",
-            location: "Chicago, IL",
-            jobType: "Contract",
-            appliedDate: "2024-04-02",
-          },
-          {
-            title: "HR Coordinator",
-            company: "People First",
-            location: "Boston, MA",
-            jobType: "Full Time",
-            appliedDate: "2024-04-01",
-          },
-          {
-            title: "Financial Analyst",
-            company: "FinGroup",
-            location: "Houston, TX",
-            jobType: "Full Time",
-            appliedDate: "2024-03-28",
-          },
-          {
-            title: "UX Designer",
-            company: "Design Studio",
-            location: "Remote",
-            jobType: "Part Time",
-            appliedDate: "2024-03-26",
-          },
-          {
-            title: "Data Scientist",
-            company: "AI Innovations",
-            location: "Austin, TX",
-            jobType: "Full Time",
-            appliedDate: "2024-03-22",
-          },
-          {
-            title: "Business Development Executive",
-            company: "Global Ventures",
-            location: "Seattle, WA",
-            jobType: "Full Time",
-            appliedDate: "2024-03-20",
-          },
-          {
-            title: "Software Engineer",
-            company: "TechWorld",
-            location: "Denver, CO",
-            jobType: "Full Time",
-            appliedDate: "2024-03-18",
-          },
-        ],
-
-        shortlistedJobs: [
-          {
-            title: "Web Developer",
-            company: "Tech Solutions",
-            location: "Seattle, WA",
-            jobType: "Full Time",
-            appliedDate: "2024-04-12",
-          },
-          {
-            title: "Data Engineer",
-            company: "DataTech",
-            location: "Boston, MA",
-            jobType: "Remote",
-            appliedDate: "2024-03-28",
-          },
-          {
-            title: "Graphic Designer",
-            company: "DesignPro",
-            location: "Los Angeles, CA",
-            jobType: "Part Time",
-            appliedDate: "2024-03-25",
-          },
-          {
-            title: "Operations Manager",
-            company: "LogisticsNow",
-            location: "New York, NY",
-            jobType: "Full Time",
-            appliedDate: "2024-03-20",
-          },
-          {
-            title: "Product Manager",
-            company: "InnovateX",
-            location: "Chicago, IL",
-            jobType: "Contract",
-            appliedDate: "2024-03-18",
-          },
-          {
-            title: "Systems Analyst",
-            company: "TechGear",
-            location: "Houston, TX",
-            jobType: "Full Time",
-            appliedDate: "2024-03-15",
-          },
-          {
-            title: "SEO Specialist",
-            company: "Marketing Wizards",
-            location: "Miami, FL",
-            jobType: "Remote",
-            appliedDate: "2024-03-12",
-          },
-        ],
-
-        submittedJobs: [
-          {
-            title: "Office Manager",
-            company: "OfficeWorld",
-            location: "Chicago, IL",
-            jobType: "Full Time",
-            appliedDate: "2024-03-30",
-          },
-          {
-            title: "Senior Developer",
-            company: "DevMasters",
-            location: "Austin, TX",
-            jobType: "Contract",
-            appliedDate: "2024-03-20",
-          },
-          {
-            title: "Network Engineer",
-            company: "NetSolutions",
-            location: "San Francisco, CA",
-            jobType: "Full Time",
-            appliedDate: "2024-03-18",
-          },
-          {
-            title: "Mobile App Developer",
-            company: "AppGenie",
-            location: "New York, NY",
-            jobType: "Full Time",
-            appliedDate: "2024-03-15",
-          },
-          {
-            title: "Cloud Architect",
-            company: "CloudTech",
-            location: "Remote",
-            jobType: "Full Time",
-            appliedDate: "2024-03-12",
-          },
-        ],
-      },
-    };
-
     const jobs = {
         jobCategories: @json($jobs)
     };
@@ -335,31 +172,34 @@
     }
 
     function createJobCards(jobList) {
-      return jobList
-        .map(
-          (job, index) => `
-            <div class="job-card" data-bs-toggle="modal" data-bs-target="#jobModal" onclick="showJobDetails(${index}, '${job.title}', '${job.company}', '${job.location}', '${job.jobType}', '${job.appliedDate}')">
-              <h6>${job.title}</h6>
-              <p>${job.company} - ${job.location}</p>
-              <span class="badge bg-secondary">${job.jobType}</span>
-              ${
-              job.interviewPhase
-                  ? `<span class="badge bg-primary">${job.interviewPhase}</span>`
-                  : ''
-              }
-            </div>
-          `
-        )
-        .join("");
+        return jobList
+            .map(
+                (job, index) => `
+                    <div class="job-card" data-bs-toggle="modal" data-bs-target="#jobModal" onclick="showJobDetails(${index}, '${job.title}', '${job.company}', '${job.location}', '${job.jobType}', '${job.appliedDate}', '${job.interviewPhase || ''}', '${job.offerLetter || 0}', \`${job.offerLetterMessage || ''}\`)">
+                      <h6>${job.title}</h6>
+                      <p>${job.company} - ${job.location}</p>
+                      <span class="badge bg-secondary">${job.jobType}</span>
+                      ${
+                    job.offerLetter == 1
+                        ? `<span class="badge bg-success">Offered</span>`
+                        : job.interviewPhase ? `<span class="badge bg-primary">${job.interviewPhase}</span>` : ''
+                }
+                    </div>
+                `)
+            .join("");
     }
 
+
     function showJobDetails(
-      index,
-      title,
-      company,
-      location,
-      jobType,
-      appliedDate
+        index,
+        title,
+        company,
+        location,
+        jobType,
+        appliedDate,
+        interviewPhase = "",
+        offerLetter = 0,
+        offerLetterMessage = ""
     ) {
       document.getElementById(
         "jobModalTitle"
@@ -376,6 +216,25 @@
       document.getElementById(
         "jobModalApplied"
       ).innerHTML = `<strong>Applied:</strong> Yes, on ${appliedDate}`;
+        // Interview Phase
+        const interviewPhaseEl = document.getElementById("jobModalInterviewPhase");
+        const interviewPhaseValueEl = document.getElementById("interviewPhaseValue");
+        if (interviewPhase && offerLetter != 1) {
+            interviewPhaseValueEl.textContent = interviewPhase;
+            interviewPhaseEl.style.display = "block";
+        } else {
+            interviewPhaseEl.style.display = "none";
+        }
+
+        // Offer Letter Message
+        const offerMessageEl = document.getElementById("jobModalOfferMessage");
+        const offerMessageValueEl = document.getElementById("offerLetterMessageValue");
+        if (offerLetter == 1 && offerLetterMessage) {
+            offerMessageValueEl.textContent = offerLetterMessage;
+            offerMessageEl.style.display = "block";
+        } else {
+            offerMessageEl.style.display = "none";
+        }
     }
 
     function filterJobs() {

@@ -829,7 +829,7 @@ public function downloadProfilePdf()
     public function ApplicationTracking()
     {
         $candidateId = auth()->guard('candidate')->id();
-        
+
         // dd($candidateId);
 
         $appliedJobs = DB::table('job_applieds')
@@ -888,7 +888,7 @@ public function downloadProfilePdf()
             'submittedJobs' => $submittedJobs,
         ];
 
-    //    dd($jobs);
+//        dd($jobs);
 
         return view('candidate.application_tracking', compact('jobs'));
     }
@@ -911,10 +911,11 @@ public function downloadProfilePdf()
         return view('candidate.job_details', compact('job'));
     }
 
-    
+
 
 public function applyJob(Request $request)
 {
+
     $request->validate([
         'job_post_id' => 'required|integer',
         'job_title' => 'required|string|max:255',
@@ -931,6 +932,8 @@ public function applyJob(Request $request)
     if ($exists) {
         return response()->json(['message' => 'You have already applied for this job.'], 409);
     }
+
+//    dd($request->all());;
 
     // Insert application
     DB::table('job_applieds')->insert([
