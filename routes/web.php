@@ -220,6 +220,8 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         // Job Search Page (main page)
         Route::get('/job', [CandidateController::class, 'showAllJobs'])->name('job.search');
 
+        Route::post('/apply-job', [CandidateController::class, 'applyJob'])->name('candidate.applyJob');
+
         // Job Details Page
         Route::get('/job-details/{jobId}', [CandidateController::class, 'showJobDetails'])->name('job.details');
 

@@ -702,6 +702,7 @@
     <div class="row">
         @foreach($jobs as $row)
         <div class="col-md-4 job-card mb-3" data-title="{{ $row->title }}" data-location="{{ $row->job_location}}"
+            data-job_id="{{ $row->id }}"
             data-type="{{$row->working_pattern}}" data-company="{{ $row->company_name }}" data-experience="{{ $row->seniority_level }}"
             data-salary="{{ $row->salary_range}}"
             data-candidate-id="{{ $row->employer_id }}" 
@@ -1034,7 +1035,12 @@
                     </div>
                 </div>
                 <div class="d-flex align-items-center">
-                    <button class="btn btn-success btn-apply me-2">
+                    <button 
+                        class="btn btn-success btn-apply me-2"
+                        id="applyBtn"
+                        data-job_id=""
+                        data-title=""
+                    >
                         <i class="bi bi-check-circle"></i> Apply
                     </button>
                     <button class="btn btn-light btn-save me-2">
@@ -1199,9 +1205,10 @@
 
 
 
-<script>
+{{-- <script>
     function showJobDetails(event) {
     const jobCard = event.currentTarget.closest(".job-card");
+    const jobId = jobCard.getAttribute("data-job_id");
     const title = jobCard.getAttribute("data-title");
     const location = jobCard.getAttribute("data-location");
     const type = jobCard.getAttribute("data-type");
@@ -1225,9 +1232,91 @@
     document.getElementById("job-benefits").innerText = benefits;
     document.getElementById("job-company-name").innerText = company;
 
+     // Inject job ID and title into Apply button
+    const applyBtn = document.getElementById("applyBtn");
+    applyBtn.setAttribute("data-job_id", jobId);
+    applyBtn.setAttribute("data-title", title);
+
+    const modal = new bootstrap.Modal(document.getElementById("job-details-modal"));
+    modal.show();
+}
+
+</script> --}}
+
+<script>
+    function showJobDetails(event) {
+    const jobCard = event.currentTarget.closest(".job-card");
+    const jobId = jobCard.getAttribute("data-job_id"); // <-- this was missing
+    const title = jobCard.getAttribute("data-title");
+    const location = jobCard.getAttribute("data-location");
+    const type = jobCard.getAttribute("data-type");
+    const company = jobCard.getAttribute("data-company");
+    const experience = jobCard.getAttribute("data-experience");
+    const salary = jobCard.getAttribute("data-salary");
+    const description = jobCard.getAttribute("data-description");
+    const requirements = jobCard.getAttribute("data-requirements");
+    const benefits = jobCard.getAttribute("data-benefits");
+    const logoImg = jobCard.querySelector("img");
+    const logo = logoImg ? logoImg.src : '';
+
+    document.getElementById("modal-logo").src = logo;
+    document.getElementById("job-title").innerText = title;
+    document.getElementById("job-location").innerText = location;
+    document.getElementById("job-type").innerText = type;
+    document.getElementById("job-experience").innerText = experience;
+    document.getElementById("job-salary").innerText = salary;
+    document.getElementById("job-description").innerText = description;
+    document.getElementById("job-requirements").innerText = requirements;
+    document.getElementById("job-benefits").innerText = benefits;
+    document.getElementById("job-company-name").innerText = company;
+
+    const applyBtn = document.getElementById("applyBtn");
+    applyBtn.setAttribute("data-job_id", jobId);
+    applyBtn.setAttribute("data-title", title);
+
     const modal = new bootstrap.Modal(document.getElementById("job-details-modal"));
     modal.show();
 }
 
 </script>
       
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Setup CSRF for AJAX
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $(document).on('click', '#applyBtn', function () {
+        let jobId = $(this).data('job_id');
+        let jobTitle = $(this).data('title');
+        let candidateId = {{ auth('candidate')->check() ? auth('candidate')->user()->id : 'null' }};
+        let candidateName = "{{ auth('candidate')->check() ? auth('candidate')->user()->candidate_name : '' }}";
+
+        if (candidateId === null) {
+            alert('Please log in to apply for a job.');
+            return;
+        }
+
+        $.ajax({
+            url: "{{ route('candidate.applyJob') }}",
+            method: "POST",
+            data: {
+                job_post_id: jobId,
+                job_title: jobTitle,
+                candidate_id: candidateId,
+                candidate_name: candidateName
+            },
+            success: function (response) {
+                alert(response.message);
+                $('#job-details-modal').modal('hide');
+            },
+            error: function (xhr) {
+                alert('Failed to apply: ' + (xhr.responseJSON.message || 'Unknown error'));
+            }
+        });
+    });
+</script>

@@ -829,6 +829,8 @@ public function downloadProfilePdf()
     public function ApplicationTracking()
     {
         $candidateId = auth()->guard('candidate')->id();
+        
+        // dd($candidateId);
 
         $appliedJobs = DB::table('job_applieds')
             ->join('jobs', 'job_applieds.job_post_id', '=', 'jobs.id')
@@ -886,7 +888,7 @@ public function downloadProfilePdf()
             'submittedJobs' => $submittedJobs,
         ];
 
-//        dd($jobs);
+    //    dd($jobs);
 
         return view('candidate.application_tracking', compact('jobs'));
     }
@@ -908,6 +910,42 @@ public function downloadProfilePdf()
         }
         return view('candidate.job_details', compact('job'));
     }
+
+    
+
+public function applyJob(Request $request)
+{
+    $request->validate([
+        'job_post_id' => 'required|integer',
+        'job_title' => 'required|string|max:255',
+        'candidate_id' => 'required|integer',
+        'candidate_name' => 'required|string|max:255',
+    ]);
+
+    // Optional: Check if already applied
+    $exists = DB::table('job_applieds')
+        ->where('job_post_id', $request->job_post_id)
+        ->where('candidate_id', $request->candidate_id)
+        ->exists();
+
+    if ($exists) {
+        return response()->json(['message' => 'You have already applied for this job.'], 409);
+    }
+
+    // Insert application
+    DB::table('job_applieds')->insert([
+        'job_post_id' => $request->job_post_id,
+        'job_title' => $request->job_title,
+        'candidate_id' => $request->candidate_id,
+        'candidate_name' => $request->candidate_name,
+        'save_applicant' => 1,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    return response()->json(['message' => 'Application submitted successfully.']);
+}
+
 
     public function inbox()
     {
