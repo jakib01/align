@@ -64,19 +64,6 @@
                 <br>
                 <input type="text" name="search" id="search" class="form-control"
                        placeholder="Search job title/applicant name"/>
-                {{-- <select class="form-select" name="seniority_level_id" id="seniority" required> --}}
-                {{-- <option value="" disabled selected>Select Job</option>
-
-                <option value="mid">job 2</option>
-                <option value="junior">job 1</option>
-                <option value="senior">job 3</option>
-                <option value="lead">job 4</option>
-                <option value="manager">job 5</option> --}}
-
-
-                </select>
-                <br>
-                {{-- <button class="btn btn-primary">s</button> --}}
 
             </div>
             <div class="table-data">
@@ -105,7 +92,11 @@
                                 </button>
                             </td>
                             <td>
-                                <button class="btn btn-primary mt-2">Profile</button>
+                                <button
+                                    class="btn btn-primary mt-2 profile-button"
+                                    data-id="{{ $row->candidate_id }}">
+                                    Profile
+                                </button>
                             </td>
                             <td>
 
@@ -179,6 +170,62 @@
                 </div>
             </div>
         </div>
+
+        <!-- Profile Modal -->
+        <div id="profile-modal" class="modal fade" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header sticky-top bg-light d-flex justify-content-between align-items-center">
+                        <h5 class="modal-title">Candidate Profile Assessment</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <!-- Candidate Info -->
+                        <div class="row align-items-center mb-4">
+                            <div class="col-md-2 text-center">
+                                <img id="candidatePhoto" src="" alt="Profile Photo" class="img-fluid rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
+                            </div>
+                            <div class="col-md-10">
+                                <h5 id="candidateName" class="mb-1"></h5>
+                                <p id="candidateEmail" class="mb-1"></p>
+                                <ul class="list-unstyled mb-0">
+                                    <li><strong>Location:</strong> <span id="candidateLocation"></span></li>
+                                    <li><strong>Seniority:</strong> <span id="candidateSeniority"></span></li>
+                                    <li><strong>Salary:</strong> <span id="candidateSalary"></span></li>
+                                    <li><strong>Contract:</strong> <span id="candidateContract"></span></li>
+                                    <li><strong>Sponsorship:</strong> <span id="candidateSponsorship"></span></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Charts Row -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-center">Behavior Assessment</h6>
+                                <canvas id="chartCandidateBehaviorOnly" style="max-height:300px;"></canvas>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-center">Value Assessment</h6>
+                                <canvas id="chartCandidateValuesOnly" style="max-height:300px;"></canvas>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    {{--                    <div class="modal-body">--}}
+{{--                        <h5 class="text-center">Behavior Assessment</h5>--}}
+{{--                        <canvas id="chartCandidateBehaviorOnly" style="max-height:300px;"></canvas>--}}
+
+{{--                        <h5 class="text-center mt-4">Value Assessment</h5>--}}
+{{--                        <canvas id="chartCandidateValuesOnly" style="max-height:300px;"></canvas>--}}
+{{--                    </div>--}}
+                </div>
+            </div>
+        </div>
+
 
     </main>
 
@@ -325,10 +372,103 @@
         }
     </script>
 
+
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
             integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <script>
+        let chartCandidateBehaviorOnly, chartCandidateValuesOnly;
+
+        // Click handler for Profile buttons
+        $(document).on('click', '.profile-button', function() {
+            const candidate_id = $(this).data('id');
+            openProfileModal(candidate_id);
+        });
+
+        function openProfileModal(candidate_id) {
+            const modalEl = document.getElementById('profile-modal');
+            const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+
+            // Fetch only candidate assessments
+            $.ajax({
+                url: '/employer/api/get-candidate-assessment',
+                method: 'GET',
+                data: { candidate_id },
+                success: function(response) {
+                    const { candidateBehaviorAssessment, candidateValueAssessment, candidateData } = response;
+
+                    // Inject candidate info
+                    $('#candidateName').text(candidateData.candidate_name);
+                    $('#candidateEmail').text(candidateData.email);
+                    $('#candidatePhoto').attr('src', candidateData.profile_photo || '/default-avatar.png');
+
+                    $('#candidateLocation').text(candidateData.job_preferences.location || '-');
+                    $('#candidateSeniority').text(candidateData.job_preferences.seniority || '-');
+                    $('#candidateSalary').text(candidateData.job_preferences.salary || '-');
+                    $('#candidateContract').text(candidateData.job_preferences.contract || '-');
+                    $('#candidateSponsorship').text(candidateData.job_preferences.sponsorship_required || '-');
+
+                    modal.show();
+
+                    // Wait for modal to be fully visible before drawing
+                    modalEl.addEventListener('shown.bs.modal', function handler() {
+                        modalEl.removeEventListener('shown.bs.modal', handler);
+                        renderCandidateCharts(candidateBehaviorAssessment, candidateValueAssessment);
+                    });
+                },
+                error: function(xhr) {
+                    console.error('Failed to load candidate assessment:', xhr.responseText);
+                }
+            });
+        }
+
+        function renderCandidateCharts(behaviorData, valueData) {
+            // Destroy previous instances
+            if (chartCandidateBehaviorOnly)  chartCandidateBehaviorOnly.destroy();
+            if (chartCandidateValuesOnly)    chartCandidateValuesOnly.destroy();
+
+            // Behavior
+            chartCandidateBehaviorOnly = new Chart(
+                document.getElementById('chartCandidateBehaviorOnly').getContext('2d'),
+                {
+                    type: 'radar',
+                    data: {
+                        labels: Object.keys(behaviorData),
+                        datasets: [{
+                            label: 'Candidate Behavior',
+                            data: Object.values(behaviorData),
+                            fill: true,
+                            backgroundColor: 'rgba(54,162,235,0.2)',
+                            borderColor: 'rgb(54,162,235)'
+                        }]
+                    }
+                }
+            );
+
+            // Values
+            chartCandidateValuesOnly = new Chart(
+                document.getElementById('chartCandidateValuesOnly').getContext('2d'),
+                {
+                    type: 'radar',
+                    data: {
+                        labels: Object.keys(valueData),
+                        datasets: [{
+                            label: 'Candidate Values',
+                            data: Object.values(valueData),
+                            fill: true,
+                            backgroundColor: 'rgba(255,206,86,0.2)',
+                            borderColor: 'rgb(255,206,86)'
+                        }]
+                    }
+                }
+            );
+        }
+    </script>
+
+    <script>
+
+
 
         //pagination
 

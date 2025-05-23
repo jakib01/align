@@ -389,7 +389,7 @@ class EmployerController extends Controller
 
     public function searchCandidates(Request $request)
     {
-        
+
         // $query = Candidate::query();
 
         // if ($request->job_location) {
@@ -643,6 +643,7 @@ class EmployerController extends Controller
                 'job_applieds.*',
                 'jobs.title',
                 'candidates.id as candidate_id',
+                'candidates.job_preferences as job_preferences',
                 'candidates.candidate_name as candidate_name',
                 'candidates.email as candidate_email',
                 'candidates.skill_assesment_score', // Ensure this column exists
@@ -651,11 +652,32 @@ class EmployerController extends Controller
             )
             ->paginate(5);
 
+//         dd($applied_job);
+
 
         return view('employer.applicant_review', compact('applied_job', ));
     }
 
-    
+    public function getCandidateAssessmentData(Request $request){
+
+        $candidateId = $request->candidate_id;
+
+        $candidateAssessment = $this->getCandidateAssessment($candidateId);
+
+        $candidateData = Candidate::where('id',$candidateId)->first();
+
+        $candidate = [
+            'candidate_name' => $candidateData-> candidate_name,
+            'email' => $candidateData-> email,
+            'profile_photo' => $candidateData-> profile_photo,
+            'job_preferences' => $candidateData-> job_preferences,
+        ];
+        return response()->json([
+            'candidateBehaviorAssessment' => $candidateAssessment['behaviorAssessment'],
+            'candidateValueAssessment' => $candidateAssessment['valueAssessment'],
+            'candidateData' => $candidate,
+        ]);
+    }
 
     public function SaveApplicant(Request $request)
     {
