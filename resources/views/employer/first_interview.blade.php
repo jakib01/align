@@ -5,7 +5,7 @@
    
 
     <div class="pagetitle">
-        <h1>All Applicant for First Interview Stage and call for next interview</h1>
+        <h1>All Applicant for 1st Interview Stage</h1>
         <nav>
             <!-- <ol class="breadcrumb">
                 <li class="breadcrumb-item active">Applicant Tracking</li>
@@ -60,8 +60,8 @@
                             
                             <select  id="interviewStage-{{ $row->job_post_id }}" required>
                                 <option value="" disabled selected>--Select an option--</option>
-                                <option value="2">Option Two</option>
-                                <option value="3">Option Three</option>
+                                <option value="2">Interview Stage 2</option>
+                                <option value="3">Interview Stage 3</option>
                             </select>
                         </div></td>
                         <td data-interview-date="{{ $row->first_interview_date ?? '' }}">

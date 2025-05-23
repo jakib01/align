@@ -746,7 +746,7 @@
                         </span>
                     </div>
                     <p class="card-text mt-3 mb-1" style="font-size: 14px;">
-                        <span class="description-text" id="description1">{{ $row->description}}</span>
+                        <span class="description-text" id="description1">{{ \Illuminate\Support\Str::limit($row->description, 20) }}</span>
                         <span id="read-more1" class="text-primary" style="cursor: pointer; display: none"
                             onclick="showFullDescription('description1', 'read-more1', 'Software Engineer', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus laudantium neque earum, suscipit quo illum dolores obcaecati architecto? Animi, praesentium?')">
                             Read more</span>

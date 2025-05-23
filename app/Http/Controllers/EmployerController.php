@@ -16,9 +16,7 @@ use App\Models\Job;
 use App\Models\TeamMember;
 use Illuminate\Support\Facades\DB;
 
-
-
-
+use App\Models\JobApplied;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -318,15 +316,33 @@ class EmployerController extends Controller
         return response()->json(['success' => false, 'error' => 'Team member not found'], 404);
     }
 
+    // public function edit($id)
+    // {
+    //     $teamMember = TeamMember::findOrFail($id);
+
+    //     $teamMembers = TeamMember::get();
+    //     $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
+
+    //     return view('employer.employer_team', compact('teamMembers', 'teamMember', 'noTeamMembersMessage'));
+    // }
+
     public function edit($id)
-    {
-        $teamMember = TeamMember::findOrFail($id);
+{
+    $teamMember = TeamMember::findOrFail($id);
+    $teamMembers = TeamMember::get();
+    $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
 
-        $teamMembers = TeamMember::get();
-        $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
+    $averages = $this->calculateEmployerAverages();
 
-        return view('employer.employer_team', compact('teamMembers', 'teamMember', 'noTeamMembersMessage'));
-    }
+    return view('employer.employer_team', [
+        'teamMembers' => $teamMembers,
+        'teamMember' => $teamMember,
+        'noTeamMembersMessage' => $noTeamMembersMessage,
+        'valuesAssessmentData' => array_values($averages['avgValueAssessment']),
+        'behaviourAssessmentData' => array_values($averages['avgBehaviorAssessment']),
+    ]);
+}
+
 
     public function updateTeam(Request $request, $id)
     {
@@ -598,14 +614,34 @@ class EmployerController extends Controller
         return redirect()->route('employer.dashboard')->with('success', 'Job posted successfully!');
     }
 
-    public function ApplicantReview()
+    // public function ApplicantReview()
+    // {
+    //     $applied_job = DB::table('job_applieds')
+    //         ->join('job_posts', 'job_applieds.job_post_id', '=', 'job_posts.id')
+    //         ->join('candidates', 'job_applieds.candidate_id', '=', 'candidates.id')
+    //         ->select(
+    //             'job_applieds.*',
+    //             'job_posts.job_title',
+    //             'candidates.id as candidate_id',
+    //             'candidates.candidate_name as candidate_name',
+    //             'candidates.email as candidate_email',
+    //             'candidates.skill_assesment_score', // Ensure this column exists
+    //             'candidates.value_assessment_score', // Ensure this column exists
+    //             'candidates.behaviour_assesment_score', // Ensure this column exists
+    //         )
+    //         ->paginate(5);
+
+    //     return view('employer.applicant_review', compact('applied_job', ));
+    // }
+
+     public function ApplicantReview()
     {
-        $applied_job = DB::table('job_applieds')
-            ->join('job_posts', 'job_applieds.job_post_id', '=', 'job_posts.id')
+         $applied_job = DB::table('job_applieds')
+            ->join('jobs', 'job_applieds.job_post_id', '=', 'jobs.id')
             ->join('candidates', 'job_applieds.candidate_id', '=', 'candidates.id')
             ->select(
                 'job_applieds.*',
-                'job_posts.job_title',
+                'jobs.title',
                 'candidates.id as candidate_id',
                 'candidates.candidate_name as candidate_name',
                 'candidates.email as candidate_email',
@@ -615,8 +651,11 @@ class EmployerController extends Controller
             )
             ->paginate(5);
 
+
         return view('employer.applicant_review', compact('applied_job', ));
     }
+
+    
 
     public function SaveApplicant(Request $request)
     {
@@ -751,26 +790,47 @@ class EmployerController extends Controller
 
     public function offerletter(Request $request,$id)
     {
-         $record = JobApplied::find($request->id);
 
-         $record->offerletter = 1;
-         $record->offerletter_message = $request->offer_letter_content;
+       $updated= DB::table('job_applieds')
+        ->where('my_row_id', $id)
+        ->update([
+            'offerletter' => 1,
+            'offerletter_message' => $request->offer_letter_content,
+        ]);
 
-            $record->save();
+        // dd("Rows updated: $updated");
 
-            return redirect()->back()->with('success', 'Offer letter sent successfully!');
+    return redirect()->back()->with('success', 'Offer letter sent successfully!');
+        //  $record = JobApplied::find($request->id);
+
+        //  $record->offerletter = 1;
+        //  $record->offerletter_message = $request->offer_letter_content;
+
+        //     $record->save();
+
+        //     return redirect()->back()->with('success', 'Offer letter sent successfully!');
+        // dd($id);
 
         // return response()->json(['success' => 'Date-Time updated successfully!']);
     }
 
     public function pagination()
     {
-        $applied_job = DB::table('job_applieds')
-            ->join('job_posts', 'job_applieds.job_post_id', 'job_posts.id')
+        // $applied_job = DB::table('job_applieds')
+        //     ->join('job_posts', 'job_applieds.job_post_id', 'job_posts.id')
+        //     ->join('candidates', 'job_applieds.candidate_id', 'candidates.id')
+        //     ->select('job_applieds.*', 'job_posts.job_title', 'candidates.*')
+        //     ->paginate(5);
+        // return view('employer.pagination_applicant_review', compact('applied_job'))->render();
+
+         $applied_job = DB::table('job_applieds')
+            ->join('jobs', 'job_applieds.job_post_id', 'jobs.id')
             ->join('candidates', 'job_applieds.candidate_id', 'candidates.id')
-            ->select('job_applieds.*', 'job_posts.job_title', 'candidates.*')
+            ->select('job_applieds.', 'jobs.title', 'candidates.')
             ->paginate(5);
         return view('employer.pagination_applicant_review', compact('applied_job'))->render();
+
+
     }
 
     public function getAssessmentData(Request $request)

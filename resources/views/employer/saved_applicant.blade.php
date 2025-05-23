@@ -70,9 +70,9 @@
                             <div class="mb-3">                        
                             <select  id="interviewStage-{{ $row->job_post_id }}" required>
                                 <option value="" disabled selected>--Select an option--</option>
-                                <option value="1">Option One</option>
-                                <option value="2">Option Two</option>
-                                <option value="3">Option Three</option>
+                                <option value="1">Interview Stage 1</option>
+                                <option value="2">Interview Stage 2</option>
+                                <option value="3">Interview Stage 3</option>
                             </select>
                            </div>
                          </td>
