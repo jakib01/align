@@ -103,7 +103,7 @@
                             @endphp
 
                            
-                            data-applicant-id="{{ $row->id }}" class="btn btn-dark offer-letter"
+                            data-applicant-id="{{ $row->my_row_id }}" class="btn btn-dark offer-letter"
         
                            >Offer Letter</button>
                           </td>
