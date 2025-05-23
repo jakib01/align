@@ -141,6 +141,9 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::post('/behavior/SocioblityVsReflectiveness/submit', [TeamMemberAssessmentController::class, 'behaviorSocioblityVsReflectivenessSubmit']);
 
         Route::get('/value/assessment/result', [TeamMemberAssessmentController::class, 'showResult'])->name('employee.value.result');
+
+        Route::get('/search-applicant', [EmployerController::class, 'searchApplicant'])->name('search.applicant');
+
     });
 
     // Employer route ends------------

@@ -652,9 +652,6 @@ class EmployerController extends Controller
             )
             ->paginate(5);
 
-//         dd($applied_job);
-
-
         return view('employer.applicant_review', compact('applied_job', ));
     }
 
@@ -678,6 +675,37 @@ class EmployerController extends Controller
             'candidateData' => $candidate,
         ]);
     }
+
+    public function searchApplicant(Request $request)
+    {
+        $query = DB::table('job_applieds')
+            ->join('jobs', 'job_applieds.job_post_id', '=', 'jobs.id')
+            ->join('candidates', 'job_applieds.candidate_id', '=', 'candidates.id')
+            ->select(
+                'job_applieds.*',
+                'jobs.title as title',
+                'candidates.id as candidate_id',
+                'candidates.job_preferences',
+                'candidates.candidate_name',
+                'candidates.email as candidate_email',
+                'candidates.skill_assesment_score',
+                'candidates.value_assessment_score',
+                'candidates.behaviour_assesment_score'
+            );
+
+        if ($request->filled('job_title')) {
+            $query->where('jobs.title', 'like', '%' . $request->job_title . '%');
+        }
+
+        if ($request->filled('candidate_name')) {
+            $query->where('candidates.candidate_name', 'like', '%' . $request->candidate_name . '%');
+        }
+
+        $applied_job = $query->paginate(5);
+
+        return view('employer.applicant_review', compact('applied_job'));
+    }
+
 
     public function SaveApplicant(Request $request)
     {

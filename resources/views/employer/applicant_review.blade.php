@@ -59,13 +59,20 @@
             <h1>Applicant Review</h1>
             <h1 class="my-4">All Candidate</h1>
 
-            <div class="col-md-4 mb-3">
-                <label for="seniority" class="form-label">Search</label>
-                <br>
-                <input type="text" name="search" id="search" class="form-control"
-                       placeholder="Search job title/applicant name"/>
+            <form method="GET" action="{{ route('search.applicant') }}" class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label for="job_title" class="form-label">Job Title</label>
+                    <input type="text" class="form-control" name="job_title" id="job_title" value="{{ request('job_title') }}" placeholder="Enter job title">
+                </div>
+                <div class="col-md-4">
+                    <label for="candidate_name" class="form-label">Candidate Name</label>
+                    <input type="text" class="form-control" name="candidate_name" id="candidate_name" value="{{ request('candidate_name') }}" placeholder="Enter candidate name">
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                </div>
+            </form>
 
-            </div>
             <div class="table-data">
                 <table class="table table-bordered">
 
@@ -85,7 +92,7 @@
                         <tr>
                             <td>{{$key + 1}}</td>
                             <td>{{$row->candidate_name}}</td>
-                            <td>{{$row->job_title}}</td>
+                            <td>{{$row->title}}</td>
                             <td>
                                 <button class="btn btn-primary mt-2"
                                         onclick="openAssessmentModal({{ $row->candidate_id }})">Check Score
@@ -211,17 +218,7 @@
                                 <canvas id="chartCandidateValuesOnly" style="max-height:300px;"></canvas>
                             </div>
                         </div>
-
                     </div>
-
-
-                    {{--                    <div class="modal-body">--}}
-{{--                        <h5 class="text-center">Behavior Assessment</h5>--}}
-{{--                        <canvas id="chartCandidateBehaviorOnly" style="max-height:300px;"></canvas>--}}
-
-{{--                        <h5 class="text-center mt-4">Value Assessment</h5>--}}
-{{--                        <canvas id="chartCandidateValuesOnly" style="max-height:300px;"></canvas>--}}
-{{--                    </div>--}}
                 </div>
             </div>
         </div>
@@ -372,8 +369,6 @@
         }
     </script>
 
-
-
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
             integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
@@ -467,11 +462,7 @@
     </script>
 
     <script>
-
-
-
         //pagination
-
         $(document).on('click', '.pagination a', function (e) {
             e.preventDefault();
             let page = $(this).attr('href').split('page=')[1];
@@ -488,35 +479,8 @@
                 }
             })
         }
-
     </script>
 
-
-    <script>
-
-        //Search applicant
-
-        $(document).on('keyup', function (e) {
-            e.preventDefault();
-            let search_string = $('#search').val();
-
-            $.ajax({
-                url: "{{route('search.applicant')}}",
-                method: 'GET',
-                data: {search_string: search_string},
-                success: function (res) {
-                    $('.table-data').html(res);
-                    if (res.status == 'nothing_found') {
-                        $('.table-data').html('<span class="text-danger">' + 'nothing found' + '</span>');
-                    }
-                }
-            });
-        });
-
-    </script>
-
-
-    {{-- save applicant --}}
 
     <script>
         $(document).on('click', '.save-button', '.send-id', function () {
