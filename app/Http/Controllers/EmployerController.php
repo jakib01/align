@@ -792,10 +792,21 @@ class EmployerController extends Controller
 
     }
 
-    public function SavedApplicant()
+    public function SavedApplicant(Request $request)
     {
-        $applicant=DB::table('job_applieds')->where('save_applicant','=','1')->get();
-        return view('employer.saved_applicant',compact('applicant'));
+        $query = DB::table('job_applieds')->where('save_applicant', '=', '1');
+
+        if ($request->has('q') && !empty($request->q)) {
+            $search = $request->q;
+            $query->where(function($q) use ($search) {
+                $q->where('candidate_name', 'like', '%' . $search . '%')
+                    ->orWhere('job_title', 'like', '%' . $search . '%');
+            });
+        }
+
+        $applicant = $query->paginate(3);
+
+        return view('employer.saved_applicant', compact('applicant'));
     }
 
     public function FirstInterview()

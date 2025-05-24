@@ -2,7 +2,7 @@
 @section('saved_applicant')
 
 <main id="main" class="main">
-   
+
 
     <div class="pagetitle">
         <h1>All saved Applicant & Call For Interview</h1>
@@ -11,8 +11,12 @@
                 <li class="breadcrumb-item active">Applicant Tracking</li>
             </ol> -->
         </nav>
-        <label class="py-2" for="">Search</label><br>
-        <input type="text" placeholder="search job title/applicant name">
+{{--        <label class="py-2" for="">Search</label><br>--}}
+        <form method="GET" action="{{ route('saved.applicant') }}" class="mb-3">
+            <label class="py-2">Search</label><br>
+            <input type="text" name="q" class="form-control w-50 d-inline" placeholder="Search job title/applicant name" value="{{ request('q') }}">
+            <button type="submit" class="btn btn-primary ms-2">Search</button>
+        </form>
     </div>
 
     <section class="section dashboard">
@@ -50,10 +54,10 @@
                                             <!-- <th><input type="checkbox" id="select-all"></th> -->
                                             <th>SL No.</th>
                                             <th>Name</th>
-                                            
+
                                             <th>Applied job title</th>
                                             <th>Interview stage</th>
-                                            
+
                                             <th>date</th>
                                             <th>view</th>
                                             <th>action</th>
@@ -64,10 +68,10 @@
                       <tr>
                         <td>{{$key+1}}</td>
                           <td>{{$row->candidate_name}}</td>
-                          
+
                           <td>{{$row->job_title}}</td>
                           <td>
-                            <div class="mb-3">                        
+                            <div class="mb-3">
                             <select  id="interviewStage-{{ $row->job_post_id }}" required>
                                 <option value="" disabled selected>--Select an option--</option>
                                 <option value="1">Interview Stage 1</option>
@@ -76,38 +80,38 @@
                             </select>
                            </div>
                          </td>
-                          
+
                           <td>
                             <input type="datetime-local" id="datetime-{{ $row->job_post_id }}" class="datetime-input form-control"
-                            
+
                             required></td>
 
                           {{-- <td>
 
-                           
+
 
                             <a href="#"  class="btn btn-warning view-applicant"
                             data-candidate-name="{{ $row->candidate_name }}"
                             data-job-title="{{ $row->job_title }}"
                             data-interview-stage="{{ $row->first_interview ?? $row->second_interview ?? $row->third_interview ?? 'Not Assigned' }}"
                             data-interview-date="{{ $row->first_interview_date ?? $row->second_interview_date ?? $row->third_interview_date ?? 'Not Assigned' }}"
-                            
+
                             >view applicant</a>
                           </td> --}}
                           <td>
                             <a href="#"  class="btn btn-warning view-applicant"
                             data-candidate-name="{{ $row->candidate_name }}"
                             data-job-title="{{ $row->job_title }}"
-                            
+
                             {{-- data-interview-stage="{{ $row->third_interview ?? 'Not Assigned' }}" --}}
                             data-interview-date1="{{ $row->first_interview_date ?? 'Not Assigned' }}"
                             data-interview-date2="{{ $row->second_interview_date ?? 'Not Assigned' }}"
                             data-interview-date="{{ $row->third_interview_date ?? 'Not Assigned' }}"
-                            
+
                             >view applicant</a>
                         </td>
                           <td>
-                            <button  
+                            <button
                             @php
                             if($row->first_interview||$row->second_interview||$row->third_interview)
                             {
@@ -117,47 +121,49 @@
                             }
                             @endphp
 
-                           
+
                             data-id="{{$row->job_post_id}}" class="update-button btn btn-primary"
-        
+
                            >call</button>
                           </td>
                       </tr>
-                     @endforeach 
+                     @endforeach
                   </tbody>
               </table>
-              <!-- <div class="mt-3">
+                                {{ $applicant->appends(request()->query())->links() }}
+
+                                <!-- <div class="mt-3">
                   <a href="all-applicants.html" class="btn btn-link text-decoration-underline">View All</a>
               </div> -->
               <!-- <button class="btn btn-primary" onclick="openInterviewModal()">Arrange Interview</button> -->
             </div>
           </div>
           <div class="tab-pane fade" id="first-interview" role="tabpanel" aria-labelledby="first-interview-tab">
-             
+
               <table class="table table-bordered">
                   <tbody id="first-interview-list">
-                      
+
                   </tbody>
               </table>
           </div>
           <div class="tab-pane fade" id="second-interview" role="tabpanel" aria-labelledby="second-interview-tab">
-              
+
               <table class="table table-bordered">
                   <tbody id="second-interview-list">
-                      
+
                   </tbody>
               </table>
           </div>
           <div class="tab-pane fade" id="final-interview" role="tabpanel" aria-labelledby="final-interview-tab">
-              
+
               <table class="table table-bordered">
                   <tbody id="final-interview-list">
-                     
+
                   </tbody>
               </table>
           </div>
           <div class="tab-pane fade" id="offer" role="tabpanel" aria-labelledby="offer-tab">
-              
+
               <table class="table table-bordered">
                   <tbody id="offer-list">
                   </tbody>
@@ -172,7 +178,7 @@
   @endsection
 
   @include('employer.applicant_modal')
-  
+
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
   <script>
@@ -181,15 +187,15 @@ $(document).on('click', '.update-button', function () {
     let id = $(this).data('id'); // Get the record ID
     let datetimeValue = $(`#datetime-${id}`).val();
     let interviewStage = $(`#interviewStage-${id}`).val();
-    
-    
+
+
 
     if (datetimeValue) {
         // console.log(`ID: ${recordId}, Date-Time: ${datetimeValue}`);
         console.log(id);
     console.log(datetimeValue);
     console.log(interviewStage);
-        
+
         // Example AJAX call to send the datetime value to Laravel
         $.ajax({
             url: '{{ route("first.interview.date") }}', // Laravel route
@@ -221,7 +227,7 @@ $(document).on('click', '.update-button', function () {
 
     $(document).on('click', '.view-applicant', function (e) {
         e.preventDefault();
-    
+
         // Get data from the button
         let candidateName = $(this).data('candidate-name');
         let jobTitle = $(this).data('job-title');
@@ -229,7 +235,7 @@ $(document).on('click', '.update-button', function () {
         let interviewDate2 = $(this).data('interview-date2');
         let interviewStage = $(this).data('interview-stage');
         let interviewDate = $(this).data('interview-date');
-    
+
         // Populate the modal with the data
         $('#modalCandidateName').text(candidateName);
         $('#modalJobTitle').text(jobTitle);
@@ -237,10 +243,10 @@ $(document).on('click', '.update-button', function () {
         $('#modalInterviewDate').text(interviewDate);
         $('#modalInterviewDate1').text(interviewDate1);
         $('#modalInterviewDate2').text(interviewDate2);
-    
+
         // Show the modal
         $('#applicantModal').modal('show');
     });
-    
+
       </script>
 
