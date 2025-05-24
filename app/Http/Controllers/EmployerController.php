@@ -804,7 +804,7 @@ class EmployerController extends Controller
             });
         }
 
-        $applicant = $query->paginate(3);
+        $applicant = $query->paginate(5);
 
         return view('employer.saved_applicant', compact('applicant'));
     }
