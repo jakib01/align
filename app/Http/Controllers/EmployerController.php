@@ -46,7 +46,8 @@ class EmployerController extends Controller
     }
 
     // Dashboard Views
-    public function Dashboard()
+
+    public function Dashboard(Request $request)
     {
         $employer = Auth::guard('employer')->user();
 
@@ -54,43 +55,31 @@ class EmployerController extends Controller
             return redirect()->route('employer.login')->with('error', 'You must be logged in to view your team.');
         }
 
-        // Fetch only the team members belonging to the authenticated employer
-        $teamMembers = TeamMember::get();
+        $search = $request->input('search');
+
+        // Filter team members if search is provided
+        $teamMembers = TeamMember::when($search, function ($query, $search) {
+            return $query->where('name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%")
+                ->orWhere('role', 'like', "%{$search}%");
+        })->paginate(10)->appends(['search' => $search]);
 
         $orderedValueKeys = [
-            'Achievement',
-            'Security',
-            'Universalism',
-            'Benevolence',
-            'Conformity',
-            'Tradition',
-            'Hedonism',
-            'Power',
-            'Self-Direction',
-            'Stimulation'
+            'Achievement', 'Security', 'Universalism', 'Benevolence', 'Conformity',
+            'Tradition', 'Hedonism', 'Power', 'Self-Direction', 'Stimulation'
         ];
 
         $orderedBehaviourKeys = [
-            'compassion',
-            'confidence',
-            'curiosity',
-            'practicality',
-            'discipline',
-            'adaptability',
-            'resilience',
-            'sensitivity',
-            'sociability',
-            'reflectiveness'
+            'compassion', 'confidence', 'curiosity', 'practicality', 'discipline',
+            'adaptability', 'resilience', 'sensitivity', 'sociability', 'reflectiveness'
         ];
 
         $valuesAssessmentData = [];
         $behaviourAssessmentData = [];
 
         foreach ($teamMembers as $member) {
-            // For value_assessment_score
             if (!empty($member->value_assessment_score)) {
                 $scores = json_decode($member->value_assessment_score, true);
-
                 if (is_array($scores)) {
                     $row = [];
                     foreach ($orderedValueKeys as $key) {
@@ -100,10 +89,8 @@ class EmployerController extends Controller
                 }
             }
 
-            // For behaviour_assessment_score
             if (!empty($member->behaviour_assessment_score)) {
                 $scores = json_decode($member->behaviour_assessment_score, true);
-
                 if (is_array($scores)) {
                     $row = [];
                     foreach ($orderedBehaviourKeys as $key) {
@@ -114,11 +101,87 @@ class EmployerController extends Controller
             }
         }
 
-        // Pass a flag to the view if no team members are found
         $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
 
-        return view('employer.employer_team', compact('teamMembers', 'noTeamMembersMessage', 'valuesAssessmentData', 'behaviourAssessmentData'));
+        return view('employer.employer_team', compact(
+            'teamMembers', 'noTeamMembersMessage',
+            'valuesAssessmentData', 'behaviourAssessmentData', 'search'
+        ));
     }
+
+//    public function Dashboard()
+//    {
+//        $employer = Auth::guard('employer')->user();
+//
+//        if (!$employer) {
+//            return redirect()->route('employer.login')->with('error', 'You must be logged in to view your team.');
+//        }
+//
+//        // Fetch only the team members belonging to the authenticated employer
+//        $teamMembers = TeamMember::paginate(1);
+//
+//        $orderedValueKeys = [
+//            'Achievement',
+//            'Security',
+//            'Universalism',
+//            'Benevolence',
+//            'Conformity',
+//            'Tradition',
+//            'Hedonism',
+//            'Power',
+//            'Self-Direction',
+//            'Stimulation'
+//        ];
+//
+//        $orderedBehaviourKeys = [
+//            'compassion',
+//            'confidence',
+//            'curiosity',
+//            'practicality',
+//            'discipline',
+//            'adaptability',
+//            'resilience',
+//            'sensitivity',
+//            'sociability',
+//            'reflectiveness'
+//        ];
+//
+//        $valuesAssessmentData = [];
+//        $behaviourAssessmentData = [];
+//
+//        foreach ($teamMembers as $member) {
+//            // For value_assessment_score
+//            if (!empty($member->value_assessment_score)) {
+//                $scores = json_decode($member->value_assessment_score, true);
+//
+//                if (is_array($scores)) {
+//                    $row = [];
+//                    foreach ($orderedValueKeys as $key) {
+//                        $row[] = $scores[$key] ?? 0;
+//                    }
+//                    $valuesAssessmentData[] = $row;
+//                }
+//            }
+//
+//            // For behaviour_assessment_score
+//            if (!empty($member->behaviour_assessment_score)) {
+//                $scores = json_decode($member->behaviour_assessment_score, true);
+//
+//                if (is_array($scores)) {
+//                    $row = [];
+//                    foreach ($orderedBehaviourKeys as $key) {
+//                        $row[] = $scores[$key] ?? 0;
+//                    }
+//                    $behaviourAssessmentData[] = $row;
+//                }
+//            }
+//        }
+//
+//        // Pass a flag to the view if no team members are found
+//        $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
+//
+//        return view('employer.employer_team', compact('teamMembers', 'noTeamMembersMessage', 'valuesAssessmentData', 'behaviourAssessmentData'));
+//    }
 
     // Profile Management
     public function showProfile()

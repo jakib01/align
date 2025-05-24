@@ -20,8 +20,12 @@
                             <div id="team-member-content" class="form-section">
                                 <h3 class="text-center">Team Details</h3>
                                 <div class="d-flex justify-content-center align-items-center mb-4">
-                                    <input type="text" class="form-control w-50" placeholder="Search Team Members..."
-                                           aria-label="Search Team Members">
+                                    <form method="GET" action="{{ route('employer.dashboard') }}" class="d-flex align-items-center w-100 w-md-auto">
+                                        <input type="text" name="search" class="form-control w-100 w-md-50" value="{{ request('search') }}" placeholder="Search Team Members...">
+                                        <button type="submit" class="btn btn-outline-primary ms-2">
+                                            <i class="fas fa-search"></i> Search
+                                        </button>
+                                    </form>
                                     <button class="btn btn-outline-secondary ms-3" data-bs-toggle="modal" data-bs-target="#addTeamMemberModal">
                                         <i class="fas fa-plus ms-2"></i>
                                         <i class="fas fa-users"></i> Team Members
@@ -128,6 +132,7 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    {{ $teamMembers->links() }}
                                 </div>
                             </div>
                         </div>
