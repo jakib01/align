@@ -10,7 +10,7 @@
             <div class="card-body d-flex">
               <div class="w-50 d-flex flex-column align-items-center border-end pe-4">
                 <img id="profilePhoto" 
-                src="{{ asset($candidate->profile_photo ?? 'assets/img/profile-img.jpg') }}" 
+                src="{{ asset($candidate->profile_photo ?? 'assets/img/demo-profile.png') }}" 
                 alt="Profile" 
                 class="rounded-circle mb-3" 
                 style="width: 120px; height: 120px; padding-top: 20px;">
@@ -136,13 +136,20 @@
 
     {{-- Location --}}
     <li class="list-group-item d-flex justify-content-between align-items-center">
-      <div>
-        <strong>Location:</strong>
-        <span class="me-2" id="locationDisplay">{{ $jobPreferences['location'] ?? '' }}</span>
+      
+        <strong style="margin-right: 5px;">Location:</strong>
+        {{-- <span class="me-2" id="locationDisplay">{{ $jobPreferences['location'] ?? 'N/A' }}</span>
         <a data-bs-toggle="collapse" href="#editLocation">
           <i class="bi bi-pencil text-primary"></i>
-        </a>
-      </div>
+        </a> --}}
+        <select class="form-select form-select-sm preference-select" data-key="location">
+  <option value="" {{ empty($jobPreferences['location']) ? 'selected' : '' }}>-- Select --</option>
+  @foreach(['London', 'Liverpool', 'Manchester', 'Birmingham', 'Edinburgh', 'Glasgow'] as $city)
+    <option value="{{ $city }}" {{ ($jobPreferences['location'] ?? '') === $city ? 'selected' : '' }}>{{ $city }}</option>
+  @endforeach
+</select>
+
+      
       <div class="collapse mt-2" id="editLocation">
         <select class="form-select form-select-sm preference-select" data-key="location">
           @foreach(['London', 'Liverpool', 'Manchester', 'Birmingham', 'Edinburgh', 'Glasgow'] as $city)
@@ -154,13 +161,22 @@
 
     {{-- Seniority --}}
     <li class="list-group-item d-flex justify-content-between align-items-center">
-      <div>
+      {{-- <div>
         <strong>Seniority:</strong>
-        <span class="me-2" id="seniorityDisplay">{{ $jobPreferences['seniority'] ?? '' }}</span>
+        <span class="me-2" id="seniorityDisplay">{{ $jobPreferences['seniority'] ?? 'N/A' }}</span>
         <a data-bs-toggle="collapse" href="#editSeniority">
           <i class="bi bi-pencil text-primary"></i>
         </a>
-      </div>
+      </div> --}}
+      <strong style="margin-right: 5px;">Seniority:</strong>
+      <select class="form-select form-select-sm preference-select" data-key="seniority">
+  <option value="" {{ empty($jobPreferences['seniority']) ? 'selected' : '' }}>-- Select --</option>
+  @foreach(['Junior', 'Mid-level', 'Senior'] as $level)
+    <option value="{{ $level }}" {{ ($jobPreferences['seniority'] ?? '') === $level ? 'selected' : '' }}>{{ $level }}</option>
+  @endforeach
+</select>
+
+
       <div class="collapse mt-2" id="editSeniority">
         <select class="form-select form-select-sm preference-select" data-key="seniority">
           @foreach(['Junior', 'Mid-level', 'Senior'] as $level)
@@ -172,9 +188,9 @@
 
     {{-- Salary --}}
     <li class="list-group-item d-flex justify-content-between align-items-center">
-      <div>
+      {{-- <div>
         <strong>Salary:</strong>
-        <span class="me-2" id="salaryDisplay">{{ $jobPreferences['salary'] ?? '' }}</span>
+        <span class="me-2" id="salaryDisplay">{{ $jobPreferences['salary'] ?? 'N/A' }}</span>
         <a data-bs-toggle="collapse" href="#editSalary">
           <i class="bi bi-pencil text-primary"></i>
         </a>
@@ -185,14 +201,28 @@
             <option value="{{ $range }}" {{ ($jobPreferences['salary'] ?? '') === $range ? 'selected' : '' }}>£{{ str_replace('-', ' - £', $range) }}</option>
           @endforeach
         </select>
-      </div>
+
+        <div> --}}
+  <strong style="margin-right: 5px;">Salary:</strong>
+  <select class="form-select form-select-sm preference-select" data-key="salary">
+    <option value="" {{ empty($jobPreferences['salary']) ? 'selected' : '' }}>-- Select --</option>
+    @foreach(['30000-40000', '40000-50000', '50000-60000', '60000-70000'] as $range)
+      <option value="{{ $range }}" {{ ($jobPreferences['salary'] ?? '') === $range ? 'selected' : '' }}>
+        £{{ number_format(explode('-', $range)[0]) }} - £{{ number_format(explode('-', $range)[1]) }}
+      </option>
+    @endforeach
+  </select>
+{{-- </div> --}}
+
+
+      
     </li>
 
     {{-- Contract --}}
     <li class="list-group-item d-flex justify-content-between align-items-center">
-      <div>
+      {{-- <div>
         <strong>Contract:</strong>
-        <span class="me-2" id="contractDisplay">{{ $jobPreferences['contract'] ?? '' }}</span>
+        <span class="me-2" id="contractDisplay">{{ $jobPreferences['contract'] ?? 'N/A' }}</span>
         <a data-bs-toggle="collapse" href="#editContract">
           <i class="bi bi-pencil text-primary"></i>
         </a>
@@ -203,14 +233,26 @@
             <option value="{{ $type }}" {{ ($jobPreferences['contract'] ?? '') === $type ? 'selected' : '' }}>{{ $type }}</option>
           @endforeach
         </select>
-      </div>
+      </div> --}}
+
+      
+  <strong style="margin-right: 5px;">Contract:</strong>
+  <select class="form-select form-select-sm preference-select" data-key="contract">
+    <option value="" {{ empty($jobPreferences['contract']) ? 'selected' : '' }}>-- Select --</option>
+    @foreach(['Full-time', 'Part-time', 'Contract'] as $type)
+      <option value="{{ $type }}" {{ ($jobPreferences['contract'] ?? '') === $type ? 'selected' : '' }}>{{ $type }}</option>
+    @endforeach
+  </select>
+
+
+
     </li>
 
     {{-- Sponsorship --}}
     <li class="list-group-item d-flex justify-content-between align-items-center">
-      <div>
+      {{-- <div>
         <strong>Sponsorship Required:</strong>
-        <span class="me-2" id="sponsorship_requiredDisplay">{{ $jobPreferences['sponsorship_required'] ?? '' }}</span>
+        <span class="me-2" id="sponsorship_requiredDisplay">{{ $jobPreferences['sponsorship_required'] ?? 'N/A' }}</span>
         <a data-bs-toggle="collapse" href="#editSponsorship">
           <i class="bi bi-pencil text-primary"></i>
         </a>
@@ -221,7 +263,19 @@
             <option value="{{ $option }}" {{ ($jobPreferences['sponsorship_required'] ?? '') === $option ? 'selected' : '' }}>{{ $option }}</option>
           @endforeach
         </select>
-      </div>
+      </div> --}}
+
+      
+  <strong style="margin-right: 5px;">Sponsorship Required:</strong>
+  <select class="form-select form-select-sm preference-select" data-key="sponsorship_required">
+    <option value="" {{ empty($jobPreferences['sponsorship_required']) ? 'selected' : '' }}>-- Select --</option>
+    @foreach(['Yes', 'No'] as $option)
+      <option value="{{ $option }}" {{ ($jobPreferences['sponsorship_required'] ?? '') === $option ? 'selected' : '' }}>{{ $option }}</option>
+    @endforeach
+  </select>
+
+
+
     </li>
   </ul>
 </div>
@@ -463,14 +517,15 @@
   });
 </script> --}}
 
-<script>
+{{-- <script>
   document.querySelectorAll('.preference-select').forEach(select => {
     // Set the initial text in the display span
     const key = select.dataset.key;
     const selectedOption = select.options[select.selectedIndex].text;
     const display = document.getElementById(`${key}Display`);
     if (display) {
-      display.textContent = selectedOption;
+      const selectedOption = select.options[select.selectedIndex];
+  display.textContent = selectedOption && selectedOption.value ? selectedOption.text : "N/A";
     }
 
     // Listen for changes (realtime update logic already here)
@@ -506,7 +561,56 @@
       });
     });
   });
+</script> --}}
+
+<script>
+  document.querySelectorAll('.preference-select').forEach(select => {
+    const key = select.dataset.key;
+    const display = document.getElementById(`${key}Display`);
+
+    // Set initial display text
+    if (display) {
+      const selectedOption = select.options[select.selectedIndex];
+      display.textContent = selectedOption && selectedOption.value ? selectedOption.text : "N/A";
+    }
+
+    // Listen for changes
+    select.addEventListener('change', function () {
+      const value = this.value;
+
+      fetch(`/candidate/candidates/{{ $candidate->id }}/preferences/update-field`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ key, value })
+      })
+      .then(async response => {
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        const displayEl = document.getElementById(`${key}Display`);
+        if (data.success && displayEl) {
+          displayEl.textContent = select.options[select.selectedIndex].text;
+        } else if (!data.success) {
+          alert(data.message || 'Failed to update. Try again.');
+        }
+      })
+      .catch(err => {
+        console.error('Update failed:', err);
+        alert('Something went wrong. Check console for details.');
+      });
+    });
+  });
 </script>
+
+
 
 <script>
   document.getElementById('photoInput').addEventListener('change', function (event) {

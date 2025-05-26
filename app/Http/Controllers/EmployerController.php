@@ -729,7 +729,8 @@ class EmployerController extends Controller
         $candidate = [
             'candidate_name' => $candidateData-> candidate_name,
             'email' => $candidateData-> email,
-            'profile_photo' => $candidateData-> profile_photo,
+            'profile_photo' => $candidateData->profile_photo ? asset( $candidateData->profile_photo) : asset('assets/img/demo-profile.png'),
+
             'job_preferences' => $candidateData-> job_preferences,
         ];
         return response()->json([

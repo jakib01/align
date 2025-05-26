@@ -384,6 +384,7 @@
         function openProfileModal(candidate_id) {
             const modalEl = document.getElementById('profile-modal');
             const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+             const fallbackImage = "{{ asset('assets/img/demo-profile.png') }}";
 
             // Fetch only candidate assessments
             $.ajax({
@@ -396,7 +397,7 @@
                     // Inject candidate info
                     $('#candidateName').text(candidateData.candidate_name);
                     $('#candidateEmail').text(candidateData.email);
-                    $('#candidatePhoto').attr('src', candidateData.profile_photo || '/default-avatar.png');
+                    $('#candidatePhoto').attr('src', candidateData.profile_photo );
 
                     $('#candidateLocation').text(candidateData.job_preferences.location || '-');
                     $('#candidateSeniority').text(candidateData.job_preferences.seniority || '-');
