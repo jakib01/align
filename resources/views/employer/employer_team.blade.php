@@ -18,7 +18,7 @@
                     <div class="row">
                         <div class="container-fluid">
                             <div id="team-member-content" class="form-section">
-                                <h3 class="text-center">Team Details</h3>
+                                <h3 class="text-center">Team Detailssss</h3>
                                 <div class="d-flex justify-content-center align-items-center mb-4">
                                     <form method="GET" action="{{ route('employer.dashboard') }}" class="d-flex align-items-center w-100 w-md-auto">
                                         <input type="text" name="search" class="form-control w-100 w-md-50" value="{{ request('search') }}" placeholder="Search Team Members...">
