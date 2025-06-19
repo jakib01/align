@@ -17,7 +17,7 @@
                 <form action="{{ route('candidate.updatePhoto') }}" method="POST" enctype="multipart/form-data" class="mt-2">
                   @csrf
                   <input type="file" name="profile_photo" id="photoInput" accept="image/*" class="form-control mb-2">
-                  <button type="submit" class="btn btn-sm btn-primary">Upload New Photo</button>
+                  <button type="submit" class="btn btn-sm btn-primary">submit</button>
               </form>
               
                 <h2 class="mt-3">{{ $candidate->candidate_name }}</h2>

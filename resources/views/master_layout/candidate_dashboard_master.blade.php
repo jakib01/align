@@ -58,16 +58,16 @@
 
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
-        <li class="nav-item m-3">
+        {{-- <li class="nav-item m-3">
           <a class="nav-link" href="#">Home</a>
-        </li>
+        </li> --}}
 
-        <li class="nav-item m-3">
+        {{-- <li class="nav-item m-3">
           <a class="nav-link text-dark" href="#"> Browse Jobs </a>
-        </li>
-        <li class="nav-item m-3">
+        </li> --}}
+        {{-- <li class="nav-item m-3">
           <a class="nav-link" href="#">Help Center</a>
-        </li>
+        </li> --}}
         <li class="nav-item dropdown pe-3">
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src="{{asset('assets/img/placeholder.jpg')}}" alt="" class="rounded-circle" />
