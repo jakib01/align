@@ -174,18 +174,31 @@ public function updateProfilePhoto(Request $request)
         // $candidate->profile_photo = 'storage/profile_photos/' . $filename;
         // $candidate->save();
 
+//         $file = $request->file('profile_photo');
+//         $filename = time() . '.' . $file->getClientOriginalExtension();
+//         $destinationPath = public_path('storage/profile_photos');
+
+//         $file->move($destinationPath, $filename);
+
+//         if (!file_exists($destinationPath . '/' . $filename)) {
+//         dd('File move failed', $destinationPath, $filename);
+// }
+
+//         $candidate->profile_photo = 'storage/profile_photos/' . $filename;
+//         $candidate->save();
+            
         $file = $request->file('profile_photo');
         $filename = time() . '.' . $file->getClientOriginalExtension();
-        $destinationPath = public_path('storage/profile_photos');
 
-        $file->move($destinationPath, $filename);
+        $publicPath = public_path('storage/profile_photos');
+        if (!file_exists($publicPath)) {
+            mkdir($publicPath, 0755, true);
+        }
 
-        if (!file_exists($destinationPath . '/' . $filename)) {
-        dd('File move failed', $destinationPath, $filename);
-}
-
+        $file->move($publicPath, $filename);
         $candidate->profile_photo = 'storage/profile_photos/' . $filename;
         $candidate->save();
+
     }
 
     return redirect()->back()->with('success', 'Profile photo updated!');
