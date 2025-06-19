@@ -180,6 +180,10 @@ public function updateProfilePhoto(Request $request)
 
         $file->move($destinationPath, $filename);
 
+        if (!file_exists($destinationPath . '/' . $filename)) {
+        dd('File move failed', $destinationPath, $filename);
+}
+
         $candidate->profile_photo = 'storage/profile_photos/' . $filename;
         $candidate->save();
     }
