@@ -168,20 +168,20 @@ public function updateProfilePhoto(Request $request)
     $candidate = \App\Models\Candidate::find(auth()->guard('candidate')->id());
 
     if ($candidate && $request->hasFile('profile_photo')) {
-        // $file = $request->file('profile_photo');
-        // $filename = time() . '.' . $file->getClientOriginalExtension();
-        // $file->storeAs('public/profile_photos', $filename);
-        // $candidate->profile_photo = 'storage/profile_photos/' . $filename;
-        // $candidate->save();
-
         $file = $request->file('profile_photo');
         $filename = time() . '.' . $file->getClientOriginalExtension();
-        $destinationPath = public_path('storage/profile_photos');
-
-        $file->move($destinationPath, $filename);
-
+        $file->storeAs('public/profile_photos', $filename);
         $candidate->profile_photo = 'storage/profile_photos/' . $filename;
         $candidate->save();
+
+        // $file = $request->file('profile_photo');
+        // $filename = time() . '.' . $file->getClientOriginalExtension();
+        // $destinationPath = public_path('storage/profile_photos');
+
+        // $file->move($destinationPath, $filename);
+
+        // $candidate->profile_photo = 'storage/profile_photos/' . $filename;
+        // $candidate->save();
     }
 
     return redirect()->back()->with('success', 'Profile photo updated!');
