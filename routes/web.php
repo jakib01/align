@@ -170,6 +170,17 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
         Route::post('/update-photo', [CandidateController::class, 'updateProfilePhoto'])->name('candidate.updatePhoto')->middleware('candidate');
 
+        Route::get('/profile-photo/{filename}', function ($filename) {
+        $path = public_path('storage/profile_photos/' . $filename);
+
+        if (!file_exists($path)) {
+            abort(404);
+        }
+
+        return response()->file($path);
+       })->name('candidate.photo');
+
+
 
         Route::post('/candidates/{id}/preferences/update-field', [CandidateController::class, 'updateSinglePreference']);
 

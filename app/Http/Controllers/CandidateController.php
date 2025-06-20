@@ -12,6 +12,8 @@ use Carbon\Carbon;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 
+use Intervention\Image\Facades\Image;
+
 
 
 
@@ -209,6 +211,24 @@ public function updateProfilePhoto(Request $request)
         // $candidate->profile_photo = 'storage/profile_photos/' . $filename;
         // $candidate->save();
 
+        // $file = $request->file('profile_photo');
+        // $filename = time() . '.' . $file->getClientOriginalExtension();
+        // $destination = public_path('storage/profile_photos');
+
+        // if (!file_exists($destination)) {
+        //     mkdir($destination, 0755, true);
+        // }
+
+        // $path = $file->move($destination, $filename);
+
+        // // Double-check file saved correctly
+        // if (!file_exists($destination . '/' . $filename)) {
+        //     dd('Upload failed');
+        // }
+
+        // $candidate->profile_photo = 'storage/profile_photos/' . $filename;
+        // $candidate->save();
+
         $file = $request->file('profile_photo');
         $filename = time() . '.' . $file->getClientOriginalExtension();
         $destination = public_path('storage/profile_photos');
@@ -217,12 +237,7 @@ public function updateProfilePhoto(Request $request)
             mkdir($destination, 0755, true);
         }
 
-        $path = $file->move($destination, $filename);
-
-        // Double-check file saved correctly
-        if (!file_exists($destination . '/' . $filename)) {
-            dd('Upload failed');
-        }
+        Image::make($file)->resize(300, 300)->save($destination . '/' . $filename);
 
         $candidate->profile_photo = 'storage/profile_photos/' . $filename;
         $candidate->save();
