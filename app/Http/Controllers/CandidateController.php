@@ -196,6 +196,16 @@ public function updateProfilePhoto(Request $request)
         }
 
         $file->move($publicPath, $filename);
+
+        $fullPath = $publicPath . '/' . $filename;
+
+        if (!file_exists($fullPath)) {
+            dd('Move failed.');
+        }
+
+        $mime = mime_content_type($fullPath);
+        dd('File saved. MIME type: ' . $mime);
+
         $candidate->profile_photo = 'storage/profile_photos/' . $filename;
         $candidate->save();
 
