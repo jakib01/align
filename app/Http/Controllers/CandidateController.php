@@ -187,27 +187,46 @@ public function updateProfilePhoto(Request $request)
 //         $candidate->profile_photo = 'storage/profile_photos/' . $filename;
 //         $candidate->save();
             
+        // $file = $request->file('profile_photo');
+        // $filename = time() . '.' . $file->getClientOriginalExtension();
+
+        // $publicPath = public_path('storage/profile_photos');
+        // if (!file_exists($publicPath)) {
+        //     mkdir($publicPath, 0755, true);
+        // }
+
+        // $file->move($publicPath, $filename);
+
+        // $fullPath = $publicPath . '/' . $filename;
+
+        // if (!file_exists($fullPath)) {
+        //     dd('Move failed.');
+        // }
+
+        // $mime = mime_content_type($fullPath);
+        // dd('File saved. MIME type: ' . $mime);
+
+        // $candidate->profile_photo = 'storage/profile_photos/' . $filename;
+        // $candidate->save();
+
         $file = $request->file('profile_photo');
         $filename = time() . '.' . $file->getClientOriginalExtension();
+        $destination = public_path('storage/profile_photos');
 
-        $publicPath = public_path('storage/profile_photos');
-        if (!file_exists($publicPath)) {
-            mkdir($publicPath, 0755, true);
+        if (!file_exists($destination)) {
+            mkdir($destination, 0755, true);
         }
 
-        $file->move($publicPath, $filename);
+        $path = $file->move($destination, $filename);
 
-        $fullPath = $publicPath . '/' . $filename;
-
-        if (!file_exists($fullPath)) {
-            dd('Move failed.');
+        // Double-check file saved correctly
+        if (!file_exists($destination . '/' . $filename)) {
+            dd('Upload failed');
         }
-
-        $mime = mime_content_type($fullPath);
-        dd('File saved. MIME type: ' . $mime);
 
         $candidate->profile_photo = 'storage/profile_photos/' . $filename;
         $candidate->save();
+
 
     }
 
