@@ -424,10 +424,29 @@ class EmployerController extends Controller
     }
 
     // Other Pages
-    public function TeamAssesment()
+    public function TeamAssesment(Request $request)
     {
-        $candidates = TeamMember::paginate(5);
-        return view('employer.employer_team_assesment', compact('candidates'));
+        $filter = $request->query('filter'); // 'complete' or 'incomplete'
+
+        $query = TeamMember::query();
+
+        if ($filter === 'complete') {
+            $query->whereNotNull('behaviour_assessment_score')
+                ->whereNotNull('behaviour_assessment_completed_at')
+                ->whereNotNull('value_assessment_score')
+                ->whereNotNull('value_assessment_completed_at');
+        } elseif ($filter === 'incomplete') {
+            $query->where(function ($q) {
+                $q->whereNull('behaviour_assessment_score')
+                    ->orWhereNull('behaviour_assessment_completed_at')
+                    ->orWhereNull('value_assessment_score')
+                    ->orWhereNull('value_assessment_completed_at');
+            });
+        }
+
+        $candidates = $query->paginate(5)->appends(['filter' => $filter]);
+
+        return view('employer.employer_team_assesment', compact('candidates', 'filter'));
     }
 
     public function ApplicantTracking()

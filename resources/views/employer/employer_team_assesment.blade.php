@@ -21,6 +21,18 @@
         <div class="container-fluid">
             <section class="section mb-5 mt-5">
                 <h2 class="fs-5 mb-3">Team Member Assessment Details</h2>
+
+                <!-- Filter Dropdown -->
+                <div class="mb-3">
+                    <form method="GET" class="d-inline">
+                        <select name="filter" onchange="this.form.submit()" class="form-select w-auto d-inline">
+                            <option value="">-- All --</option>
+                            <option value="complete" {{ request('filter') == 'complete' ? 'selected' : '' }}>Complete</option>
+                            <option value="incomplete" {{ request('filter') == 'incomplete' ? 'selected' : '' }}>Incomplete</option>
+                        </select>
+                    </form>
+                </div>
+
                 <div class="table-responsive d-none d-md-block">
                     <table class="table table-bordered table-hover">
                         <thead class="table-light">
