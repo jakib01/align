@@ -9,12 +9,14 @@
           <div class="card">
             <div class="card-body d-flex">
               <div class="w-50 d-flex flex-column align-items-center border-end pe-4">
-                {{dd($candidate->profile_photo)}}
-                <img id="profilePhoto" 
+                {{-- {{dd($candidate->profile_photo)}} --}}
+                {{-- <img id="profilePhoto" 
                 src="{{ asset($candidate->profile_photo ?? 'assets/img/demo-profile.png') }}" 
                 alt="Profile" 
                 class="rounded-circle mb-3" 
-                style="width: 120px; height: 120px; padding-top: 20px;">
+                style="width: 120px; height: 120px; padding-top: 20px;"> --}}
+                <img src="{{ route('candidate.photo', ['filename' => basename($candidate->profile_photo)]) }}" alt="Profile">
+
                 <form action="{{ route('candidate.updatePhoto') }}" method="POST" enctype="multipart/form-data" class="mt-2">
                   @csrf
                   <input type="file" name="profile_photo" id="photoInput" accept="image/*" class="form-control mb-2">
