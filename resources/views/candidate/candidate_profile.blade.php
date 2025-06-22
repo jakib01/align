@@ -10,7 +10,7 @@
             <div class="card-body d-flex">
               <div class="w-50 d-flex flex-column align-items-center border-end pe-4">
                 <img id="profilePhoto" 
-                src="{{ asset('assets/img/demo-profile.png') ?? 'assets/img/demo-profile.png' }}" 
+                src="{{ asset('storage/profile_photos/1750549809.jpg') ?? 'assets/img/demo-profile.png' }}" 
                 alt="Profile" 
                 class="rounded-circle mb-3" 
                 style="width: 120px; height: 120px; padding-top: 20px;">
