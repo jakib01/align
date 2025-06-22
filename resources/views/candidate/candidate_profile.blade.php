@@ -9,6 +9,7 @@
           <div class="card">
             <div class="card-body d-flex">
               <div class="w-50 d-flex flex-column align-items-center border-end pe-4">
+                {{dd($candidate->profile_photo)}}
                 <img id="profilePhoto" 
                 src="{{ asset($candidate->profile_photo ?? 'assets/img/demo-profile.png') }}" 
                 alt="Profile" 
