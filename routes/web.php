@@ -7,9 +7,6 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CandidateAuthController;
 use App\Http\Controllers\EmployerAuthController;
 
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Response;
-
 
 use App\Http\Controllers\TeamMemberAssessmentController;
 use App\Http\Middleware\Candidate;
@@ -172,16 +169,6 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::get('/dashboard', [CandidateController::class, 'Dashboard'])->name('candidate.dashboard')->middleware('candidate');
 
         Route::post('/update-photo', [CandidateController::class, 'updateProfilePhoto'])->name('candidate.updatePhoto')->middleware('candidate');
-
-        Route::get('/profile-photo/{filename}', function ($filename) {
-        $path = storage_path('storage/app/public/profile_photos/' . $filename);
-
-        if (!File::exists($path)) {
-            abort(404);
-        }
-
-        return Response::file($path);
-    })->name('candidate.photo');
 
 
         Route::post('/candidates/{id}/preferences/update-field', [CandidateController::class, 'updateSinglePreference']);
