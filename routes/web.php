@@ -174,7 +174,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::post('/update-photo', [CandidateController::class, 'updateProfilePhoto'])->name('candidate.updatePhoto')->middleware('candidate');
 
         Route::get('/profile-photo/{filename}', function ($filename) {
-        $path = storage_path('app/public/profile_photos/' . $filename);
+        $path = storage_path('storage/app/public/profile_photos/' . $filename);
 
         if (!File::exists($path)) {
             abort(404);
