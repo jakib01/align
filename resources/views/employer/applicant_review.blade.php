@@ -106,13 +106,12 @@
                                 </button>
                             </td>
                             <td>
-
                                 <button @php
                                             if ($row->save_applicant == 1) {
                                         @endphp disabled @php
                                             }
                                         @endphp
-                                        style="font-size:11.5rem width: 30%" data-id="{{$row->job_post_id}}"
+                                        style="font-size:11.5rem; width: 30%" data-id="{{$row->job_post_id}}"
                                         class="save-button btn btn-secondary send-id">save
                                 </button>
 
@@ -121,10 +120,9 @@
                                         @endphp disabled @php
                                             }
                                         @endphp
-                                        style="font-size:11.5rem width: 30%" data-id="{{$row->job_post_id}}"
+                                        style="font-size:11.5rem; width: 30%" data-id="{{$row->job_post_id}}"
                                         class="unsave-button btn btn-secondary send-id">unsave
                                 </button>
-{{--                                <button style="font-size:11.5rem width: 30%" class="btn btn-warning">Message</button>--}}
                             </td>
                         </tr>
                     @endforeach

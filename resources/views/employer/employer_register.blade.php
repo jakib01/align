@@ -77,7 +77,7 @@
                         <label for="confirm-password" class="form-label" style="color: #4a5568;">Confirm
                             Password</label>
                         <input type="password" id="confirm-password" name="password_confirmation" class="form-control"
-                            placeholder="Confirm your password" required
+                            placeholder="This password must be at least 8 character" required
                             style="border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; background: #f9fbfc;">
                     </div>
 
