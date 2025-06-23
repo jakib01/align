@@ -153,26 +153,21 @@
                     <div class="modal-body">
                         <h5 class="text-center">Behavior Comparison</h5>
                         <div class="row">
-                            <div class="col-md-6">
-                                <canvas id="chartEmployerBehavior" style="max-height: 300px;"></canvas>
-                            </div>
-                            <div class="col-md-6">
-                                <canvas id="chartCandidateBehavior" style="max-height: 300px;"></canvas>
+                            <div class="col-md-12">
+                                <canvas id="chartBehavior" style="max-height: 400px;"></canvas>
                             </div>
                         </div>
 
                         <h5 class="text-center mt-4">Value Comparison</h5>
                         <div class="row">
-                            <div class="col-md-6">
-                                <canvas id="chartEmployerValues" style="max-height: 300px;"></canvas>
-                            </div>
-                            <div class="col-md-6">
-                                <canvas id="chartCandidateValues" style="max-height: 300px;"></canvas>
+                            <div class="col-md-12">
+                                <canvas id="chartValues" style="max-height: 400px;"></canvas>
                             </div>
                         </div>
 
-                        <h5 class="text-center mt-4" id="alignmentScoreText"></h5> <!-- Alignment Score Text -->
+                        <h5 class="text-center mt-4" id="alignmentScoreText"></h5>
                     </div>
+
 
                 </div>
             </div>
@@ -279,65 +274,79 @@
 
         function renderCharts(employerBehaviourAssessmentData, candidateBehaviourAssessmentData, employerValuesAssessmentData, candidateValueAssessmentData) {
             if (chartEmployerBehavior) chartEmployerBehavior.destroy();
-            if (chartCandidateBehavior) chartCandidateBehavior.destroy();
             if (chartEmployerValues) chartEmployerValues.destroy();
-            if (chartCandidateValues) chartCandidateValues.destroy();
 
-            // Behavior Charts
-            chartEmployerBehavior = new Chart(document.getElementById('chartEmployerBehavior').getContext('2d'), {
+            // === Behavior Combined Chart ===
+            const behaviorLabels = Object.keys(employerBehaviourAssessmentData);
+            chartEmployerBehavior = new Chart(document.getElementById('chartBehavior').getContext('2d'), {
                 type: 'radar',
                 data: {
-                    labels: Object.keys(employerBehaviourAssessmentData),
-                    datasets: [{
-                        label: 'Employee Behavior',
-                        data: Object.values(employerBehaviourAssessmentData),
-                        fill: true,
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgb(255, 99, 132)'
-                    }]
+                    labels: behaviorLabels,
+                    datasets: [
+                        {
+                            label: 'Employer Behavior',
+                            data: behaviorLabels.map(label => employerBehaviourAssessmentData[label]),
+                            fill: true,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgb(255, 99, 132)'
+                        },
+                        {
+                            label: 'Candidate Behavior',
+                            data: behaviorLabels.map(label => candidateBehaviourAssessmentData[label]),
+                            fill: true,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgb(54, 162, 235)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            min: 0,
+                            max: 100,
+                            ticks: {
+                                stepSize: 20
+                            }
+                        }
+                    }
                 }
             });
 
-            chartCandidateBehavior = new Chart(document.getElementById('chartCandidateBehavior').getContext('2d'), {
+            // === Values Combined Chart ===
+            const valueLabels = Object.keys(employerValuesAssessmentData);
+            chartEmployerValues = new Chart(document.getElementById('chartValues').getContext('2d'), {
                 type: 'radar',
                 data: {
-                    labels: Object.keys(candidateBehaviourAssessmentData),
-                    datasets: [{
-                        label: 'Candidate Behavior',
-                        data: Object.values(candidateBehaviourAssessmentData),
-                        fill: true,
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgb(54, 162, 235)'
-                    }]
-                }
-            });
-
-            // Value Charts
-            chartEmployerValues = new Chart(document.getElementById('chartEmployerValues').getContext('2d'), {
-                type: 'radar',
-                data: {
-                    labels: Object.keys(employerValuesAssessmentData),
-                    datasets: [{
-                        label: 'Employee Values',
-                        data: Object.values(employerValuesAssessmentData),
-                        fill: true,
-                        backgroundColor: 'rgba(133, 250, 240, 0.2)',
-                        borderColor: 'rgb(68, 242, 248)'
-                    }]
-                }
-            });
-
-            chartCandidateValues = new Chart(document.getElementById('chartCandidateValues').getContext('2d'), {
-                type: 'radar',
-                data: {
-                    labels: Object.keys(candidateValueAssessmentData),
-                    datasets: [{
-                        label: 'Candidate Values',
-                        data: Object.values(candidateValueAssessmentData),
-                        fill: true,
-                        backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                        borderColor: 'rgb(255, 206, 86)'
-                    }]
+                    labels: valueLabels,
+                    datasets: [
+                        {
+                            label: 'Employer Values',
+                            data: valueLabels.map(label => employerValuesAssessmentData[label]),
+                            fill: true,
+                            backgroundColor: 'rgba(133, 250, 240, 0.2)',
+                            borderColor: 'rgb(68, 242, 248)'
+                        },
+                        {
+                            label: 'Candidate Values',
+                            data: valueLabels.map(label => candidateValueAssessmentData[label]),
+                            fill: true,
+                            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                            borderColor: 'rgb(255, 206, 86)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            min: 0,
+                            max: 100,
+                            ticks: {
+                                stepSize: 20
+                            }
+                        }
+                    }
                 }
             });
 
@@ -349,7 +358,6 @@
             );
             document.getElementById('alignmentScoreText').innerText = `Alignment Score: ${alignment}%`;
         }
-
 
         function calculateAlignment(scores1a, scores1b, scores2a, scores2b) {
             let total = 0;
