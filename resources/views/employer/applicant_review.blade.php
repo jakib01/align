@@ -106,23 +106,15 @@
                                 </button>
                             </td>
                             <td>
-                                <button @php
-                                            if ($row->save_applicant == 1) {
-                                        @endphp disabled @php
-                                            }
-                                        @endphp
-                                        style="font-size:11.5rem; width: 30%" data-id="{{$row->job_post_id}}"
-                                        class="save-button btn btn-secondary send-id">save
-                                </button>
-
-                                <button @php
-                                            if ($row->save_applicant == null) {
-                                        @endphp disabled @php
-                                            }
-                                        @endphp
-                                        style="font-size:11.5rem; width: 30%" data-id="{{$row->job_post_id}}"
-                                        class="unsave-button btn btn-secondary send-id">unsave
-                                </button>
+                                @if ($row->save_applicant == 1)
+                                    <button class="btn btn-outline-danger unsave-button" data-id="{{ $row->job_post_id }}" title="Unsave Candidate">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                @else
+                                    <button class="btn btn-outline-secondary save-button" data-id="{{ $row->job_post_id }}" title="Save Candidate">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
