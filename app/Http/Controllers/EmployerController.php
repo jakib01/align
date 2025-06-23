@@ -10,6 +10,7 @@ use App\Models\JobLocation;
 use App\Models\SalaryRange;
 use App\Models\SeniorityLevel;
 use App\Models\Skill;
+use App\Models\TeamMemberAssessment;
 use App\Models\WorkingPattern;
 use Illuminate\Http\Request;
 use App\Models\Job;
@@ -78,6 +79,14 @@ class EmployerController extends Controller
         $behaviourAssessmentData = [];
 
         foreach ($teamMembers as $member) {
+
+            if((empty($member->value_assessment_score) || empty($member->behaviour_assessment_score) && $member->is_send_link = 1 && $member->is_done_assessment = 0)) {
+                $member->can_resend = true;
+            }else{
+                $member->can_resend = false;
+            }
+
+
             if (!empty($member->value_assessment_score)) {
                 $scores = json_decode($member->value_assessment_score, true);
                 if (is_array($scores)) {
@@ -102,6 +111,8 @@ class EmployerController extends Controller
         }
 
         $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
+
+//        dd($teamMembers->toArray());
 
         return view('employer.employer_team', compact(
             'teamMembers', 'noTeamMembersMessage',
@@ -660,6 +671,21 @@ class EmployerController extends Controller
         $employer = Auth::guard('employer')->user(); // or use auth()->user()
 
         // Validate incoming request
+        $validated = $request->validate([
+            'employer_name' => 'required|string|max:255',
+            'company_name' => 'required|string|max:255',
+            'job_title' => 'required|string|max:255',
+            'salary_range' => 'nullable|string|max:255',
+            'seniority_level' => 'nullable|string|max:255',
+            'job_location' => 'nullable|string|max:255',
+            'working_pattern' => 'nullable|string|max:255',
+            'industry' => 'nullable|string|max:255',
+            'visa_sponsorship' => 'nullable|string|max:255',
+            'description' => 'required|string',
+            'requirements' => 'nullable|string',
+            'benefits' => 'nullable|string',
+            'application_deadline' => 'nullable|date', // Validate application deadline as a date
+        ]);
         $validated = $request->validate([
             'employer_name' => 'required|string|max:255',
             'company_name' => 'required|string|max:255',

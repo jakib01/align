@@ -18,7 +18,7 @@
                     <div class="row">
                         <div class="container-fluid">
                             <div id="team-member-content" class="form-section">
-                                <h3 class="text-center">Team Detailssss</h3>
+                                <h3 class="text-center">Team Details</h3>
                                 <div class="d-flex justify-content-center align-items-center mb-4">
                                     <form method="GET" action="{{ route('employer.dashboard') }}" class="d-flex align-items-center w-100 w-md-auto">
                                         <input type="text" name="search" class="form-control w-100 w-md-50" value="{{ request('search') }}" placeholder="Search Team Members...">
@@ -121,11 +121,30 @@
                                                             <input type="hidden" name="member_id" value="{{ $member->id }}">
                                                             <input type="hidden" name="employee_email" value="{{ $member->email }}">
 
-                                                            <button type="submit" class="btn btn-sm
-                                                                {{ $member->is_done_assesment ? 'btn-secondary' : ($member->is_send_link ? 'btn-success' : 'btn-primary') }}"
-                                                                {{ $member->is_send_link || $member->is_done_assesment ? 'disabled' : '' }}>
-                                                                {{ $member->is_done_assessment ? 'Assessment Done' : ($member->is_send_link ? 'Link Sent' : 'Send Test Link') }}
-                                                            </button>
+                                                            @if($member->is_done_assessment)
+                                                                <button type="button" class="btn btn-sm btn-secondary" disabled>Assessment Done</button>
+                                                            @elseif(!$member->is_send_link)
+                                                                {{-- Link never sent --}}
+                                                                <form action="{{ route('employee.assessment.send') }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Send test link?')">
+                                                                    @csrf
+                                                                    <input type="hidden" name="member_id" value="{{ $member->id }}">
+                                                                    <input type="hidden" name="employee_email" value="{{ $member->email }}">
+                                                                    <button type="submit" class="btn btn-sm btn-primary">Send Test Link</button>
+                                                                </form>
+                                                            @else
+                                                                {{-- Link was sent --}}
+                                                                <button type="button" class="btn btn-sm btn-success" disabled>Link Sent</button>
+
+                                                                @if($member->can_resend)
+                                                                    <form action="{{ route('employee.assessment.send') }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Resend the test link?')">
+                                                                        @csrf
+                                                                        <input type="hidden" name="member_id" value="{{ $member->id }}">
+                                                                        <input type="hidden" name="employee_email" value="{{ $member->email }}">
+                                                                        <button type="submit" class="btn btn-sm btn-warning ms-1">Resend Test Link</button>
+                                                                    </form>
+                                                                @endif
+                                                            @endif
+
                                                         </form>
                                                     </td>
                                                 </tr>

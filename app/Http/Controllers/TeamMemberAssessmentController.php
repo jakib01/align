@@ -147,6 +147,11 @@ class TeamMemberAssessmentController extends Controller
                 ->update([
                     'is_done_assessment' => 1,
                 ]);
+
+            if ($link) {
+                $link->is_used = 1;
+                $link->save();
+            }
         }
 
 		return response()->json(['success' => true]);
@@ -223,6 +228,11 @@ class TeamMemberAssessmentController extends Controller
                 ->update([
                     'is_done_assessment' => 1,
                 ]);
+
+            if ($link) {
+                $link->is_used = 1;
+                $link->save();
+            }
         }
 
         return redirect()->route('employer.behavior.assessment.CuriosityVsPracticality', ['token' => $request->token]);
@@ -296,6 +306,11 @@ class TeamMemberAssessmentController extends Controller
                 ->update([
                     'is_done_assessment' => 1,
                 ]);
+
+            if ($link) {
+                $link->is_used = 1;
+                $link->save();
+            }
         }
 
         return redirect()->route('employer.behavior.assessment.DisciplineVsAdaptability', ['token' => $request->token]);
@@ -367,6 +382,11 @@ class TeamMemberAssessmentController extends Controller
                 ->update([
                     'is_done_assessment' => 1,
                 ]);
+
+            if ($link) {
+                $link->is_used = 1;
+                $link->save();
+            }
         }
 
         return redirect()->route('employer.behavior.assessment.ResilienceVsSensitivity', ['token' => $request->token]);
@@ -439,6 +459,11 @@ class TeamMemberAssessmentController extends Controller
                 ->update([
                     'is_done_assessment' => 1,
                 ]);
+
+            if ($link) {
+                $link->is_used = 1;
+                $link->save();
+            }
         }
 
         return redirect()->route('employer.behavior.assessment.SociobilityVsReflectiveness', ['token' => $request->token]);
@@ -510,6 +535,11 @@ class TeamMemberAssessmentController extends Controller
                 ->update([
                     'is_done_assessment' => 1,
                 ]);
+
+            if ($link) {
+                $link->is_used = 1;
+                $link->save();
+            }
         }
 
         return redirect()->route('employee.value.result', ['assessment' => 'Behaviour']);
