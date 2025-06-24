@@ -81,6 +81,7 @@
                         <th>SL No.</th>
                         <th>Candidate Name</th>
                         <th>Applied Job Title</th>
+                        <th>Skills Score</th>
                         <th>Score</th>
                         <th>Profile</th>
                         <th>Action</th>
@@ -93,6 +94,7 @@
                             <td>{{$key + 1}}</td>
                             <td>{{$row->candidate_name}}</td>
                             <td>{{$row->title}}</td>
+                            <td>{{$row->technical_assessment_score}}</td>
                             <td>
                                 <button class="btn btn-primary mt-2"
                                         onclick="openAssessmentModal({{ $row->candidate_id }})">Check Score
@@ -203,6 +205,17 @@
                                 <canvas id="chartCandidateValuesOnly" style="max-height:300px;"></canvas>
                             </div>
                         </div>
+
+                        <!-- Assessment Completion Summary -->
+                        <section class="section mt-4" id="assessmentSummary" style="display: none;">
+                            <h5>Assessment Complete</h5>
+                            <p><strong>Total Score:</strong> <span id="totalScore"></span></p>
+                            <p><strong>Badge:</strong> <span id="scoreBadge"></span></p>
+                            <p><strong>Score Range:</strong> <span id="scoreRange"></span></p>
+                            <p><strong>Approx %:</strong> <span id="scorePercentage"></span></p>
+                            <p><strong>Reputation:</strong> <span id="scoreReputation"></span></p>
+                        </section>
+
                     </div>
                 </div>
             </div>
@@ -402,6 +415,41 @@
                     $('#candidateSalary').text(candidateData.job_preferences.salary || '-');
                     $('#candidateContract').text(candidateData.job_preferences.contract || '-');
                     $('#candidateSponsorship').text(candidateData.job_preferences.sponsorship_required || '-');
+
+                    if (candidateData.score != null) {
+                        const score = candidateData.score || 0;
+                        const percentage = Math.round((score / 36) * 100);
+
+                        let badge = '❌ No Badge';
+                        let range = '0–21';
+                        let reputation = 'Needs development or fit review';
+
+                        if (score >= 33) {
+                            badge = '🥇 Gold';
+                            range = '33–36';
+                            reputation = 'Elite, future leader, pre-qualified';
+                        } else if (score >= 28) {
+                            badge = '🥈 Silver';
+                            range = '28–32';
+                            reputation = 'High performer, dependable';
+                        } else if (score >= 22) {
+                            badge = '🥉 Bronze';
+                            range = '22–27';
+                            reputation = 'Emerging talent, coachable';
+                        }
+
+                        // Inject values into modal
+                        $('#totalScore').text(score);
+                        $('#scoreBadge').text(badge);
+                        $('#scoreRange').text(range);
+                        $('#scorePercentage').text(percentage + '%');
+                        $('#scoreReputation').text(reputation);
+
+                        // Show the section
+                        $('#assessmentSummary').show();
+                    } else {
+                        $('#assessmentSummary').hide();
+                    }
 
                     modal.show();
 

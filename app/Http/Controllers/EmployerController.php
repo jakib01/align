@@ -757,6 +757,7 @@ class EmployerController extends Controller
                 'candidates.skill_assesment_score', // Ensure this column exists
                 'candidates.value_assessment_score', // Ensure this column exists
                 'candidates.behaviour_assesment_score', // Ensure this column exists
+                'candidates.technical_assessment_score', // Ensure this column exists
             )
             ->paginate(5);
 
@@ -777,6 +778,7 @@ class EmployerController extends Controller
             'profile_photo' => $candidateData->profile_photo ? asset( $candidateData->profile_photo) : asset('assets/img/demo-profile.png'),
 
             'job_preferences' => $candidateData-> job_preferences,
+            'score' => $candidateData-> technical_assessment_score,
         ];
         return response()->json([
             'candidateBehaviorAssessment' => $candidateAssessment['behaviorAssessment'],
