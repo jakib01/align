@@ -209,23 +209,41 @@ public function updateProfilePhoto(Request $request)
         // $candidate->profile_photo = 'storage/profile_photos/' . $filename;
         // $candidate->save();
 
+        // $file = $request->file('profile_photo');
+        // $filename = time() . '.' . $file->getClientOriginalExtension();
+        // $destination = public_path('storage/profile_photos');
+
+        // if (!file_exists($destination)) {
+        //     mkdir($destination, 0755, true);
+        // }
+
+        // $path = $file->move($destination, $filename);
+
+        // // Double-check file saved correctly
+        // if (!file_exists($destination . '/' . $filename)) {
+        //     dd('Upload failed');
+        // }
+
+        // $candidate->profile_photo = 'storage/profile_photos/' . $filename;
+        // $candidate->save();
+
         $file = $request->file('profile_photo');
         $filename = time() . '.' . $file->getClientOriginalExtension();
-        $destination = public_path('storage/profile_photos');
+
+        // 🔥 Explicit path to your subdomain's public_html/storage/profile_photos
+        $destination = base_path('../public_html/storage/profile_photos');
 
         if (!file_exists($destination)) {
             mkdir($destination, 0755, true);
         }
 
-        $path = $file->move($destination, $filename);
+        // Save the image there
+        $file->move($destination, $filename);
 
-        // Double-check file saved correctly
-        if (!file_exists($destination . '/' . $filename)) {
-            dd('Upload failed');
-        }
-
+        // Save the path Laravel will generate a full URL for
         $candidate->profile_photo = 'storage/profile_photos/' . $filename;
         $candidate->save();
+
 
 
     }
