@@ -820,24 +820,15 @@ class EmployerController extends Controller
 
     public function SaveApplicant(Request $request)
     {
-
-
         $id = $request->input('id');
-        $applicant1 = DB::table('job_applieds')->where('job_post_id', $id)->update(['save_applicant' => 1]);
-
-
+        $applicant1 = DB::table('job_applieds')->where('my_row_id', $id)->update(['save_applicant' => 1]);
 
     }
 
     public function UnSaveApplicant(Request $request)
     {
-
-
         $id = $request->input('id');
-        $applicant1 = DB::table('job_applieds')->where('job_post_id', $id)->update(['save_applicant' => null]);
-
-
-
+        $applicant1 = DB::table('job_applieds')->where('my_row_id', $id)->update(['save_applicant' => null]);
     }
 
     public function SavedApplicant(Request $request)

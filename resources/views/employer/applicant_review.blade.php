@@ -109,11 +109,11 @@
                             </td>
                             <td>
                                 @if ($row->save_applicant == 1)
-                                    <button class="btn btn-outline-danger unsave-button" data-id="{{ $row->job_post_id }}" title="Unsave Candidate">
+                                    <button class="btn btn-outline-danger unsave-button" data-id="{{ $row->my_row_id }}" title="Unsave Candidate">
                                         <i class="fas fa-heart"></i>
                                     </button>
                                 @else
-                                    <button class="btn btn-outline-secondary save-button" data-id="{{ $row->job_post_id }}" title="Save Candidate">
+                                    <button class="btn btn-outline-secondary save-button" data-id="{{ $row->my_row_id }}" title="Save Candidate">
                                         <i class="far fa-heart"></i>
                                     </button>
                                 @endif
