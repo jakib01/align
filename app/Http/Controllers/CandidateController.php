@@ -231,7 +231,7 @@ public function updateProfilePhoto(Request $request)
         $filename = time() . '.' . $file->getClientOriginalExtension();
 
         // 🔥 Explicit path to your subdomain's public_html/storage/profile_photos
-        $destination = base_path('../public_html/storage/profile_photos');
+        $destination = base_path('.../alignjob.idrisforid.com/storage/profile_photos');
 
         if (!file_exists($destination)) {
             mkdir($destination, 0755, true);
