@@ -801,7 +801,8 @@ class EmployerController extends Controller
                 'candidates.email as candidate_email',
                 'candidates.skill_assesment_score',
                 'candidates.value_assessment_score',
-                'candidates.behaviour_assesment_score'
+                'candidates.behaviour_assesment_score',
+                'candidates.technical_assessment_score'
             );
 
         if ($request->filled('job_title')) {
