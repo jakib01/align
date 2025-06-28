@@ -801,7 +801,8 @@ class EmployerController extends Controller
                 'candidates.email as candidate_email',
                 'candidates.skill_assesment_score',
                 'candidates.value_assessment_score',
-                'candidates.behaviour_assesment_score'
+                'candidates.behaviour_assesment_score',
+                'candidates.technical_assessment_score'
             );
 
         if ($request->filled('job_title')) {
@@ -820,24 +821,15 @@ class EmployerController extends Controller
 
     public function SaveApplicant(Request $request)
     {
-
-
         $id = $request->input('id');
-        $applicant1 = DB::table('job_applieds')->where('job_post_id', $id)->update(['save_applicant' => 1]);
-
-
+        $applicant1 = DB::table('job_applieds')->where('my_row_id', $id)->update(['save_applicant' => 1]);
 
     }
 
     public function UnSaveApplicant(Request $request)
     {
-
-
         $id = $request->input('id');
-        $applicant1 = DB::table('job_applieds')->where('job_post_id', $id)->update(['save_applicant' => null]);
-
-
-
+        $applicant1 = DB::table('job_applieds')->where('my_row_id', $id)->update(['save_applicant' => null]);
     }
 
     public function SavedApplicant(Request $request)
