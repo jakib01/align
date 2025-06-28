@@ -224,7 +224,7 @@ public function updateProfilePhoto(Request $request)
             dd('Upload failed');
         }
 
-        $candidate->profile_photo = 'storage/profile_photos/' . $filename;
+        $candidate->profile_photo = 'public/storage/profile_photos/' . $filename;
         $candidate->save();
 
 
