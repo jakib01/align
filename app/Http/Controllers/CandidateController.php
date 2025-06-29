@@ -89,7 +89,7 @@ class CandidateController extends Controller
     public function Dashboard()
 {
     $candidate = auth()->guard('candidate')->user();
-
+    $technical_assessment_score = $candidate->technical_assessment_score ?? 0;
     $valueScores = [];
     $behaviourScores = [];
     $behaviourassessmentTakenDate = null;
@@ -155,6 +155,7 @@ class CandidateController extends Controller
         'hasCompletedBehaviour' => $hasCompletedBehaviour,
         'hasCompletedValue' => $hasCompletedValue,
         'jobPreferences' => $jobPreferences,
+        'technical_assessment_score' => $technical_assessment_score,
 
     ]);
 }
@@ -330,8 +331,16 @@ public function downloadProfilePdf()
     }
 
     public function TechnicalAssesment()
-    {
-        return view('candidate.technical_assessment');
+    {   
+        // Count the number of jobs for each required_test value
+    $qualificationReasoningCount = \App\Models\Job::where('required_test', 'qualification_reasoning')->count();
+    $logicalReasoningCount = \App\Models\Job::where('required_test', 'logical_reasoning')->count();
+
+        // Pass the counts to the view
+    return view('candidate.technical_assessment', [
+        'qualificationReasoningCount' => $qualificationReasoningCount,
+        'logicalReasoningCount' => $logicalReasoningCount,
+    ]);
     }
 
     public function CoreSkillAssesment()

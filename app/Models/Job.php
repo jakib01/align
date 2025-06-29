@@ -20,6 +20,10 @@ class Job extends Model
         'industry',
         'visa_sponsorship',
         'application_deadline',
+        'skills',
+        'required_test'
+        
+
     ];
 
     // In Job model

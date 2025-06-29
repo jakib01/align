@@ -62,7 +62,12 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Candidate Qualification & Reasoning</h5>
                         <p class="card-text">Test your mathematical and analytical skills. Lorem ipsum consectetur adipiscing, dolor sit amet, consectetur elit. Quisque sit amet accumsan arcu.</p>
-                        <div class="d-flex align-items-center">
+
+                        <span class=" badge bg-info text-dark">
+                        Number of jobs requiring: {{ $qualificationReasoningCount ?? 0 }}
+                       </span>
+                       
+                        <div class="d-flex py-2 align-items-center">
                         {{-- <button class="btn btn-primary me-2" onclick="startAssessment()">Start</button> --}}
                         <a href="{{route('coreskill.assesment')}}"  class="btn btn-primary me-2">start</a>
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNumerical">Details</button>
@@ -101,7 +106,13 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Logical Reasoning</h5>
                         <p class="card-text">Evaluate your ability to think logically and solve problems. Lorem ipsum dolort si amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu.</p>
-                        <div class="d-flex align-items-center">
+                        
+                        <span class=" badge bg-info text-dark">
+                        Number of jobs requiring: {{ $logicalReasoningCount ?? 0 }}
+                       </span>
+                       
+
+                        <div class="py-2 d-flex align-items-center">
                         <button class="btn btn-primary me-2" onclick="startAssessment()">Complete</button>
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalLogical">Details</button>
                     </div>
