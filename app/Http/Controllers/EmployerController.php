@@ -671,6 +671,21 @@ class EmployerController extends Controller
         $employer = Auth::guard('employer')->user(); // or use auth()->user()
 
         // Validate incoming request
+        // $validated = $request->validate([
+        //     'employer_name' => 'required|string|max:255',
+        //     'company_name' => 'required|string|max:255',
+        //     'job_title' => 'required|string|max:255',
+        //     'salary_range' => 'nullable|string|max:255',
+        //     'seniority_level' => 'nullable|string|max:255',
+        //     'job_location' => 'nullable|string|max:255',
+        //     'working_pattern' => 'nullable|string|max:255',
+        //     'industry' => 'nullable|string|max:255',
+        //     'visa_sponsorship' => 'nullable|string|max:255',
+        //     'description' => 'required|string',
+        //     'requirements' => 'nullable|string',
+        //     'benefits' => 'nullable|string',
+        //     'application_deadline' => 'nullable|date', // Validate application deadline as a date
+        // ]);
         $validated = $request->validate([
             'employer_name' => 'required|string|max:255',
             'company_name' => 'required|string|max:255',
@@ -682,23 +697,11 @@ class EmployerController extends Controller
             'industry' => 'nullable|string|max:255',
             'visa_sponsorship' => 'nullable|string|max:255',
             'description' => 'required|string',
+            'skills' => 'nullable|array',
+            'skills.*' => 'string',
             'requirements' => 'nullable|string',
             'benefits' => 'nullable|string',
-            'application_deadline' => 'nullable|date', // Validate application deadline as a date
-        ]);
-        $validated = $request->validate([
-            'employer_name' => 'required|string|max:255',
-            'company_name' => 'required|string|max:255',
-            'job_title' => 'required|string|max:255',
-            'salary_range' => 'nullable|string|max:255',
-            'seniority_level' => 'nullable|string|max:255',
-            'job_location' => 'nullable|string|max:255',
-            'working_pattern' => 'nullable|string|max:255',
-            'industry' => 'nullable|string|max:255',
-            'visa_sponsorship' => 'nullable|string|max:255',
-            'description' => 'required|string',
-            'requirements' => 'nullable|string',
-            'benefits' => 'nullable|string',
+            'required_test' => 'nullable|string|max:255',
             'application_deadline' => 'nullable|date', // Validate application deadline as a date
         ]);
 
@@ -717,6 +720,8 @@ class EmployerController extends Controller
             'industry' => $validated['industry'],
             'visa_sponsorship' => $validated['visa_sponsorship'],
             'application_deadline' => $validated['application_deadline'],  // Storing application deadline
+            'skills' => $validated['skills'] ? json_encode($validated['skills']) : null,
+            'required_test' => $validated['required_test'],
         ]);
 
         return redirect()->route('employer.dashboard')->with('success', 'Job posted successfully!');
