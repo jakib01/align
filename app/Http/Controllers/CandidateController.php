@@ -89,7 +89,7 @@ class CandidateController extends Controller
     public function Dashboard()
 {
     $candidate = auth()->guard('candidate')->user();
-
+    $technical_assessment_score = $candidate->technical_assessment_score ?? 0;
     $valueScores = [];
     $behaviourScores = [];
     $behaviourassessmentTakenDate = null;
@@ -155,6 +155,7 @@ class CandidateController extends Controller
         'hasCompletedBehaviour' => $hasCompletedBehaviour,
         'hasCompletedValue' => $hasCompletedValue,
         'jobPreferences' => $jobPreferences,
+        'technical_assessment_score' => $technical_assessment_score,
 
     ]);
 }

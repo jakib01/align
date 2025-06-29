@@ -297,12 +297,37 @@
               <div class="w-50 border-end pe-4">
                 <h3 class="text-center pt-4">Core Skills</h3>
                 <div class="d-flex flex-column">
-                  <h6 class="d-flex align-items-center">Customer-Centricity <span class="bi bi-award-fill text-warning ml-2"></span></h6>
-                  <h6 class="d-flex align-items-center">Strategic Thinking <span class="bi bi-award-fill text-warning ml-2"></span></h6>
+
+                   @php
+        $badge = '❌ No Badge';
+        $percentage = round(($technical_assessment_score / 36) * 100); // Assuming 36 is the max score
+        $reputation = 'Needs development or fit review';
+        $range = '0–21';
+
+        if ($technical_assessment_score >= 33) {
+            $badge = '🥇 Gold';
+            $range = '33–36';
+            $reputation = 'Elite, future leader, pre-qualified';
+        } elseif ($technical_assessment_score >= 28) {
+            $badge = '🥈 Silver';
+            $range = '28–32';
+            $reputation = 'High performer, dependable';
+        } elseif ($technical_assessment_score >= 22) {
+            $badge = '🥉 Bronze';
+            $range = '22–27';
+            $reputation = 'Emerging talent, coachable';
+        }
+    @endphp
+                  <h6 class="d-flex align-items-center">1. Candidate Qualification & Reasoning: </h6>
+                  <p>Badge: {{ $badge }}</p>
+                <p>Score Range: {{ $range }}</p>
+                <p>Approx %: {{ $percentage }}%</p>
+                <p>Reputation: {{ $reputation }}</p>
+                  {{-- <h6 class="d-flex align-items-center">Strategic Thinking <span class="bi bi-award-fill text-warning ml-2"></span></h6>
                   <h6 class="d-flex align-items-center">Critical Thinking <span class="bi bi-award-fill text-warning ml-2"></span></h6>
                   <h6 class="d-flex align-items-center">Logical Reasoning <span class="bi bi-award-fill text-warning ml-2"></span></h6>
-                  <h6 class="d-flex align-items-center">Project Management <span class="bi bi-award-fill text-warning ml-2"></span></h6>
-                  <h6 class="d-flex align-items-center">Relationship Building <span class="bi bi-award-fill text-secondary ml-2"></span></h6>
+                  <h6 class="d-flex align-items-center">Project Management <span class="bi bi-award-fill text-warning ml-2"></span></h6> --}}
+                  {{-- <h6 class="d-flex align-items-center">Relationship Building <span class="bi bi-award-fill text-secondary ml-2"></span></h6>
                   <h6 class="d-flex align-items-center">Commercial Acumen <span class="bi bi-award-fill text-secondary ml-2"></span></h6>
                   <h6 class="d-flex align-items-center">Collaboration <span class="bi bi-award-fill text-secondary ml-2"></span></h6>
                   <h6 class="d-flex align-items-center">Negotiation <span class="bi bi-award-fill text-secondary ml-2"></span></h6>
@@ -311,12 +336,12 @@
                   <h6 class="d-flex align-items-center">Non-Verbal Communication <span class="bi bi-award-fill text-muted ml-2"></span></h6>
                   <h6 class="d-flex align-items-center">Organisation <span class="bi bi-award-fill text-muted ml-2"></span></h6>
                   <h6 class="d-flex align-items-center">Team Management <span class="bi bi-award-fill text-muted ml-2"></span></h6>
-                  <h6 class="d-flex align-items-center">Stakeholder Management <span class="bi bi-award-fill text-muted ml-2"></span></h6>
+                  <h6 class="d-flex align-items-center">Stakeholder Management <span class="bi bi-award-fill text-muted ml-2"></span></h6> --}}
                 </div>
               </div>
               <div class="w-50 ps-4">
                 <h3 class="text-center pt-4">Technical Skills</h3>
-                <div class="d-flex flex-column">
+                {{-- <div class="d-flex flex-column">
                   <h6 class="d-flex align-items-center">Quantitative Research Design <span class="bi bi-award-fill text-warning ml-2"></span></h6>
                   <h6 class="d-flex align-items-center">Statistical Analysis <span class="bi bi-award-fill text-warning ml-2"></span></h6>
                   <h6 class="d-flex align-items-center">Presenting Data <span class="bi bi-award-fill text-warning ml-2"></span></h6>
@@ -324,7 +349,7 @@
                   <h6 class="d-flex align-items-center">Project Management <span class="bi bi-award-fill text-secondary ml-2"></span></h6>
                   <h6 class="d-flex align-items-center">Qualitative Research Design <span class="bi bi-award-fill text-muted ml-2"></span></h6>
                   <h6 class="d-flex align-items-center">Qualitative Data Analysis <span class="bi bi-award-fill text-muted ml-2"></span></h6>
-                </div>
+                </div> --}}
               </div>
             </div>
           </div>
