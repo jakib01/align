@@ -129,6 +129,15 @@
                 <textarea name="requirements" class="form-control" placeholder="Enter Job Requirements"></textarea>
             </div>
 
+            <div class="mb-3">
+                <label for="require_test" class="form-label">Required Tests</label>
+                <select name="required_test" class="form-select">
+                    <option value="" disabled selected>Select Test Name</option>
+                    <option value="qualification_reasoning">Candidate Qualification & Reasoing</option>
+                    <option value="logical_reasoning">Logical Reasoning</option>
+                </select>
+            </div>
+
             <!-- Benefits -->
             <div class="mb-3">
                 <label for="benefits" class="form-label">Benefits</label>

@@ -331,8 +331,16 @@ public function downloadProfilePdf()
     }
 
     public function TechnicalAssesment()
-    {
-        return view('candidate.technical_assessment');
+    {   
+        // Count the number of jobs for each required_test value
+    $qualificationReasoningCount = \App\Models\Job::where('required_test', 'qualification_reasoning')->count();
+    $logicalReasoningCount = \App\Models\Job::where('required_test', 'logical_reasoning')->count();
+
+        // Pass the counts to the view
+    return view('candidate.technical_assessment', [
+        'qualificationReasoningCount' => $qualificationReasoningCount,
+        'logicalReasoningCount' => $logicalReasoningCount,
+    ]);
     }
 
     public function CoreSkillAssesment()
