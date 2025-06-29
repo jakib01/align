@@ -79,7 +79,6 @@
                                             </div>
                                         </div>
                                     </div>
-{{--                                    @endif--}}
 
                                 </div>
                                 <div class="table-responsive d-none d-md-block">

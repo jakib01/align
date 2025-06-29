@@ -46,8 +46,6 @@ class EmployerController extends Controller
         return redirect()->route('employer_login_form');
     }
 
-    // Dashboard Views
-
     public function Dashboard(Request $request)
     {
         $employer = Auth::guard('employer')->user();
@@ -59,11 +57,11 @@ class EmployerController extends Controller
         $search = $request->input('search');
 
         // Filter team members if search is provided
-        $teamMembers = TeamMember::when($search, function ($query, $search) {
+        $teamMembers = TeamMember::when($search, function ($query, $search) use ($employer) {
             return $query->where('name', 'like', "%{$search}%")
                 ->orWhere('email', 'like', "%{$search}%")
                 ->orWhere('role', 'like', "%{$search}%");
-        })->paginate(10)->appends(['search' => $search]);
+        })->Where('employer_id', '=', $employer->id)->paginate(10)->appends(['search' => $search]);
 
         $orderedValueKeys = [
             'Achievement', 'Security', 'Universalism', 'Benevolence', 'Conformity',
@@ -112,87 +110,11 @@ class EmployerController extends Controller
 
         $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
 
-//        dd($teamMembers->toArray());
-
         return view('employer.employer_team', compact(
             'teamMembers', 'noTeamMembersMessage',
             'valuesAssessmentData', 'behaviourAssessmentData', 'search'
         ));
     }
-
-//    public function Dashboard()
-//    {
-//        $employer = Auth::guard('employer')->user();
-//
-//        if (!$employer) {
-//            return redirect()->route('employer.login')->with('error', 'You must be logged in to view your team.');
-//        }
-//
-//        // Fetch only the team members belonging to the authenticated employer
-//        $teamMembers = TeamMember::paginate(1);
-//
-//        $orderedValueKeys = [
-//            'Achievement',
-//            'Security',
-//            'Universalism',
-//            'Benevolence',
-//            'Conformity',
-//            'Tradition',
-//            'Hedonism',
-//            'Power',
-//            'Self-Direction',
-//            'Stimulation'
-//        ];
-//
-//        $orderedBehaviourKeys = [
-//            'compassion',
-//            'confidence',
-//            'curiosity',
-//            'practicality',
-//            'discipline',
-//            'adaptability',
-//            'resilience',
-//            'sensitivity',
-//            'sociability',
-//            'reflectiveness'
-//        ];
-//
-//        $valuesAssessmentData = [];
-//        $behaviourAssessmentData = [];
-//
-//        foreach ($teamMembers as $member) {
-//            // For value_assessment_score
-//            if (!empty($member->value_assessment_score)) {
-//                $scores = json_decode($member->value_assessment_score, true);
-//
-//                if (is_array($scores)) {
-//                    $row = [];
-//                    foreach ($orderedValueKeys as $key) {
-//                        $row[] = $scores[$key] ?? 0;
-//                    }
-//                    $valuesAssessmentData[] = $row;
-//                }
-//            }
-//
-//            // For behaviour_assessment_score
-//            if (!empty($member->behaviour_assessment_score)) {
-//                $scores = json_decode($member->behaviour_assessment_score, true);
-//
-//                if (is_array($scores)) {
-//                    $row = [];
-//                    foreach ($orderedBehaviourKeys as $key) {
-//                        $row[] = $scores[$key] ?? 0;
-//                    }
-//                    $behaviourAssessmentData[] = $row;
-//                }
-//            }
-//        }
-//
-//        // Pass a flag to the view if no team members are found
-//        $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
-//
-//        return view('employer.employer_team', compact('teamMembers', 'noTeamMembersMessage', 'valuesAssessmentData', 'behaviourAssessmentData'));
-//    }
 
     // Profile Management
     public function showProfile()
@@ -390,16 +312,6 @@ class EmployerController extends Controller
         return response()->json(['success' => false, 'error' => 'Team member not found'], 404);
     }
 
-    // public function edit($id)
-    // {
-    //     $teamMember = TeamMember::findOrFail($id);
-
-    //     $teamMembers = TeamMember::get();
-    //     $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
-
-    //     return view('employer.employer_team', compact('teamMembers', 'teamMember', 'noTeamMembersMessage'));
-    // }
-
     public function edit($id)
 {
     $teamMember = TeamMember::findOrFail($id);
@@ -416,7 +328,6 @@ class EmployerController extends Controller
         'behaviourAssessmentData' => array_values($averages['avgBehaviorAssessment']),
     ]);
 }
-
 
     public function updateTeam(Request $request, $id)
     {
@@ -437,6 +348,8 @@ class EmployerController extends Controller
     // Other Pages
     public function TeamAssesment(Request $request)
     {
+        $employer = Auth::guard('employer')->user();
+
         $filter = $request->query('filter'); // 'complete' or 'incomplete'
 
         $query = TeamMember::query();
@@ -455,7 +368,7 @@ class EmployerController extends Controller
             });
         }
 
-        $candidates = $query->paginate(5)->appends(['filter' => $filter]);
+        $candidates = $query->where('employer_id',$employer->id)->paginate(5)->appends(['filter' => $filter]);
 
         return view('employer.employer_team_assesment', compact('candidates', 'filter'));
     }
@@ -632,8 +545,8 @@ class EmployerController extends Controller
         $employer = Auth::guard('employer')->user();
 
         // Fetch all jobs posted by this employer
-        // $jobs = Job::where('employer_id', $employer->id)->get();
-        $jobs = Job::get();
+         $jobs = Job::where('employer_id', $employer->id)->get();
+//        $jobs = Job::get();
 
         // Return the view with the jobs
         return view('employer.employer_jobs', compact('jobs'));
@@ -744,7 +657,9 @@ class EmployerController extends Controller
 
      public function ApplicantReview()
     {
-         $applied_job = DB::table('job_applieds')
+        $employer = Auth::guard('employer')->user();
+
+        $applied_job = DB::table('job_applieds')
             ->join('jobs', 'job_applieds.job_post_id', '=', 'jobs.id')
             ->join('candidates', 'job_applieds.candidate_id', '=', 'candidates.id')
             ->select(
@@ -758,7 +673,7 @@ class EmployerController extends Controller
                 'candidates.value_assessment_score', // Ensure this column exists
                 'candidates.behaviour_assesment_score', // Ensure this column exists
                 'candidates.technical_assessment_score', // Ensure this column exists
-            )
+            )->where('employer_id', $employer->id)
             ->paginate(5);
 
         return view('employer.applicant_review', compact('applied_job', ));
