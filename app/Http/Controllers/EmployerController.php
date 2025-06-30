@@ -315,7 +315,8 @@ class EmployerController extends Controller
     public function edit($id)
 {
     $teamMember = TeamMember::findOrFail($id);
-    $teamMembers = TeamMember::get();
+    // $teamMembers = TeamMember::get();
+    $teamMembers = TeamMember::paginate(10);
     $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
 
     $averages = $this->calculateEmployerAverages();

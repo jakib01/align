@@ -15,8 +15,9 @@
             </div>
             <div class="d-flex flex-column ml-3">
                 <!-- Added ml-3 class for margin-left -->
-                <h2 class="h4 font-weight-bold">{{ $employer->company_name ?? 'Company Not Found' }}</h2>
-                <p>{{ $employer->website ?? 'Not Provided' }}</p> <!-- Website field -->
+                <h2 class="h4 font-weight-bold">Company: {{ $employer->company_name ?? 'Company Not Found' }}</h2>
+                <span>Employer Name: {{$employer->username}}</span>
+                <p>website: {{ $employer->website ?? 'Not Provided' }}</p> <!-- Website field -->
             </div>
             <!-- Edit Button moved to Top Right -->
             <a href="{{ route('employer.profile.edit') }}" class="btn btn-warning btn-sm position-absolute"
