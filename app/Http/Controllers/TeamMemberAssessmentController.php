@@ -229,10 +229,10 @@ class TeamMemberAssessmentController extends Controller
                     'is_done_assessment' => 1,
                 ]);
 
-            if ($link) {
-                $link->is_used = 1;
-                $link->save();
-            }
+            // if ($link) {
+            //     $link->is_used = 1;
+            //     $link->save();
+            // }
         }
 
         return redirect()->route('employer.behavior.assessment.CuriosityVsPracticality', ['token' => $request->token]);
@@ -307,10 +307,10 @@ class TeamMemberAssessmentController extends Controller
                     'is_done_assessment' => 1,
                 ]);
 
-            if ($link) {
-                $link->is_used = 1;
-                $link->save();
-            }
+            // if ($link) {
+            //     $link->is_used = 1;
+            //     $link->save();
+            // }
         }
 
         return redirect()->route('employer.behavior.assessment.DisciplineVsAdaptability', ['token' => $request->token]);
@@ -320,7 +320,7 @@ class TeamMemberAssessmentController extends Controller
     public function accessDisciplineVsAdaptability($token)
     {
         $link = TeamMemberAssessment::where('access_token', $token)->first();
-
+        // dd($link , $link->is_used , $link->expires_at->isPast());
         if (!$link || $link->is_used || $link->expires_at->isPast()) {
             abort(403, 'Link is expired or already used.');
         }
@@ -383,10 +383,10 @@ class TeamMemberAssessmentController extends Controller
                     'is_done_assessment' => 1,
                 ]);
 
-            if ($link) {
-                $link->is_used = 1;
-                $link->save();
-            }
+            // if ($link) {
+            //     $link->is_used = 1;
+            //     $link->save();
+            // }
         }
 
         return redirect()->route('employer.behavior.assessment.ResilienceVsSensitivity', ['token' => $request->token]);
@@ -460,10 +460,10 @@ class TeamMemberAssessmentController extends Controller
                     'is_done_assessment' => 1,
                 ]);
 
-            if ($link) {
-                $link->is_used = 1;
-                $link->save();
-            }
+            // if ($link) {
+            //     $link->is_used = 1;
+            //     $link->save();
+            // }
         }
 
         return redirect()->route('employer.behavior.assessment.SociobilityVsReflectiveness', ['token' => $request->token]);
