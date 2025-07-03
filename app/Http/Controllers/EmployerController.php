@@ -313,22 +313,32 @@ class EmployerController extends Controller
     }
 
     public function edit($id)
-{
-    $teamMember = TeamMember::findOrFail($id);
-    // $teamMembers = TeamMember::get();
-    $teamMembers = TeamMember::paginate(10);
-    $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
+    {
+        $employer = Auth::guard('employer')->user();
 
-    $averages = $this->calculateEmployerAverages();
+        $teamMember = TeamMember::findOrFail($id);
+        // $teamMembers = TeamMember::get();
+        $teamMembers = TeamMember::where('employer_id', '=', $employer->id)->paginate(10);
+        foreach ($teamMembers as $member) {
 
-    return view('employer.employer_team', [
-        'teamMembers' => $teamMembers,
-        'teamMember' => $teamMember,
-        'noTeamMembersMessage' => $noTeamMembersMessage,
-        'valuesAssessmentData' => array_values($averages['avgValueAssessment']),
-        'behaviourAssessmentData' => array_values($averages['avgBehaviorAssessment']),
-    ]);
-}
+            if((empty($member->value_assessment_score) || empty($member->behaviour_assessment_score) && $member->is_send_link = 1 && $member->is_done_assessment = 0)) {
+                $member->can_resend = true;
+            }else{
+                $member->can_resend = false;
+            }
+        }
+        $noTeamMembersMessage = $teamMembers->isEmpty() ? 'No team members found.' : null;
+
+        $averages = $this->calculateEmployerAverages();
+
+        return view('employer.employer_team', [
+            'teamMembers' => $teamMembers,
+            'teamMember' => $teamMember,
+            'noTeamMembersMessage' => $noTeamMembersMessage,
+            'valuesAssessmentData' => array_values($averages['avgValueAssessment']),
+            'behaviourAssessmentData' => array_values($averages['avgBehaviorAssessment']),
+        ]);
+    }
 
     public function updateTeam(Request $request, $id)
     {
